@@ -7,6 +7,8 @@ Authors@R: c(
 Description: This packages gives access to the oaDOI API. oaDOI links DOIs
     representing scholarly publications to open access full-text copies.
 License: MIT + file LICENSE
+URL: https://github.com/njahn82/roadoi
+BugReports: https://github.com/njahn82/roadoi/issues
 LazyData: TRUE
 Imports:
     httr,

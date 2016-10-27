@@ -64,5 +64,6 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 License: MIT
 
-Please use the issue tracker for bug reporting and feature requests.
+Please use the [issue tracker](https://github.com/njahn82/roadoi/issues) for bug reporting and feature requests.
+
 
