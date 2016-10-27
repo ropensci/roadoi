@@ -1,0 +1,68 @@
+# roadoi - Use oaDOI.org with R
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+
+[![Build Status](https://travis-ci.org/njahn82/roadoi.svg?branch=master)](https://travis-ci.org/njahn82/roadoi)
+![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/njahn82/roadoi?branch=master&svg=true)](https://ci.appveyor.com/project/njahn82/roadoi)
+[![codecov.io](https://codecov.io/github/njahn82/roadoi/coverage.svg?branch=master)](https://codecov.io/github/njahn82/roadoi?branch=master)
+
+roadoi interacts with the [oaDOI service](http://oadoi.org/), which links DOIs 
+and open access versions of scholarly works.
+
+API Documentation: <http://oadoi.org/api>
+
+## Installation
+
+Development version:
+
+```r
+devtools::install_github("njahn82/roadoi")
+library(roadoi)
+```
+
+## Usage
+
+Use the `oadoi_fetch()` function in this package to get open access status
+information and full-text links from oaDOI. Please note that oaDOI restricts
+usage to 10k requests per day.
+
+```{r}
+roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"))
+```
+
+## Where to get DOIs?
+
+[rOpenSci](https://ropensci.org/) offers [various packages to access literature databases](https://ropensci.org/packages/#literature), and many of these packages return DOIs for scholarly works, if available.
+
+A great tool to get a random sample of DOI is the 
+[rcrossref](https://github.com/ropensci/rcrossref) package.
+
+For instance, to get a DOI sample of 50 publications, and explore how many 
+publications are provided as green or gold open access:
+
+```{r}
+library(dplyr)
+dois_r <- rcrossref::cr_r(sample = 50)
+roadoi::oadoi_fetch(dois_r) %>% 
+  group_by(oa_color) %>%
+  summarise(Articles = n()) %>%
+  knitr::kable()
+```
+
+
+## Meta
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+License: MIT
+
+Please use the issue tracker for bug reporting and feature requests.
+

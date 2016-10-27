@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+README.Rmd
+^CONDUCT\.md$
+^appveyor\.yml$
+^.travis.yml$
+^codecov.yml$
+review_answer.md
+cran-comments.md

@@ -1,0 +1,22 @@
+Package: roadoi
+Type: Package
+Title: Client for the oaDOI-API
+Version: 0.0.1
+Authors@R: c(
+    person("Najko", "Jahn", role = c("aut", "cre"), email = "najko.jahn@gmail.com"))
+Description: This packages gives access to the oaDOI API. oaDOI links DOIs
+    representing scholarly publications to open access full-text copies.
+License: MIT + file LICENSE
+LazyData: TRUE
+Imports:
+    httr,
+    jsonlite,
+    dplyr,
+    plyr,
+    tibble
+Suggests:
+    roxygen2 (>= 5.0.1),
+    testthat,
+    knitr,
+    covr
+RoxygenNote: 5.0.1
