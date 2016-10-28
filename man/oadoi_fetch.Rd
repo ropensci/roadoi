@@ -4,10 +4,16 @@
 \alias{oadoi_fetch}
 \title{Fetch open access status information and full-text links from oaDOI}
 \usage{
-oadoi_fetch(dois = NULL)
+oadoi_fetch(dois = NULL, email = NULL)
 }
 \arguments{
 \item{dois}{character vector, search by a single DOI or many DOIs.}
+
+\item{email}{character verctor, tell oaDOI your email adress and get notified
+if something breaks. It also helps oaDOI to keep track of usage!}
+}
+\value{
+A tibble
 }
 \description{
 This is the main function to retrieve comprehensive open acccess status

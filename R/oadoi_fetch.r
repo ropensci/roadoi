@@ -6,6 +6,10 @@
 #' More info see \url{http://oadoi.org/api}
 #'
 #' @param dois character vector, search by a single DOI or many DOIs.
+#' @param email character verctor, tell oaDOI your email adress and get notified
+#'   if something breaks. It also helps oaDOI to keep track of usage!
+#'
+#' @return A tibble
 #'
 #' @examples \dontrun{
 #' oadoi_fetch(dois = c("10.1016/j.jbiotec.2010.07.030",
@@ -13,7 +17,7 @@
 #' }
 #'
 #' @export
-oadoi_fetch <- function(dois = NULL) {
+oadoi_fetch <- function(dois = NULL, email = NULL) {
   # validate dois
   dois <- plyr::ldply(dois, doi_validate)
   if (nrow(dois[dois$is_valid == FALSE,]) > 0)
@@ -27,7 +31,7 @@ oadoi_fetch <- function(dois = NULL) {
     for(i in seq(1, length(dois), by = 25)) {
       tt <- dois[i:(i+24)]
       tt <- tt[!is.na(tt)]
-      out_tmp <- oadoi_api_(tt)
+      out_tmp <- oadoi_api_(tt, email = email)
       out <- dplyr::bind_rows(out, out_tmp)
       out
     }
@@ -43,24 +47,25 @@ oadoi_fetch <- function(dois = NULL) {
 #' access status information from all your requests. One request comprises up to
 #' 25 DOIs at a time.
 #'
-#' @param dois character vector with dois
+#' @inheritParams oadoi_fetch
 #' @return A tibble
 #' @examples \dontrun{
 #' oadoi_api_(dois = c("10.1016/j.jbiotec.2010.07.030",
 #' "10.1186/1471-2164-11-245"))
 #' }
 #' @export
-oadoi_api_ <- function(dois = NULL) {
+oadoi_api_ <- function(dois = NULL, email = NULL) {
   if(length(dois) == 1) {
-    u <- httr::modify_url(oadoi_baseurl(),
+    u <- httr::modify_url(oadoi_baseurl(), query = args_(email = email),
                           path = c(oadoi_api_version(), "publication", "doi", dois))
-    resp <- httr::GET(u)
+    resp <- httr::GET(u, ua)
   } else {
-    u <- httr::modify_url(oadoi_baseurl(),
+    u <- httr::modify_url(oadoi_baseurl(), query = args_(email = email),
                           path = c(oadoi_api_version(), "publications"))
-    resp <- httr::POST(url = u,
+    resp <- httr::POST(url = u, ua,
                        body = list(dois = dois),
-                       encode = "json", httr::accept_json(), httr::content_type_json())
+                       encode = "json", httr::accept_json(),
+                       httr::content_type_json())
   }
   # parse json
   if (httr::http_type(resp) != "application/json") {

@@ -4,10 +4,13 @@
 \alias{oadoi_api_}
 \title{Post one request to access open access status information.}
 \usage{
-oadoi_api_(dois = NULL)
+oadoi_api_(dois = NULL, email = NULL)
 }
 \arguments{
-\item{dois}{character vector with dois}
+\item{dois}{character vector, search by a single DOI or many DOIs.}
+
+\item{email}{character verctor, tell oaDOI your email adress and get notified
+if something breaks. It also helps oaDOI to keep track of usage!}
 }
 \value{
 A tibble
