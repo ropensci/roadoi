@@ -1,7 +1,7 @@
 Package: roadoi
 Type: Package
 Title: Client for the oaDOI-API
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person("Najko", "Jahn", role = c("aut", "cre"), email = "najko.jahn@gmail.com"))
 Description: This packages gives access to the oaDOI API. oaDOI links DOIs
