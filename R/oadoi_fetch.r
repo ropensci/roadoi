@@ -3,11 +3,15 @@
 #' This is the main function to retrieve comprehensive open acccess status
 #' information from the oaDOI service. Please play nice with the API. At the
 #' moment only 10k request are allowed per user and day.
-#' More info see \url{http://oadoi.org/api}
+#' For more info see \url{http://oadoi.org/api}
 #'
-#' @param dois character vector, search by a single DOI or many DOIs.
+#' @param dois character vector, search by a single DOI or many DOIs. A maximum
+#'   of 10,000 DOIs are allowed per request.
 #' @param email character verctor, tell oaDOI your email adress and get notified
 #'   if something breaks. It also helps oaDOI to keep track of usage!
+#' @param .progress Shows the \code{plyr}-style progress bar. Options are "none", "text",
+#' "tk", "win", and "time".  See \code{\link[plyr]{create_progress_bar}} for details
+#'  of each. By default, no progress bar is displayed.
 #'
 #' @return A tibble
 #'
@@ -17,7 +21,11 @@
 #' }
 #'
 #' @export
-oadoi_fetch <- function(dois = NULL, email = NULL) {
+oadoi_fetch <- function(dois = NULL, email = NULL, .progress = "none") {
+  # limit
+  if (length(dois) > api_limit)
+    stop("The rate limit is 10k requests per day.
+         Get in touch with team@impactstory.org to get an upgrade.", .call = FALSE)
   # validate dois
   dois <- plyr::ldply(dois, doi_validate)
   if (nrow(dois[dois$is_valid == FALSE,]) > 0)
@@ -25,52 +33,37 @@ oadoi_fetch <- function(dois = NULL, email = NULL) {
   dois <- dplyr::filter(dois, is_valid == TRUE) %>%
     .$doi %>%
     as.character()
-  if (length(dois) > 25) {
-    # loop
-    out <- data.frame()
-    for(i in seq(1, length(dois), by = 25)) {
-      tt <- dois[i:(i+24)]
-      tt <- tt[!is.na(tt)]
-      out_tmp <- oadoi_api_(tt, email = email)
-      out <- dplyr::bind_rows(out, out_tmp)
-      out
-    }
-  } else {
-    out <- oadoi_api_(dois)
-  }
-  return(tibble::as_data_frame(out))
+  plyr::ldply(dois, oadoi_api_, .progress = .progress) %>%
+    # wrap as tibble
+    dplyr::as_data_frame()
 }
 
-#' Post one request to access open access status information.
+#' Post one DOI to access open access status information.
 #'
 #' In general, use oadoi_fetch instead. It calls this method, returning open
-#' access status information from all your requests. One request comprises up to
-#' 25 DOIs at a time.
+#' access status information from all your requests.
 #'
 #' @inheritParams oadoi_fetch
 #' @return A tibble
 #' @examples \dontrun{
-#' oadoi_api_(dois = c("10.1016/j.jbiotec.2010.07.030",
-#' "10.1186/1471-2164-11-245"))
+#' oadoi_api_(dois = c("10.1016/j.jbiotec.2010.07.030")
 #' }
 #' @export
 oadoi_api_ <- function(dois = NULL, email = NULL) {
-  if(length(dois) == 1) {
-    u <- httr::modify_url(oadoi_baseurl(), query = args_(email = email),
-                          path = c(oadoi_api_version(), "publication", "doi", dois))
-    resp <- httr::GET(u, ua)
-  } else {
-    u <- httr::modify_url(oadoi_baseurl(), query = args_(email = email),
-                          path = c(oadoi_api_version(), "publications"))
-    resp <- httr::POST(url = u, ua,
-                       body = list(dois = dois),
-                       encode = "json", httr::accept_json(),
-                       httr::content_type_json())
-  }
-  # parse json
-  if (httr::http_type(resp) != "application/json") {
-    stop("Ups, something went wrong, because API did not return json", call. = FALSE)
-  }
-  jsonlite::fromJSON(content(resp, "text", encoding = "UTF-8"))$results %>%
-    tibble::as_data_frame()
+  u <- httr::modify_url(oadoi_baseurl(),
+                        query = args_(email = email),
+                        path = dois)
+  resp <- httr::GET(
+    u,
+    ua,
+    # be explicit about the API version roadoi has to request
+    add_headers(
+      Accept = paste0("application/x.oadoi.", oadoi_api_version(), "+json")))
+
+    # parse json
+    if (httr::http_type(resp) != "application/json") {
+      stop("Ups, something went wrong, because API did not return json",
+           call. = FALSE)
+    }
+    jsonlite::fromJSON(content(resp, "text", encoding = "UTF-8"))$results
 }

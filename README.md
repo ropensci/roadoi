@@ -25,21 +25,23 @@ library(roadoi)
 
 Use the `oadoi_fetch()` function in this package to get open access status
 information and full-text links from oaDOI. Please note that oaDOI restricts
-usage to 10k requests per day.
+usage to 10k requests per day. If you need more, simply contact the 
+[oaDOI team](https://oadoi.org/team). They will hook you up.
 
 
 ```r
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"))
-#> # A tibble: 2 x 10
-#>                   doi doi_resolver
-#> *               <chr>        <chr>
-#> 1     10.1038/ng.3260     crossref
-#> 2 10.1093/nar/gkr1047     crossref
-#> # ... with 8 more variables: evidence <chr>, free_fulltext_url <chr>,
-#> #   is_boai_license <lgl>, is_free_to_read <lgl>,
-#> #   is_subscription_journal <lgl>, license <chr>, oa_color <chr>,
-#> #   url <chr>
+#> # A tibble: 2 × 11
+#>                                                                      `_title`
+#>                                                                         <chr>
+#> 1                                       New genomes clarify mimicry evolution
+#> 2 GABI-Kat SimpleSearch: new features of the Arabidopsis thaliana T-DNA mutan
+#> # ... with 10 more variables: doi <chr>, doi_resolver <chr>,
+#> #   evidence <chr>, free_fulltext_url <chr>, is_boai_license <lgl>,
+#> #   is_free_to_read <lgl>, is_subscription_journal <lgl>, license <chr>,
+#> #   oa_color <chr>, url <chr>
 ```
+
 
 ## Share your email address to support oaDOI!
 
@@ -49,19 +51,19 @@ something breaks, but also helps Impactstory reporting API usage to the non-prof
 
 
 ```r
-roadoi::oadoi_fetch(dois = "10.1371/journal.pone.0018657", email = "najko.jahn@gmail.com")
-#> # A tibble: 1 x 10
-#>                            doi doi_resolver                      evidence
-#> *                        <chr>        <chr>                         <chr>
-#> 1 10.1371/journal.pone.0018657     crossref oa journal (via issn in doaj)
-#> # ... with 7 more variables: free_fulltext_url <chr>,
-#> #   is_boai_license <lgl>, is_free_to_read <lgl>,
-#> #   is_subscription_journal <lgl>, license <chr>, oa_color <chr>,
-#> #   url <chr>
+roadoi::oadoi_fetch(dois = "10.1371/journal.pone.0018657", email = "name@example.com")
+#> # A tibble: 1 × 11
+#>                                                                      `_title`
+#>                                                                         <chr>
+#> 1 Who Shares? Who Doesn't? Factors Associated with Openly Archiving Raw Resea
+#> # ... with 10 more variables: doi <chr>, doi_resolver <chr>,
+#> #   evidence <chr>, free_fulltext_url <chr>, is_boai_license <lgl>,
+#> #   is_free_to_read <lgl>, is_subscription_journal <lgl>, license <chr>,
+#> #   oa_color <chr>, url <chr>
 ```
 
 
-## Where to get DOIs?
+## Where to get DOIs from?
 
 [rOpenSci](https://ropensci.org/) offers [various packages to access literature databases](https://ropensci.org/packages/#literature), and many of these packages return DOIs for scholarly works, if available.
 
@@ -73,11 +75,16 @@ For instance, to get a random sample of 50 publications that are indexed by Cros
 
 ```r
 library(dplyr)
+# get a random sample
 dois_r <- rcrossref::cr_r(sample = 50)
-roadoi::oadoi_fetch(dois_r) %>% 
+# call oaDOI API
+my_df <- roadoi::oadoi_fetch(dois_r)
+# Analyse the so retrieved data 
+my_df %>% 
   group_by(oa_color) %>%
   summarise(Articles = n()) %>%
   mutate(Proportion = Articles / sum(Articles)) %>%
+  arrange(desc(Articles)) %>%
   knitr::kable()
 ```
 
@@ -85,10 +92,31 @@ roadoi::oadoi_fetch(dois_r) %>%
 
 |oa_color | Articles| Proportion|
 |:--------|--------:|----------:|
-|gold     |       11|       0.22|
-|green    |        2|       0.04|
-|NA       |       37|       0.74|
+|NA       |       42|       0.84|
+|green    |        5|       0.10|
+|gold     |        3|       0.06|
 
+Following this approach, you can also easily assess how much oaDOI's data providers
+contribute to its evidence base.
+
+
+
+```r
+my_df %>% 
+  group_by(evidence) %>%
+  summarise(Articles = n()) %>%
+  mutate(Proportion = Articles / sum(Articles)) %>%
+  arrange(desc(Articles)) %>%
+  knitr::kable()
+```
+
+
+
+|evidence                                   | Articles| Proportion|
+|:------------------------------------------|--------:|----------:|
+|closed                                     |       42|       0.84|
+|oa repository (via base-search.net oa url) |        5|       0.10|
+|hybrid journal (via crossref license url)  |        3|       0.06|
 
 ## Meta
 

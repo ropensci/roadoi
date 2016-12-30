@@ -4,13 +4,18 @@
 \alias{oadoi_fetch}
 \title{Fetch open access status information and full-text links from oaDOI}
 \usage{
-oadoi_fetch(dois = NULL, email = NULL)
+oadoi_fetch(dois = NULL, email = NULL, .progress = "none")
 }
 \arguments{
-\item{dois}{character vector, search by a single DOI or many DOIs.}
+\item{dois}{character vector, search by a single DOI or many DOIs. A maximum
+of 10,000 DOIs are allowed per request.}
 
 \item{email}{character verctor, tell oaDOI your email adress and get notified
 if something breaks. It also helps oaDOI to keep track of usage!}
+
+\item{.progress}{Shows the \code{plyr}-style progress bar. Options are "none", "text",
+"tk", "win", and "time".  See \code{\link[plyr]{create_progress_bar}} for details
+ of each. By default, no progress bar is displayed.}
 }
 \value{
 A tibble
@@ -19,7 +24,7 @@ A tibble
 This is the main function to retrieve comprehensive open acccess status
 information from the oaDOI service. Please play nice with the API. At the
 moment only 10k request are allowed per user and day.
-More info see \url{http://oadoi.org/api}
+For more info see \url{http://oadoi.org/api}
 }
 \examples{
 \dontrun{

@@ -2,12 +2,13 @@
 % Please edit documentation in R/oadoi_fetch.r
 \name{oadoi_api_}
 \alias{oadoi_api_}
-\title{Post one request to access open access status information.}
+\title{Post one DOI to access open access status information.}
 \usage{
 oadoi_api_(dois = NULL, email = NULL)
 }
 \arguments{
-\item{dois}{character vector, search by a single DOI or many DOIs.}
+\item{dois}{character vector, search by a single DOI or many DOIs. A maximum
+of 10,000 DOIs are allowed per request.}
 
 \item{email}{character verctor, tell oaDOI your email adress and get notified
 if something breaks. It also helps oaDOI to keep track of usage!}
@@ -17,13 +18,11 @@ A tibble
 }
 \description{
 In general, use oadoi_fetch instead. It calls this method, returning open
-access status information from all your requests. One request comprises up to
-25 DOIs at a time.
+access status information from all your requests.
 }
 \examples{
 \dontrun{
-oadoi_api_(dois = c("10.1016/j.jbiotec.2010.07.030",
-"10.1186/1471-2164-11-245"))
+oadoi_api_(dois = c("10.1016/j.jbiotec.2010.07.030")
 }
 }
 

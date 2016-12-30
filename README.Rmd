@@ -32,11 +32,13 @@ library(roadoi)
 
 Use the `oadoi_fetch()` function in this package to get open access status
 information and full-text links from oaDOI. Please note that oaDOI restricts
-usage to 10k requests per day.
+usage to 10k requests per day. If you need more, simply contact the 
+[oaDOI team](https://oadoi.org/team). They will hook you up.
 
 ```{r}
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"))
 ```
+
 
 ## Share your email address to support oaDOI!
 
@@ -45,11 +47,11 @@ Sharing your email address with oaDOI does not only keep you updated in case
 something breaks, but also helps Impactstory reporting API usage to the non-profit's funders.
 
 ```{r}
-roadoi::oadoi_fetch(dois = "10.1371/journal.pone.0018657", email = "najko.jahn@gmail.com")
+roadoi::oadoi_fetch(dois = "10.1371/journal.pone.0018657", email = "name@example.com")
 ```
 
 
-## Where to get DOIs?
+## Where to get DOIs from?
 
 [rOpenSci](https://ropensci.org/) offers [various packages to access literature databases](https://ropensci.org/packages/#literature), and many of these packages return DOIs for scholarly works, if available.
 
@@ -60,14 +62,31 @@ For instance, to get a random sample of 50 publications that are indexed by Cros
 
 ```{r}
 library(dplyr)
+# get a random sample
 dois_r <- rcrossref::cr_r(sample = 50)
-roadoi::oadoi_fetch(dois_r) %>% 
+# call oaDOI API
+my_df <- roadoi::oadoi_fetch(dois_r)
+# Analyse the so retrieved data 
+my_df %>% 
   group_by(oa_color) %>%
   summarise(Articles = n()) %>%
   mutate(Proportion = Articles / sum(Articles)) %>%
+  arrange(desc(Articles)) %>%
   knitr::kable()
 ```
 
+Following this approach, you can also easily assess how much oaDOI's data providers
+contribute to its evidence base.
+
+
+```{r}
+my_df %>% 
+  group_by(evidence) %>%
+  summarise(Articles = n()) %>%
+  mutate(Proportion = Articles / sum(Articles)) %>%
+  arrange(desc(Articles)) %>%
+  knitr::kable()
+```
 
 ## Meta
 
