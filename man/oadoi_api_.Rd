@@ -2,15 +2,16 @@
 % Please edit documentation in R/oadoi_fetch.r
 \name{oadoi_api_}
 \alias{oadoi_api_}
-\title{Post one DOI to access open access status information.}
+\title{Get open access status information.}
 \usage{
 oadoi_api_(dois = NULL, email = NULL)
 }
 \arguments{
-\item{dois}{character vector, search by a single DOI or many DOIs. A maximum
-of 10,000 DOIs are allowed per request.}
+\item{dois}{character vector, search by a single DOI or many DOIs. The API is limited
+to 10,000 requests per day. If you need more, get in touch with
+team@impactstory.org.}
 
-\item{email}{character verctor, tell oaDOI your email adress and get notified
+\item{email}{character verctor, tell oaDOI your email adress to get notified
 if something breaks. It also helps oaDOI to keep track of usage!}
 }
 \value{
