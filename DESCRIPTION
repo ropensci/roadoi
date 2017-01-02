@@ -4,7 +4,7 @@ Title: Client for the oaDOI-API
 Version: 0.0.2
 Authors@R: c(
     person("Najko", "Jahn", role = c("aut", "cre"), email = "najko.jahn@gmail.com"))
-Description: This packages gives access to the oaDOI API. oaDOI links DOIs
+Description: Client for the oaDOI API. oaDOI links DOIs
     representing scholarly publications to open access full-text copies.
 License: MIT + file LICENSE
 URL: https://github.com/njahn82/roadoi
@@ -14,8 +14,7 @@ Imports:
     httr,
     jsonlite,
     dplyr,
-    plyr,
-    tibble
+    plyr
 Suggests:
     roxygen2 (>= 5.0.1),
     testthat,

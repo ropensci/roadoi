@@ -14,11 +14,16 @@
 #' It is important to keep in mind that oaDOI is still in early development,
 #' which could affect the API and this client.
 #'
-#' @import httr
+#' @importFrom httr GET
+#' @importFrom httr content
+#' @importFrom httr modify_url
+#' @importFrom httr user_agent
+#' @importFrom httr add_headers
 #' @importFrom jsonlite fromJSON
-#' @import dplyr
 #' @importFrom plyr ldply
-#' @import tibble
+#' @importFrom dplyr as_data_frame
+#' @importFrom dplyr %>%
+#' @importFrom dplyr filter
 #' @name roadoi-package
 #' @aliases roadoi
 #' @docType package
