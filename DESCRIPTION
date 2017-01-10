@@ -19,5 +19,7 @@ Suggests:
     roxygen2 (>= 5.0.1),
     testthat,
     knitr,
-    covr
+    covr,
+    rmarkdown
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr

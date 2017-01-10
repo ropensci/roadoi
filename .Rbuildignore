@@ -7,3 +7,5 @@ README.Rmd
 ^codecov.yml$
 review_answer.md
 cran-comments.md
+^README\.Rmd$
+^README-.*\.png$

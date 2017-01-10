@@ -10,8 +10,8 @@ R Client for the oaDOI-API
 }
 \section{What is this client for?}{
 
-roadoi interacts with the oaDOI service, which links DOIs that are often used
-to identify scholarly works with open access versions.
+roadoi interacts with the oaDOI service, which links DOIs representing
+scholarly works with open access versions.
 }
 
 \section{General usage}{
@@ -21,7 +21,7 @@ information and full-text links from oaDOI. Please note that oaDOI restricts
 usage to 10k requests per day.
 }
 
-\section{Participate}{
+\section{Contribute}{
 
 I would be very happy for people willing to contribute to this package.
 It is important to keep in mind that oaDOI is still in early development,

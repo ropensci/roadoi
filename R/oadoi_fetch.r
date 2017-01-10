@@ -34,15 +34,7 @@ oadoi_fetch <-
         Get in touch with team@impactstory.org to get an upgrade.",
         .call = FALSE
       )
-    # validate dois
-    dois <- plyr::ldply(dois, doi_validate)
-    if (nrow(dois[dois$is_valid == FALSE, ]) > 0)
-      warning("Found mal-formed DOIs, which will not be send to oaDOI")
-    dois <- dplyr::filter(dois, is_valid == TRUE) %>%
-      .$doi %>%
-      as.character()
     plyr::ldply(dois, oadoi_api_, .progress = .progress) %>%
-      # wrap as tibble
       dplyr::as_data_frame()
   }
 
@@ -50,17 +42,18 @@ oadoi_fetch <-
 #'
 #' In general, use oadoi_fetch instead. It calls this method, returning open
 #' access status information from all your requests.
-#'
-#' @inheritParams oadoi_fetch
+#' @param doi character vector,a DOI
+#' @param email character verctor, tell oaDOI your email adress to get notified
+#'   if something breaks. It also helps oaDOI to keep track of usage!
 #' @return A tibble
 #' @examples \dontrun{
 #' oadoi_api_(dois = c("10.1016/j.jbiotec.2010.07.030")
 #' }
 #' @export
-oadoi_api_ <- function(dois = NULL, email = NULL) {
+oadoi_api_ <- function(doi = NULL, email = NULL) {
   u <- httr::modify_url(oadoi_baseurl(),
                         query = args_(email = email),
-                        path = dois)
+                        path = doi)
   resp <- httr::GET(u,
                     ua,
                     # be explicit about the API version roadoi has to request
@@ -68,10 +61,29 @@ oadoi_api_ <- function(dois = NULL, email = NULL) {
                       Accept = paste0("application/x.oadoi.", oadoi_api_version(), "+json")
                     ))
 
-  # parse json
+  # test for valid json
   if (httr::http_type(resp) != "application/json") {
-    stop("Ups, something went wrong, because API did not return json",
-         call. = FALSE)
+    # test needed because oaDOI throws 505 when non-encoded whitespace
+    # is provided by this client
+    stop(
+      sprintf(
+        "Oops, API did not return json after calling '%s': check your query - or api.oadoi.org may experience problems",
+        doi
+      ),
+      call. = FALSE
+    )
+  }
+
+  # warn if nothing could be found and return meaningful message
+  if (httr::status_code(resp) != 200) {
+    warning(
+      sprintf(
+        "oaDOI request failed [%s]\n%s",
+        httr::status_code(resp),
+        httr::content(resp)$message
+      ),
+      call. = FALSE
+    )
   }
   jsonlite::fromJSON(content(resp, "text", encoding = "UTF-8"))$results
 }
