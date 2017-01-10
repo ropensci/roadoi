@@ -1,0 +1,67 @@
+---
+title: "Introduction to roadoi "
+author: "Najko Jahn"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Open access copies of scholarly publications are sometimes hard to find. This document guides you to roadoi, a R client that interfaces the [oaDOI.org](https://oadoi.org/) linking service. 
+
+## About oaDOI.org
+
+[oaDOI](https://oadoi.org/), developed and maintained by the [team of Impactstory](https://oadoi.org/team), is a service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
+
+oaDOI uses different data sources to find open access full-texts including:
+
+- [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
+- [Datacite](https://www.datacite.org/): another DOI registration agency with a major focus on research data
+- [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
+- [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/): an aggregator of various OAI-PMH metadata sources. OAI-PMH is a protocoll often used by open access repositories.
+
+
+## Basic usage
+
+There is one major function to talk with oaDOI.org, `oadoi_fetch()`, which takes up to 10,000 DOIs as input.
+
+```{r}
+library(roadoi)
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"))
+```
+
+According to the [oaDOI.org API specification](https://oadoi.org/api), the following variables with the following definitions are returned:
+
+* `doi`: the requested DOI
+* `doi_resolver`: Possible values:
+    + crossref
+    + datacite
+* `evidence`: A phrase summarizing the step of the open access detection process where the `free_fulltext_url` was found.
+* `free_fulltext_url`: The url where we found a free-to-read version of the DOI. None when no free-to-read version was found.
+* `is_boai_license`: TRUE whenever the license is cc-by, cc0, or PD. This is the highly-regarded BOAI definition of Open access
+* `is_free_to_read`: TRUE whenever the free_fulltext_url is not None.
+* `is_subscription_journal`: TRUE whenever the journal is not in the Directory of Open Access Journals or DataCite.
+* `license`: Contains the name of the Creative Commons license associated with the free_fulltext_url, whenever one was found. Example: "cc-by".
+* `oa_color`: Possible values:
+    + green
+    + gold
+* `url`: the canonical DOI URL
+
+It is highly recommended that you provide your email address when querying oaDOI.org because it not only helps the maintainer of oaDOI, the non-profit [Impactstory](https://impactstory.org/), to inform you when something breaks, but also to demonstrate API usage to its funders. Simply use the `email` parameter:
+
+```{r}
+roadoi::oadoi_fetch("10.1186/s12864-016-2566-9", email = "name@example.com")
+```
+
+oaDOI.org limits API usage to 10k request per day. However, when you need an upgrade, contact team@impactstory.org.
+
+To follow your API call, and to estimate the time until completion, use the `.progress` parameter inherited from plyr to display a progress bar.
+
+```{r}
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), .progress = "text")
+```
+
+## Usage together with rcrossref
+
