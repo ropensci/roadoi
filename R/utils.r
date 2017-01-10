@@ -1,5 +1,5 @@
 # meta
-oadoi_baseurl <- function() "http://api.oadoi.org/"
+oadoi_baseurl <- function() "https://api.oadoi.org/"
 oadoi_api_version <- function() "1.1.0"
 api_limit <- 10000
 
