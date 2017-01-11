@@ -20,6 +20,8 @@ Suggests:
     testthat,
     knitr,
     covr,
-    rmarkdown
+    rmarkdown,
+    lubridate,
+    rcrossref
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
