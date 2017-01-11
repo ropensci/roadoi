@@ -72,8 +72,6 @@ DOIs have become essential to reference scholarly publications, and thus many di
 
 ```{r, message=FALSE}
 library(dplyr)
-# install rcrossref from CRAN
-install.packages("rcrossref")
 library(rcrossref)
 # get a random sample of DOIs and metadata describing these works
 random_dois <- rcrossref::cr_r(sample = 100) %>%
