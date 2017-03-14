@@ -2,7 +2,6 @@
 title: "Introduction to roadoi"
 author: "Najko Jahn"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to roadoi}
   %\VignetteEngine{knitr::rmarkdown}
@@ -11,7 +10,7 @@ vignette: >
 
 Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [oaDOI.org](https://oadoi.org/) service where DOIs are matched with full-text links in open access journals and archives.
 
-## About oaDOI.org
+### About oaDOI.org
 
 [oaDOI.org](https://oadoi.org/), developed and maintained by the [team of Impactstory](https://oadoi.org/team), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
 
@@ -22,7 +21,7 @@ oaDOI uses different data sources to find open access full-texts including:
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
 - [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/): an aggregator of various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories.
 
-## Basic usage
+### Basic usage
 
 There is one major function to talk with oaDOI.org, `oadoi_fetch()`, which takes up to 10,000 DOIs as input.
 
@@ -62,11 +61,11 @@ To follow your API call, and to estimate the time until completion, use the `.pr
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), .progress = "text")
 ```
 
-## Use Case: Studying the compliance with open access policies
+### Use Case: Studying the compliance with open access policies
 
 An increasing number of universities, research organisations and funders have launched open access policies in recent years. Using roadoi together with other R-packages makes it easy to examine how and to what extent researchers comply with these policies in a reproducible and transparent manner. In particular, the [rcrossref package](https://github.com/ropensci/rcrossref), maintained by rOpenSci, provides many helpful functions for this task.
 
-### Gathering DOIs representing scholalry publications
+#### Gathering DOIs representing scholarly publications
 
 DOIs have become essential for referencing scholarly publications, and thus many digital libraries and institutional databases keep track of these persistent identifiers. For the sake of this vignette, instead of starting with a pre-defined set of publications originating from these sources, we simply generate a random sample of 100 DOIs registered with Crossref by using the [rcrossref package](https://github.com/ropensci/rcrossref).
 
@@ -101,7 +100,7 @@ random_dois %>%
   arrange(desc(pubs))
 ```
 
-### Calling oaDOI.org
+#### Calling oaDOI.org
 
 Now let's call oaDOI.org
 
@@ -116,7 +115,7 @@ my_df <- dplyr::left_join(oa_df, random_dois, by = c("doi" = "DOI"))
 my_df
 ```
 
-### Reporting
+#### Reporting
 
 After gathering the data, reporting with R is very straightforward. You can even generate dynamic reports using [R Markdown](http://rmarkdown.rstudio.com/) and related packages, thus making your study reproducible and transparent for others.
 
