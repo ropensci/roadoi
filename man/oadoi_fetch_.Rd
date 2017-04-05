@@ -21,7 +21,7 @@ access status information from all your requests.
 }
 \examples{
 \dontrun{
-oadoi_fetch_(dois = c("10.1016/j.jbiotec.2010.07.030")
+oadoi_fetch_(doi = c("10.1016/j.jbiotec.2010.07.030"))
 }
 }
 

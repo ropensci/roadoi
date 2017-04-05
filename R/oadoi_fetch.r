@@ -81,7 +81,7 @@ oadoi_fetch <-
 #'   if something breaks. It also helps oaDOI to keep track of usage!
 #' @return A tibble
 #' @examples \dontrun{
-#' oadoi_fetch_(dois = c("10.1016/j.jbiotec.2010.07.030")
+#' oadoi_fetch_(doi = c("10.1016/j.jbiotec.2010.07.030"))
 #' }
 #' @export
 oadoi_fetch_ <- function(doi = NULL, email = NULL) {
@@ -94,7 +94,7 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
                     add_headers(
                       Accept = paste0("application/x.oadoi.",
                                       oadoi_api_version(), "+json")
-                    ))
+                    ), timeout(5))
 
   # test for valid json
   if (httr::http_type(resp) != "application/json") {

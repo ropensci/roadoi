@@ -160,29 +160,29 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   rcrossref::cr_works() %>%
   .$data
 random_dois
-#> # A tibble: 100 × 35
-#>                         alternative.id
-#>                                  <chr>
-#> 1                                     
-#> 2                                     
-#> 3                    S1293850513001371
-#> 4                                     
-#> 5                     0022480478901452
-#> 6  20B227F1-170D-11D7-8645000102C1865D
-#> 7                      10.2307/4076395
-#> 8                                     
-#> 9                                     
-#> 10                                    
-#> # ... with 90 more rows, and 34 more variables: container.title <chr>,
+#> # A tibble: 100 × 34
+#>       alternative.id
+#>                <chr>
+#> 1                   
+#> 2                   
+#> 3  S1385894705004109
+#> 4       BFjibs199240
+#> 5                   
+#> 6                   
+#> 7                   
+#> 8                   
+#> 9                   
+#> 10                  
+#> # ... with 90 more rows, and 33 more variables: container.title <chr>,
 #> #   created <chr>, deposited <chr>, DOI <chr>, funder <list>,
-#> #   indexed <chr>, ISBN <chr>, ISSN <chr>, issue <chr>, issued <chr>,
-#> #   link <list>, member <chr>, page <chr>, prefix <chr>, publisher <chr>,
+#> #   indexed <chr>, ISBN <chr>, ISSN <chr>, issued <chr>, link <list>,
+#> #   member <chr>, page <chr>, prefix <chr>, publisher <chr>,
 #> #   reference.count <chr>, score <chr>, source <chr>, subject <chr>,
-#> #   title <chr>, type <chr>, URL <chr>, volume <chr>, assertion <list>,
-#> #   author <list>, `clinical-trial-number` <list>, license_date <chr>,
-#> #   license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, subtitle <chr>, update.policy <chr>,
-#> #   abstract <chr>, archive <chr>
+#> #   title <chr>, type <chr>, URL <chr>, assertion <list>, author <list>,
+#> #   `clinical-trial-number` <list>, issue <chr>, volume <chr>,
+#> #   license_date <chr>, license_URL <chr>, license_delay.in.days <chr>,
+#> #   license_content.version <chr>, archive <chr>, subtitle <chr>,
+#> #   update.policy <chr>
 ```
 
 Let's see when these random publications were published
@@ -196,20 +196,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 41 × 2
+#> # A tibble: 45 × 2
 #>    issued  pubs
 #>     <dbl> <int>
-#> 1      NA    11
-#> 2    2016     7
-#> 3    2004     6
-#> 4    2010     5
-#> 5    2011     5
-#> 6    2013     5
-#> 7    2014     4
-#> 8    2015     4
-#> 9    1990     3
-#> 10   1992     3
-#> # ... with 31 more rows
+#> 1      NA    15
+#> 2    2013     7
+#> 3    2006     5
+#> 4    2009     5
+#> 5    2012     5
+#> 6    2014     5
+#> 7    1984     4
+#> 8    2011     4
+#> 9    2016     4
+#> 10   1988     3
+#> # ... with 35 more rows
 ```
 
 and of what type they are
@@ -220,16 +220,17 @@ random_dois %>%
   group_by(type) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 7 × 2
+#> # A tibble: 8 × 2
 #>                  type  pubs
 #>                 <chr> <int>
 #> 1     journal-article    67
-#> 2        book-chapter    15
-#> 3 proceedings-article    10
-#> 4           component     3
-#> 5             dataset     3
+#> 2        book-chapter    12
+#> 3 proceedings-article     8
+#> 4           component     6
+#> 5             dataset     4
 #> 6       journal-issue     1
 #> 7     reference-entry     1
+#> 8            standard     1
 ```
 
 #### Calling oaDOI.org
@@ -247,33 +248,34 @@ and merge the resulting information about open access full-text links with our C
 ```r
 my_df <- dplyr::left_join(oa_df, random_dois, by = c("doi" = "DOI"))
 my_df
-#> # A tibble: 100 × 50
-#>    `_best_open_url` `_closed_base_ids` `_closed_urls` `_open_base_ids`
-#>               <chr>             <list>         <list>           <list>
-#> 1              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 2              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 3              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 4              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 5              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 6              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 7              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 8              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 9              <NA>         <list [0]>     <list [0]>       <list [0]>
-#> 10             <NA>         <list [0]>     <list [0]>       <list [0]>
-#> # ... with 90 more rows, and 46 more variables: `_open_urls` <list>,
+#> # A tibble: 100 × 49
+#>                                                               `_best_open_url`
+#>                                                                          <chr>
+#> 1                                                                         <NA>
+#> 2                                                                         <NA>
+#> 3                                                                         <NA>
+#> 4  http://digitalcommons.macalester.edu/cgi/viewcontent.cgi?article=1045&conte
+#> 5                                                                         <NA>
+#> 6                             http://doi.org/10.1371/journal.pone.0059758.g002
+#> 7                                                                         <NA>
+#> 8             http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.678.7907
+#> 9                                                                         <NA>
+#> 10                                                                        <NA>
+#> # ... with 90 more rows, and 48 more variables: `_closed_base_ids` <list>,
+#> #   `_closed_urls` <list>, `_open_base_ids` <list>, `_open_urls` <list>,
 #> #   doi <chr>, doi_resolver <chr>, evidence <chr>,
 #> #   free_fulltext_url <chr>, is_boai_license <lgl>, is_free_to_read <lgl>,
 #> #   is_subscription_journal <lgl>, license <chr>, oa_color <chr>,
 #> #   url <chr>, year <int>, alternative.id <chr>, container.title <chr>,
 #> #   created <chr>, deposited <chr>, funder <list>, indexed <chr>,
-#> #   ISBN <chr>, ISSN <chr>, issue <chr>, issued <chr>, link <list>,
-#> #   member <chr>, page <chr>, prefix <chr>, publisher <chr>,
-#> #   reference.count <chr>, score <chr>, source <chr>, subject <chr>,
-#> #   title <chr>, type <chr>, URL <chr>, volume <chr>, assertion <list>,
-#> #   author <list>, `clinical-trial-number` <list>, license_date <chr>,
-#> #   license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, subtitle <chr>, update.policy <chr>,
-#> #   abstract <chr>, archive <chr>
+#> #   ISBN <chr>, ISSN <chr>, issued <chr>, link <list>, member <chr>,
+#> #   page <chr>, prefix <chr>, publisher <chr>, reference.count <chr>,
+#> #   score <chr>, source <chr>, subject <chr>, title <chr>, type <chr>,
+#> #   URL <chr>, assertion <list>, author <list>,
+#> #   `clinical-trial-number` <list>, issue <chr>, volume <chr>,
+#> #   license_date <chr>, license_URL <chr>, license_delay.in.days <chr>,
+#> #   license_content.version <chr>, archive <chr>, subtitle <chr>,
+#> #   update.policy <chr>
 ```
 
 #### Reporting
@@ -296,14 +298,13 @@ my_df %>%
 
 |evidence                                              | Articles| Proportion|
 |:-----------------------------------------------------|--------:|----------:|
-|closed                                                |       79|       0.79|
-|oa repository (via BASE title and first author match) |        8|       0.08|
-|oa journal (via journal title in doaj)                |        4|       0.04|
-|oa journal (via publisher name)                       |        3|       0.03|
-|hybrid journal (via crossref license)                 |        2|       0.02|
+|closed                                                |       84|       0.84|
+|oa journal (via publisher name)                       |        6|       0.06|
+|oa journal (via journal title in doaj)                |        3|       0.03|
 |oa repository (via BASE doi match)                    |        2|       0.02|
+|oa repository (via BASE title and first author match) |        2|       0.02|
+|oa repository (via pmcid lookup)                      |        2|       0.02|
 |oa repository (via BASE title match)                  |        1|       0.01|
-|oa repository (via pmcid lookup)                      |        1|       0.01|
 
 How many of them are provided as green or gold open access?
 
@@ -321,9 +322,9 @@ my_df %>%
 
 |oa_color | Articles| Proportion|
 |:--------|--------:|----------:|
-|NA       |       79|       0.79|
-|green    |       12|       0.12|
+|NA       |       84|       0.84|
 |gold     |        9|       0.09|
+|green    |        7|       0.07|
 
 Let's take a closer look and assess how green and gold is distributed over publication types?
 
@@ -339,10 +340,9 @@ my_df %>%
 
 |oa_color |type                |  n|
 |:--------|:-------------------|--:|
-|green    |journal-article     | 10|
-|gold     |journal-article     |  6|
-|gold     |component           |  3|
-|green    |book-chapter        |  1|
+|gold     |component           |  6|
+|green    |journal-article     |  6|
+|gold     |journal-article     |  3|
 |green    |proceedings-article |  1|
 
 

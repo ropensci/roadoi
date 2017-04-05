@@ -13,9 +13,9 @@
 #' It is important to keep in mind that oaDOI is still in early development,
 #' which could affect the API and this client.
 #'
-#' @importFrom httr GET content modify_url user_agent add_headers status_code
+#' @importFrom httr GET content modify_url user_agent add_headers status_code timeout
 #' @importFrom jsonlite fromJSON
-#' @importFrom plyr ldply
+#' @importFrom plyr ldply create_progress_bar
 #' @importFrom dplyr as_data_frame %>%
 #' @name roadoi-package
 #' @aliases roadoi
