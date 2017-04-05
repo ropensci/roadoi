@@ -32,6 +32,10 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2
 
 According to the [oaDOI.org API specification](https://oadoi.org/api), the following variables with the following definitions are returned:
 
+* `_best_open_url`: Link to free full-text
+* `_closed_base_ids`: Ids of oai metadata records with closed access full-text links collected by the [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/) 
+* `_open_base_ids`: Ids of oai metadata records with open access full-text links collected by the [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/)
+* `_open_urls`: full-text url
 * `doi`: the requested DOI
 * `doi_resolver`: Possible values:
     + crossref
@@ -46,6 +50,7 @@ According to the [oaDOI.org API specification](https://oadoi.org/api), the follo
     + green
     + gold
 * `url`: the canonical DOI URL
+* `year`: year of publication
 
 Providing your email address when using this client is highly appreciated by oaDOI.org. It not only helps the maintainer of oaDOI.org, the non-profit [Impactstory](https://impactstory.org/), to inform you when something breaks, but also to demonstrate API usage to its funders. Simply use the `email` parameter for this purpose:
 
