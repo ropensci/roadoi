@@ -9,7 +9,7 @@ Description: This web client interfaces oaDOI (https://oadoi.org), a service fin
     repositories. It provides unified access to various data sources for open access
     full-text links including Crossref, Bielefeld Academic Search Engine (BASE) and 
     the Directory of Open Access Journals (DOAJ). API usage is free and no 
-    registration is required
+    registration is required.
 License: MIT + file LICENSE
 URL: https://github.com/njahn82/roadoi
 BugReports: https://github.com/njahn82/roadoi/issues

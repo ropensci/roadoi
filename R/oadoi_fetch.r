@@ -8,7 +8,7 @@
 #' @param dois character vector, search by a single DOI or many DOIs.
 #'   A rate limit of 100k requests per day is suggested. If you need to access
 #'   more data, use the data dump \url{https://oadoi.org/api#dataset} instead.
-#' @param email character verctor, tell oaDOI your email adress to get notified
+#' @param email character vector, tell oaDOI your email adress to get notified
 #'   if something breaks. It also helps oaDOI to keep track of usage!
 #' @param .progress Shows the \code{plyr}-style progress bar.
 #'   Options are "none", "text", "tk", "win", and "time".
@@ -30,24 +30,23 @@
 #'  [,7] \tab evidence           \tab A phrase summarizing the step of the
 #'  open access detection process where the full-text links were found. \cr
 #'  [,8] \tab free_fulltext_url  \tab URL where the free version was found \cr
-#'  [,9] \tab is_boai_license    \tab TRUE whenever the license indications Creative
+#'  [,9] \tab is_boai_license    \tab TRUE whenever the license indications are Creative
 #'  Commons - Attribution (CC BY), Creative Commons CC - Universal(CC 0)) or Public
-#'  Domain were found. These permissive licenses comply with the highly-regarded BOAI
+#'  Domain. These permissive licenses comply with the highly-regarded BOAI
 #'  definition of Open access \cr
-#' [,10] \tab is_free_to_read    \tab TRUE if freely availabe full-text was found
+#' [,10] \tab is_free_to_read    \tab TRUE if freely available full-text was found
 #'  \cr
 #' [,11] \tab is_subscription_journal \tab TRUE if article is published in
 #' toll-access journal \cr
 #' [,12] \tab license      \tab Contains the name of the Creative Commons license
 #' associated with the free_fulltext_url, whenever one was found. \cr
-#' [,13] \tab oa_color           \tab OA delvered by journal (gold) or by repository (green) \cr
+#' [,13] \tab oa_color           \tab OA delivered by journal (gold) or
+#' by repository (green) \cr
 #' [,14] \tab url                \tab the canonical DOI UR \cr
 #' [,15] \tab year               \tab publishing year \cr
 #' }
 #'
-#' The contents are all strings.
-#'
-#' The columns \code{_closed_base_ids}, \code{_open_base_ids}, \code{_open_urls},
+#' The columns \code{`_closed_base_ids`}, \code{`_open_base_ids`}, \code{`_open_urls`},
 #'  are list-columns and may have multiple entries.
 #'
 #' @examples \dontrun{
@@ -93,7 +92,8 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
                     ua,
                     # be explicit about the API version roadoi has to request
                     add_headers(
-                      Accept = paste0("application/x.oadoi.", oadoi_fetch_version(), "+json")
+                      Accept = paste0("application/x.oadoi.",
+                                      oadoi_api_version(), "+json")
                     ))
 
   # test for valid json
@@ -102,7 +102,8 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
     # is provided by this client
     stop(
       sprintf(
-        "Oops, API did not return json after calling '%s': check your query - or api.oadoi.org may experience problems",
+        "Oops, API did not return json after calling '%s':
+        check your query - or api.oadoi.org may experience problems",
         doi
       ),
       call. = FALSE
