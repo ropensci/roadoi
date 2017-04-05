@@ -15,7 +15,40 @@
 #'   See \code{\link[plyr]{create_progress_bar}} for details
 #'   of each. By default, no progress bar is displayed.
 #'
-#' @return A tibble
+#' @return The result is a tibble with each row representing a publication and
+#' and the following columns.
+#'
+#' \tabular{rll}{
+#'  [,1] \tab `_best_open_url`   \tab link to free full-text \cr
+#'  [,2] \tab `_closed_base_ids` \tab ids of oai metadata records with closed access
+#'  full-text links collected by the Bielefeld Academic Search Engine (BASE) \cr
+#'  [,3] \tab `_open_base_ids`   \tab  ids of oai metadata records with open access
+#'  full-text links collected by the Bielefeld Academic Search Engine (BASE) \cr
+#'  [,4] \tab `_open_urls`       \tab full-text url \cr
+#'  [,5] \tab doi                \tab DOI \cr
+#'  [,6] \tab doi_resolver       \tab DOI agency \cr
+#'  [,7] \tab evidence           \tab A phrase summarizing the step of the
+#'  open access detection process where the full-text links were found. \cr
+#'  [,8] \tab free_fulltext_url  \tab URL where the free version was found \cr
+#'  [,9] \tab is_boai_license    \tab TRUE whenever the license indications Creative
+#'  Commons - Attribution (CC BY), Creative Commons CC - Universal(CC 0)) or Public
+#'  Domain were found. These permissive licenses comply with the highly-regarded BOAI
+#'  definition of Open access \cr
+#' [,10] \tab is_free_to_read    \tab TRUE if freely availabe full-text was found
+#'  \cr
+#' [,11] \tab is_subscription_journal \tab TRUE if article is published in
+#' toll-access journal \cr
+#' [,12] \tab license      \tab Contains the name of the Creative Commons license
+#' associated with the free_fulltext_url, whenever one was found. \cr
+#' [,13] \tab oa_color           \tab OA delvered by journal (gold) or by repository (green) \cr
+#' [,14] \tab url                \tab the canonical DOI UR \cr
+#' [,15] \tab year               \tab publishing year \cr
+#' }
+#'
+#' The contents are all strings.
+#'
+#' The columns \code{_closed_base_ids}, \code{_open_base_ids}, \code{_open_urls},
+#'  are list-columns and may have multiple entries.
 #'
 #' @examples \dontrun{
 #' oadoi_fetch("10.1016/j.shpsc.2013.03.020")
