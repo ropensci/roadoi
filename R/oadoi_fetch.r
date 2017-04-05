@@ -69,7 +69,7 @@ oadoi_fetch <-
         https://oadoi.org/api#dataset instead",
         .call = FALSE
       )
-    plyr::ldply(dois, oadoi_api_, .progress = .progress) %>%
+    plyr::ldply(dois, oadoi_fetch_, .progress = .progress) %>%
       dplyr::as_data_frame()
   }
 
@@ -82,10 +82,10 @@ oadoi_fetch <-
 #'   if something breaks. It also helps oaDOI to keep track of usage!
 #' @return A tibble
 #' @examples \dontrun{
-#' oadoi_api_(dois = c("10.1016/j.jbiotec.2010.07.030")
+#' oadoi_fetch_(dois = c("10.1016/j.jbiotec.2010.07.030")
 #' }
 #' @export
-oadoi_api_ <- function(doi = NULL, email = NULL) {
+oadoi_fetch_ <- function(doi = NULL, email = NULL) {
   u <- httr::modify_url(oadoi_baseurl(),
                         query = args_(email = email),
                         path = doi)
@@ -93,7 +93,7 @@ oadoi_api_ <- function(doi = NULL, email = NULL) {
                     ua,
                     # be explicit about the API version roadoi has to request
                     add_headers(
-                      Accept = paste0("application/x.oadoi.", oadoi_api_version(), "+json")
+                      Accept = paste0("application/x.oadoi.", oadoi_fetch_version(), "+json")
                     ))
 
   # test for valid json

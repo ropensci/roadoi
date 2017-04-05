@@ -53,7 +53,7 @@ associated with the free_fulltext_url, whenever one was found. \cr
 The contents are all strings.
 
 The columns \code{_closed_base_ids}, \code{_open_base_ids}, \code{_open_urls},
- are list-columns and may have multiple entries and are of ).
+ are list-columns and may have multiple entries.
 }
 \description{
 This is the main function to retrieve comprehensive open acccess status
