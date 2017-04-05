@@ -14,21 +14,21 @@ knitr::opts_chunk$set(
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/njahn82/roadoi?branch=master&svg=true)](https://ci.appveyor.com/project/njahn82/roadoi)
 [![codecov.io](https://codecov.io/github/njahn82/roadoi/coverage.svg?branch=master)](https://codecov.io/github/njahn82/roadoi?branch=master)
 
-roadoi interacts with the [oaDOI service](http://oadoi.org/), which links DOIs 
-and open access versions of scholarly works.
+roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple interface which links DOIs 
+and open access versions of scholarly works. oaDOI powers [unpaywall](http://unpaywall.org/).
 
 API Documentation: <http://oadoi.org/api>
 
 ## How do I use it? 
 
 Use the `oadoi_fetch()` function in this package to get open access status
-information and full-text links from oaDOI. Please note that oaDOI restricts
-usage to 10k requests per day. If you need more, simply contact the 
-[oaDOI team](https://oadoi.org/team). They will hook you up.
+information and full-text links from oaDOI.
 
 ```{r}
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"))
 ```
+
+There are no API restrictions. However, a rate limit of 100k is implemented. If you need to access more data, use the data dump <https://oadoi.org/api#dataset> instead.
 
 ## How do I get it? 
 

@@ -1,7 +1,7 @@
 # meta
 oadoi_baseurl <- function() "https://api.oadoi.org/"
 oadoi_api_version <- function() "1.2.0"
-api_limit <- 10000
+api_limit <- 100000
 
 # user agent, so oaDOI can track the usage of this client
 ua <- httr::user_agent("https://github.com/njahn82/roadoi")

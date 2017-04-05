@@ -7,15 +7,16 @@
 oadoi_fetch(dois = NULL, email = NULL, .progress = "none")
 }
 \arguments{
-\item{dois}{character vector, search by a single DOI or many DOIs. The API is limited
-to 10,000 requests per day. If you need more, get in touch with
-team@impactstory.org.}
+\item{dois}{character vector, search by a single DOI or many DOIs.
+A rate limit of 100k requests per day is suggested. If you need to access
+more data, use the data dump \url{https://oadoi.org/api#dataset} instead.}
 
 \item{email}{character verctor, tell oaDOI your email adress to get notified
 if something breaks. It also helps oaDOI to keep track of usage!}
 
-\item{.progress}{Shows the \code{plyr}-style progress bar. Options are "none", "text",
-"tk", "win", and "time".  See \code{\link[plyr]{create_progress_bar}} for details
+\item{.progress}{Shows the \code{plyr}-style progress bar.
+Options are "none", "text", "tk", "win", and "time".
+See \code{\link[plyr]{create_progress_bar}} for details
 of each. By default, no progress bar is displayed.}
 }
 \value{
@@ -24,8 +25,8 @@ A tibble
 \description{
 This is the main function to retrieve comprehensive open acccess status
 information from the oaDOI service. Please play nice with the API. At the
-moment only 10k request are allowed per user and day.
-For more info see \url{http://oadoi.org/api}.
+moment only 100k request are allowed per user and day.
+For more info see \url{https://oadoi.org/api}.
 }
 \examples{
 \dontrun{

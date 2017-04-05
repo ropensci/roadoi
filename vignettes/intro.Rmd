@@ -23,7 +23,7 @@ oaDOI uses different data sources to find open access full-texts including:
 
 ### Basic usage
 
-There is one major function to talk with oaDOI.org, `oadoi_fetch()`, which takes up to 10,000 DOIs as input.
+There is one major function to talk with oaDOI.org, `oadoi_fetch()`.
 
 ```{r}
 library(roadoi)
@@ -52,8 +52,6 @@ Providing your email address when using this client is highly appreciated by oaD
 ```{r}
 roadoi::oadoi_fetch("10.1186/s12864-016-2566-9", email = "name@example.com")
 ```
-
-oaDOI.org limits API usage to 10,000 requests per day. However, when you need an upgrade, please contact team@impactstory.org.
 
 To follow your API call, and to estimate the time until completion, use the `.progress` parameter inherited from plyr to display a progress bar.
 
