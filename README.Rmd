@@ -34,7 +34,7 @@ There are no API restrictions. However, a rate limit of 100k is implemented. If 
 
 ## How do I get it? 
 
-To install the development version, use the [devtools package](https://cran.r-project.org/web/packages/devtools/index.html)
+To install the development version, use the [devtools package](https://cran.r-project.org/package=devtools)
 
 ```{r eval = FALSE}
 devtools::install_github("njahn82/roadoi")
