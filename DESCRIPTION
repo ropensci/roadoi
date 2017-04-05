@@ -1,11 +1,15 @@
 Package: roadoi
 Type: Package
-Title: Client for the oaDOI-API
-Version: 0.0.2
+Title: Find free versions of scholarly publications via the oaDOI service
+Version: 0.1
 Authors@R: c(
     person("Najko", "Jahn", role = c("aut", "cre"), email = "najko.jahn@gmail.com"))
-Description: Client for the oaDOI API. oaDOI links DOIs
-    representing scholarly publications to open access full-text copies.
+Description: This web client interfaces oaDOI (https://oadoi.org), a service finding 
+    free full-texts of academic papers by linking DOIs with open access journals and
+    repositories. It provides unified access to various data sources for open access
+    full-text links including Crossref, Bielefeld Academic Search Engine (BASE) and 
+    the Directory of Open Access Journals (DOAJ). API usage is free and no 
+    registration is required
 License: MIT + file LICENSE
 URL: https://github.com/njahn82/roadoi
 BugReports: https://github.com/njahn82/roadoi/issues
