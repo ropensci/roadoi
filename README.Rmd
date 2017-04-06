@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 [![Build Status](https://travis-ci.org/njahn82/roadoi.svg?branch=master)](https://travis-ci.org/njahn82/roadoi)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/njahn82/roadoi?branch=master&svg=true)](https://ci.appveyor.com/project/njahn82/roadoi)
 [![codecov.io](https://codecov.io/github/njahn82/roadoi/coverage.svg?branch=master)](https://codecov.io/github/njahn82/roadoi?branch=master)
-[![cran version](http://www.r-pkg.org/badges/version/roadoi)](https://cran.r-project.org/package=europepmc)
+[![cran version](http://www.r-pkg.org/badges/version/roadoi)](https://cran.r-project.org/package=roadoi)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/roadoi)](https://github.com/metacran/cranlogs.app)
 
 roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple interface which links DOIs 
@@ -33,6 +33,13 @@ roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"))
 There are no API restrictions. However, a rate limit of 100k is implemented. If you need to access more data, use the data dump <https://oadoi.org/api#dataset> instead.
 
 ## How do I get it? 
+
+Install and load from [CRAN](https://cran.r-project.org/package=roadoi):
+
+```{r eval=FALSE}
+install.packages("roadoi")
+library(roadoi)
+```
 
 To install the development version, use the [devtools package](https://cran.r-project.org/package=devtools)
 
