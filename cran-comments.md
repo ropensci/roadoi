@@ -22,6 +22,10 @@ and found no problems related to this submission.
 
 ---
 
+Dear CRAN maintainers, 
+
+This is a re-submission because the package did not pass the CRAN teams' auto-check service: There was a web API timeout while building the vignettes. This version now waits up to 5 seconds using the httr::timeout function.
+
 This is my initial submission of roadoi for CRAN.
 
 Thanks!
