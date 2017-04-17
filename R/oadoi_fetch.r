@@ -94,7 +94,7 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
                     add_headers(
                       Accept = paste0("application/x.oadoi.",
                                       oadoi_api_version(), "+json")
-                    ), timeout(30))
+                    ), timeout(10))
 
   # test for valid json
   if (httr::http_type(resp) != "application/json") {
