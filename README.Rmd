@@ -32,6 +32,12 @@ roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"))
 
 There are no API restrictions. However, a rate limit of 100k is implemented. If you need to access more data, use the data dump <https://oadoi.org/api#dataset> instead.
 
+### RStudio Addin
+
+The dev version comes with a RStudio Addin.
+
+![](oadoi_addin.gif)
+
 ## How do I get it? 
 
 Install and load from [CRAN](https://cran.r-project.org/package=roadoi):

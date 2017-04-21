@@ -18,7 +18,9 @@ Imports:
     httr,
     jsonlite,
     dplyr,
-    plyr
+    plyr,
+    miniUI,
+    shiny
 Suggests:
     roxygen2 (>= 5.0.1),
     testthat,

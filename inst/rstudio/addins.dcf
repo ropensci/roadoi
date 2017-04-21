@@ -1,0 +1,4 @@
+Name: Find free fulltexts
+Description:Finding free copies of scholarly articles via oaDOI.
+Binding: roadoi_addin
+Interactive: true
