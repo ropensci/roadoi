@@ -32,16 +32,23 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2
 
 According to the [oaDOI.org API specification](https://oadoi.org/api), the following variables with the following definitions are returned:
 
-* `_best_open_url`: Link to free full-text
 * `_closed_base_ids`: Ids of oai metadata records with closed access full-text links collected by the [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/) 
 * `_open_base_ids`: Ids of oai metadata records with open access full-text links collected by the [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/)
 * `_open_urls`: full-text url
+
+
+* `_best_open_url`: Link to free full-text
 * `doi`: the requested DOI
 * `doi_resolver`: Possible values:
     + crossref
     + datacite
 * `evidence`: A phrase summarizing the step of the open access detection process where the `free_fulltext_url` was found.
+* `found_green` :logical indicating whether a self-archived copy in a repository was found
+* `found_hybrid`: logical indicating whether an open access
+ article was published in a toll-access journal
 * `free_fulltext_url`: The URL where we found a free-to-read version of the DOI. None when no free-to-read version was found.
+* `green_base_collections`: internal collection ID from the
+ Bielefeld Academic Search Engine (BASE)
 * `is_boai_license`: TRUE whenever the license indications Creative Commons - Attribution (CC BY), Creative Commons  CC - Universal(CC 0)) or Public Domain were found. These permissive licenses comply with the highly-regarded [BOAI definition of Open access](http://www.budapestopenaccessinitiative.org/)
 * `is_free_to_read`: TRUE whenever the free_fulltext_url is not None.
 * `is_subscription_journal`: TRUE whenever the journal is not in the Directory of Open Access Journals or DataCite. Please note that there might be a time-lag between the first publication of an open access journal and its registration in the DOAJ.
@@ -49,6 +56,11 @@ According to the [oaDOI.org API specification](https://oadoi.org/api), the follo
 * `oa_color`: Possible values:
     + green
     + gold
+    + blue
+* `_open_base_ids`: ids of oai metadata records with open access
+ full-text links collected by the Bielefeld Academic Search Engine (BASE) 
+* `_open_urls`: full-text urls
+* `reported_noncompliant_copies` \tab links to free full-texts found provided by service often considered as not open access compliant, e.g. ResearchGate
 * `url`: the canonical DOI URL
 * `year`: year of publication
 
