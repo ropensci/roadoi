@@ -14,7 +14,7 @@
 #' }
 #'
 #' @export
-roadoi_addin <- function() {
+roadoi_addin <- function() { # nocov start
   # create user interface like the one rcrossref provides
   ui <- miniPage(
     gadgetTitleBar("Find freely available full-text via oaDOI.org"),
@@ -63,7 +63,7 @@ roadoi_addin <- function() {
     })
   }
 
-  # finally, define where and how the gadget is displayed 
+  # finally, define where and how the gadget is displayed
   viewer <- dialogViewer("Find free full-texts",
                          width = 800, height = 800)
   runGadget(ui, server, viewer = viewer)
@@ -73,3 +73,5 @@ roadoi_addin <- function() {
 create_link <- function(x) {
   paste0('<a href="', x, '" target="_blank">', x, '</a>')
 }
+
+# nocov start
