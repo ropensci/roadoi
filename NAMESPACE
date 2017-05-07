@@ -2,6 +2,7 @@
 
 export(oadoi_fetch)
 export(oadoi_fetch_)
+export(roadoi_addin)
 importFrom(dplyr,"%>%")
 importFrom(dplyr,as_data_frame)
 importFrom(dplyr,mutate)

@@ -1,3 +1,19 @@
+#' Find OA copies with RStudio addin
+#'
+#' An \href{https://rstudio.github.io/rstudioaddins/}{RStudio addin} to call
+#' \code{oadoi_fetch()}. Shows up as "Find free full-texts" in the RStudio addin
+#' menu.
+#'
+#' The addin works as follows:
+#'
+#' \enumerate{
+#'
+#' \item Copy up to ten line-separated DOIs into the text area
+#' \item Press the button "Run!"
+#' \item Click on the links in the table to download full-text
+#' }
+#'
+#' @export
 roadoi_addin <- function() {
   # create user interface like the one rcrossref provides
   ui <- miniPage(
@@ -17,7 +33,7 @@ roadoi_addin <- function() {
       tableOutput("table")
     )
   )
-
+  # here's the server-side R code that will be executed to find OA copies
   server <- function(input, output) {
     observeEvent(input$submit, {
       my_input <- reactive({
@@ -26,8 +42,10 @@ roadoi_addin <- function() {
         `_best_open_url` <- NULL
         doi <- NULL
         dois <- unlist(strsplit(input$text, "\n"))
-        if(length(dois) > 9)
+        # limit input to 10
+        if (length(dois) > 9)
           dois <- dois[1:10]
+        # fetch full-text links and return the best match
         roadoi::oadoi_fetch(dois) %>%
           select(`Free fulltext link` = `_best_open_url`, doi) %>%
           mutate(`Free fulltext link` = ifelse(
@@ -36,6 +54,7 @@ roadoi_addin <- function() {
             create_link(`Free fulltext link`)
           ))
       })
+      # output as table
       output$table <- renderTable(
         my_input(),
         sanitize.text.function = function(x)
@@ -44,17 +63,13 @@ roadoi_addin <- function() {
     })
   }
 
-  # We'll use a pane viewer, and set the minimum height at
-  # 300px to ensure we get enough screen space to display the clock.
-  viewer <- dialogViewer("Find free fulltexts", width = 800, height = 800)
+  # finally, define where and how the gadget is displayed 
+  viewer <- dialogViewer("Find free full-texts",
+                         width = 800, height = 800)
   runGadget(ui, server, viewer = viewer)
-
 }
 
-# Now all that's left is sharing this addin -- put this function
-# in an R package, provide the registration metadata at
-# 'inst/rstudio/addins.dcf', and you're ready to go!
-
+# helper to make links clickable
 create_link <- function(x) {
   paste0('<a href="', x, '" target="_blank">', x, '</a>')
 }
