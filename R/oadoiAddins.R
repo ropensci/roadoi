@@ -74,4 +74,4 @@ create_link <- function(x) {
   paste0('<a href="', x, '" target="_blank">', x, '</a>')
 }
 
-# nocov start
+# nocov end
