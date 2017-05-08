@@ -26,4 +26,3 @@ method, returning open access status information from all your requests.
 oadoi_fetch_(doi = c("10.1016/j.jbiotec.2010.07.030"))
 }
 }
-
