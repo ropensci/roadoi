@@ -4,24 +4,25 @@
 \alias{oadoi_fetch_}
 \title{Get open access status information.}
 \usage{
-oadoi_fetch_(doi = NULL, email = NULL)
+oadoi_fetch_(doi = NULL, email)
 }
 \arguments{
 \item{doi}{character vector,a DOI}
 
-\item{email}{character verctor, tell oaDOI your email adress to get notified
-if something breaks. It also helps oaDOI to keep track of usage!}
+\item{email}{character vector, required! It is strongly encourage to tell
+oaDOI your email adress, so that they can track usage and notify you
+when something breaks. Set email address in your `.Rprofile` file with
+the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.}
 }
 \value{
 A tibble
 }
 \description{
-In general, use oadoi_fetch instead. It calls this method, returning open
-access status information from all your requests.
+In general, use \code{\link{oadoi_fetch}} instead. It calls this
+method, returning open access status information from all your requests.
 }
 \examples{
 \dontrun{
 oadoi_fetch_(doi = c("10.1016/j.jbiotec.2010.07.030"))
 }
 }
-

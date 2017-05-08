@@ -2,8 +2,8 @@
 % Please edit documentation in R/roadoi-package.r
 \docType{package}
 \name{roadoi-package}
-\alias{roadoi}
 \alias{roadoi-package}
+\alias{roadoi}
 \title{R Client for the oaDOI-API}
 \description{
 R Client for the oaDOI-API
@@ -26,5 +26,5 @@ I would be very happy for people willing to contribute to this package.
 It is important to keep in mind that oaDOI is still in early development,
 which could affect the API and this client.
 }
-\keyword{package}
 
+\keyword{package}

@@ -21,4 +21,3 @@ The addin works as follows:
 \item Click on the links in the table to download full-text
 }
 }
-

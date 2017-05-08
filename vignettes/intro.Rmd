@@ -27,15 +27,12 @@ There is one major function to talk with oaDOI.org, `oadoi_fetch()`.
 
 ```{r}
 library(roadoi)
-roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"))
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com")
 ```
 
 According to the [oaDOI.org API specification](https://oadoi.org/api), the following variables with the following definitions are returned:
-
-* `_closed_base_ids`: Ids of oai metadata records with closed access full-text links collected by the [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/) 
-* `_open_base_ids`: Ids of oai metadata records with open access full-text links collected by the [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/)
-* `_open_urls`: full-text url
-
 
 * `_best_open_url`: Link to free full-text
 * `doi`: the requested DOI
@@ -64,16 +61,19 @@ According to the [oaDOI.org API specification](https://oadoi.org/api), the follo
 * `url`: the canonical DOI URL
 * `year`: year of publication
 
-Providing your email address when using this client is highly appreciated by oaDOI.org. It not only helps the maintainer of oaDOI.org, the non-profit [Impactstory](https://impactstory.org/), to inform you when something breaks, but also to demonstrate API usage to its funders. Simply use the `email` parameter for this purpose:
+Providing your email address when using this client is required by oaDOI.org. It not only helps the maintainer of oaDOI.org, the non-profit [Impactstory](https://impactstory.org/), to inform you when something breaks, but also to demonstrate API usage to its funders. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are tired to type in your email address every time you want to call oadDOI.
 
-```{r}
-roadoi::oadoi_fetch("10.1186/s12864-016-2566-9", email = "name@example.com")
+```r
+options(roadoi_email = "name@example.com")
 ```
 
 To follow your API call, and to estimate the time until completion, use the `.progress` parameter inherited from plyr to display a progress bar.
 
 ```{r}
-roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), .progress = "text")
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com", 
+                    .progress = "text")
 ```
 
 ### Use Case: Studying the compliance with open access policies
@@ -120,7 +120,7 @@ random_dois %>%
 Now let's call oaDOI.org
 
 ```{r}
-oa_df <- roadoi::oadoi_fetch(dois = random_dois$DOI)
+oa_df <- roadoi::oadoi_fetch(dois = random_dois$DOI, email = "name@example.com")
 ```
 
 and merge the resulting information about open access full-text links with our Crossref metadata-set
