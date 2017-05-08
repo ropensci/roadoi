@@ -27,7 +27,9 @@ There is one major function to talk with oaDOI.org, `oadoi_fetch()`.
 
 ```{r}
 library(roadoi)
-roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), email = "name@example.com")
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com")
 ```
 
 According to the [oaDOI.org API specification](https://oadoi.org/api), the following variables with the following definitions are returned:
@@ -68,7 +70,10 @@ options(roadoi_email = "name@example.com")
 To follow your API call, and to estimate the time until completion, use the `.progress` parameter inherited from plyr to display a progress bar.
 
 ```{r}
-roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), email = "name@example.com", .progress = "text")
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com", 
+                    .progress = "text")
 ```
 
 ### Use Case: Studying the compliance with open access policies
