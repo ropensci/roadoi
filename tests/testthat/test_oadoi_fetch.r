@@ -2,11 +2,12 @@ context("testing oadoi_fetch")
 
 test_that("oadoi_fetch returns", {
   skip_on_cran()
-  a <- oadoi_fetch(dois = "10.7717/peerj.2323")
+  email = "test@test.com"
+  a <- oadoi_fetch(dois = "10.7717/peerj.2323", email)
   b <- oadoi_fetch(dois = c("10.1038/ng.919", "10.1105/tpc.111.088682"),
-                   email = "test@test.com")
-  c <- oadoi_fetch("10.1016/j.shpsc.2013.03.020")
-  d <- oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"))
+                   email)
+  c <- oadoi_fetch("10.1016/j.shpsc.2013.03.020", email)
+  d <- oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), email)
 
 
   # correct classes
@@ -21,5 +22,10 @@ test_that("oadoi_fetch returns", {
   expect_equal(nrow(c), 1)
   expect_equal(nrow(d), 2)
 
-  expect_warning(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260")))
+  # wrong DOI
+  expect_warning(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260"), email))
+  # wrong .progress value
+  expect_warning(oadoi_fetch("10.1038/ng.3260", email, .progress = "TEXT"))
+  # missing email address
+  expect_error(oadoi_fetch("10.1038/ng.3260"))
 })

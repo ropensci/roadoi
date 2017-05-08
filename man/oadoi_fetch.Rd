@@ -4,15 +4,18 @@
 \alias{oadoi_fetch}
 \title{Fetch open access status information and full-text links from oaDOI}
 \usage{
-oadoi_fetch(dois = NULL, email = NULL, .progress = "none")
+oadoi_fetch(dois = NULL, email = getOption("roadoi_email"),
+  .progress = "none")
 }
 \arguments{
 \item{dois}{character vector, search by a single DOI or many DOIs.
 A rate limit of 100k requests per day is suggested. If you need to access
 more data, use the data dump \url{https://oadoi.org/api#dataset} instead.}
 
-\item{email}{character vector, tell oaDOI your email adress to get notified
-if something breaks. It also helps oaDOI to keep track of usage!}
+\item{email}{character vector, required! It is strongly encourage to tell
+oaDOI your email adress, so that they can track usage and notify you
+when something breaks. Set email address in your `.Rprofile` file with
+the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.}
 
 \item{.progress}{Shows the \code{plyr}-style progress bar.
 Options are "none", "text", "tk", "win", and "time".
@@ -48,8 +51,8 @@ and the following columns.
  [,12] \tab license          \tab Contains the name of the Creative
  Commons license associated with the free_fulltext_url, whenever one
  was found. \cr
- [,13] \tab oa_color         \tab OA delivered by journal (gold) or
- by repository (green) \cr
+ [,13] \tab oa_color         \tab OA delivered by journal (gold),
+ by repository (green) or others (blue) \cr
  [,14] \tab `_open_base_ids` \tab  ids of oai metadata records with open access
  full-text links collected by the Bielefeld Academic Search Engine (BASE) \cr
  [,15] \tab `_open_urls`      \tab full-text url \cr

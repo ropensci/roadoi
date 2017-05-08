@@ -8,8 +8,10 @@
 #' @param dois character vector, search by a single DOI or many DOIs.
 #'   A rate limit of 100k requests per day is suggested. If you need to access
 #'   more data, use the data dump \url{https://oadoi.org/api#dataset} instead.
-#' @param email character vector, tell oaDOI your email adress to get notified
-#'   if something breaks. It also helps oaDOI to keep track of usage!
+#' @param email character vector, required! It is strongly encourage to tell
+#'   oaDOI your email adress, so that they can track usage and notify you
+#'   when something breaks. Set email address in your `.Rprofile` file with
+#'   the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.
 #' @param .progress Shows the \code{plyr}-style progress bar.
 #'   Options are "none", "text", "tk", "win", and "time".
 #'   See \code{\link[plyr]{create_progress_bar}} for details
@@ -72,9 +74,11 @@
 #' @export
 oadoi_fetch <-
   function(dois = NULL,
-           email = NULL,
+           email = getOption("roadoi_email"),
            .progress = "none") {
     # limit
+    # input validation
+    stopifnot(!is.null(dois), !is.null(email))
     if (length(dois) > api_limit)
       stop(
         "A rate limit of 100k requests per day is suggested.
@@ -83,25 +87,28 @@ oadoi_fetch <-
         .call = FALSE
       )
     # Call API for every DOI, and return results as tbl_df
-    plyr::ldply(dois, oadoi_fetch_, .progress = .progress) %>%
+    plyr::ldply(dois, oadoi_fetch_, email, .progress = .progress) %>%
       dplyr::as_data_frame()
   }
 
 #' Get open access status information.
 #'
-#' In general, use oadoi_fetch instead. It calls this method, returning open
-#' access status information from all your requests.
+#' In general, use \code{\link{oadoi_fetch}} instead. It calls this
+#' method, returning open access status information from all your requests.
+#'
 #' @param doi character vector,a DOI
-#' @param email character verctor, tell oaDOI your email adress to get notified
-#'   if something breaks. It also helps oaDOI to keep track of usage!
+#' @param email character vector, required! It is strongly encourage to tell
+#'   oaDOI your email adress, so that they can track usage and notify you
+#'   when something breaks. Set email address in your `.Rprofile` file with
+#'   the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.
 #' @return A tibble
 #' @examples \dontrun{
 #' oadoi_fetch_(doi = c("10.1016/j.jbiotec.2010.07.030"))
 #' }
 #' @export
-oadoi_fetch_ <- function(doi = NULL, email = NULL) {
+oadoi_fetch_ <- function(doi = NULL, email) {
   u <- httr::modify_url(oadoi_baseurl(),
-                        query = args_(email = email),
+                        query = args_(email),
                         path = doi)
   # Call oaDOI API
   resp <- httr::GET(u,
@@ -137,5 +144,5 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
       call. = FALSE
     )
   }
-  jsonlite::fromJSON(content(resp, "text", encoding = "UTF-8"))$results
+  jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))$results
 }

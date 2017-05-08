@@ -46,7 +46,7 @@ roadoi_addin <- function() { # nocov start
         if (length(dois) > 9)
           dois <- dois[1:10]
         # fetch full-text links and return the best match
-        roadoi::oadoi_fetch(dois) %>%
+        roadoi::oadoi_fetch(dois, email = "name@example.com") %>%
           select(`Free fulltext link` = `_best_open_url`, doi) %>%
           mutate(`Free fulltext link` = ifelse(
             is.na(`Free fulltext link`),

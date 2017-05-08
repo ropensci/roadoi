@@ -21,7 +21,8 @@ information and full-text links from oaDOI.
 
 
 ```r
-roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"))
+roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"), 
+                    email = "name@example.com")
 #> # A tibble: 2 × 18
 #>                                      `_best_open_url`                 doi
 #>                                                 <chr>               <chr>
@@ -35,7 +36,7 @@ roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"))
 #> #   reported_noncompliant_copies <list>, url <chr>, year <int>
 ```
 
-There are no API restrictions. However, a rate limit of 100k is implemented. If you need to access more data, use the data dump <https://oadoi.org/api#dataset> instead.
+There are no API restrictions. However, providing an email address is required and a rate limit of 100k is implemented If you need to access more data, use the data dump <https://oadoi.org/api#dataset> instead.
 
 ### RStudio Addin
 
@@ -85,7 +86,7 @@ There is one major function to talk with oaDOI.org, `oadoi_fetch()`.
 
 ```r
 library(roadoi)
-roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"))
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), email = "name@example.com")
 #> # A tibble: 2 × 18
 #>                                       `_best_open_url`
 #>                                                  <chr>
@@ -101,11 +102,6 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2
 ```
 
 According to the [oaDOI.org API specification](https://oadoi.org/api), the following variables with the following definitions are returned:
-
-* `_closed_base_ids`: Ids of oai metadata records with closed access full-text links collected by the [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/) 
-* `_open_base_ids`: Ids of oai metadata records with open access full-text links collected by the [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/)
-* `_open_urls`: full-text url
-
 
 * `_best_open_url`: Link to free full-text
 * `doi`: the requested DOI
@@ -134,28 +130,17 @@ According to the [oaDOI.org API specification](https://oadoi.org/api), the follo
 * `url`: the canonical DOI URL
 * `year`: year of publication
 
-Providing your email address when using this client is highly appreciated by oaDOI.org. It not only helps the maintainer of oaDOI.org, the non-profit [Impactstory](https://impactstory.org/), to inform you when something breaks, but also to demonstrate API usage to its funders. Simply use the `email` parameter for this purpose:
-
+Providing your email address when using this client is required by oaDOI.org. It not only helps the maintainer of oaDOI.org, the non-profit [Impactstory](https://impactstory.org/), to inform you when something breaks, but also to demonstrate API usage to its funders. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are tired to type in your email address every time you want to call oadDOI.
 
 ```r
-roadoi::oadoi_fetch("10.1186/s12864-016-2566-9", email = "name@example.com")
-#> # A tibble: 1 × 18
-#>                           `_best_open_url`                       doi
-#>                                      <chr>                     <chr>
-#> 1 http://doi.org/10.1186/s12864-016-2566-9 10.1186/s12864-016-2566-9
-#> # ... with 16 more variables: doi_resolver <chr>, evidence <chr>,
-#> #   found_green <lgl>, found_hybrid <lgl>, free_fulltext_url <chr>,
-#> #   green_base_collections <list>, is_boai_license <lgl>,
-#> #   is_free_to_read <lgl>, is_subscription_journal <lgl>, license <chr>,
-#> #   oa_color <chr>, open_base_ids <list>, open_urls <list>,
-#> #   reported_noncompliant_copies <list>, url <chr>, year <int>
+options(roadoi_email = "name@example.com")
 ```
 
 To follow your API call, and to estimate the time until completion, use the `.progress` parameter inherited from plyr to display a progress bar.
 
 
 ```r
-roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), .progress = "text")
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1016/j.cognition.2014.07.007"), email = "name@example.com", .progress = "text")
 #>   |                                                                         |                                                                 |   0%  |                                                                         |================================                                 |  50%  |                                                                         |=================================================================| 100%
 #> # A tibble: 2 × 18
 #>                                       `_best_open_url`
@@ -188,28 +173,29 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   rcrossref::cr_works() %>%
   .$data
 random_dois
-#> # A tibble: 100 × 35
-#>                  alternative.id                  container.title
-#>                           <chr>                            <chr>
-#> 1                          9151         Hepatology International
-#> 2              003259109180155C                Powder Technology
-#> 3                                      Journal of Animal Science
-#> 4                               European Journal of Biochemistry
-#> 5                                    Journal of General Virology
-#> 6                                     The Modern Language Review
-#> 7                                 Advances in Tracer Methodology
-#> 8                                                        Science
-#> 9                                       Survey of Anesthesiology
-#> 10 10.1080/01690965.2010.500218 Language and Cognitive Processes
-#> # ... with 90 more rows, and 33 more variables: created <chr>,
-#> #   deposited <chr>, DOI <chr>, funder <list>, indexed <chr>, ISBN <chr>,
-#> #   ISSN <chr>, issue <chr>, issued <chr>, link <list>, member <chr>,
-#> #   page <chr>, prefix <chr>, publisher <chr>, reference.count <chr>,
-#> #   score <chr>, source <chr>, subject <chr>, title <chr>, type <chr>,
-#> #   URL <chr>, volume <chr>, assertion <list>, author <list>,
-#> #   `clinical-trial-number` <list>, license_date <chr>, license_URL <chr>,
-#> #   license_delay.in.days <chr>, license_content.version <chr>,
-#> #   subtitle <chr>, archive <chr>, update.policy <chr>, abstract <chr>
+#> # A tibble: 100 × 34
+#>                                    alternative.id
+#>                                             <chr>
+#> 1  10.1175/1520-0493(2002)130<0668:GAOHG>2.0.CO;2
+#> 2                                                
+#> 3                                                
+#> 4                                                
+#> 5                                                
+#> 6                                                
+#> 7                           10.1081/NCN-100002482
+#> 8                                                
+#> 9                                                
+#> 10                                               
+#> # ... with 90 more rows, and 33 more variables: container.title <chr>,
+#> #   created <chr>, deposited <chr>, DOI <chr>, funder <list>,
+#> #   indexed <chr>, ISBN <chr>, ISSN <chr>, issue <chr>, issued <chr>,
+#> #   link <list>, member <chr>, page <chr>, prefix <chr>, publisher <chr>,
+#> #   reference.count <chr>, score <chr>, source <chr>, subject <chr>,
+#> #   title <chr>, type <chr>, URL <chr>, volume <chr>, assertion <list>,
+#> #   author <list>, `clinical-trial-number` <list>, license_date <chr>,
+#> #   license_URL <chr>, license_delay.in.days <chr>,
+#> #   license_content.version <chr>, update.policy <chr>, subtitle <chr>,
+#> #   abstract <chr>
 ```
 
 Let's see when these random publications were published
@@ -223,20 +209,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 48 × 2
+#> # A tibble: 45 × 2
 #>    issued  pubs
 #>     <dbl> <int>
-#> 1      NA    11
+#> 1      NA    14
 #> 2    2016     6
-#> 3    2010     5
-#> 4    2011     5
-#> 5    1991     4
-#> 6    2000     4
-#> 7    2004     4
-#> 8    2009     4
-#> 9    2013     4
-#> 10   2014     4
-#> # ... with 38 more rows
+#> 3    2003     5
+#> 4    2006     4
+#> 5    2012     4
+#> 6    2014     4
+#> 7    1990     3
+#> 8    1993     3
+#> 9    2009     3
+#> 10   2010     3
+#> # ... with 35 more rows
 ```
 
 and of what type they are
@@ -247,18 +233,15 @@ random_dois %>%
   group_by(type) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 9 × 2
+#> # A tibble: 6 × 2
 #>                  type  pubs
 #>                 <chr> <int>
-#> 1     journal-article    77
-#> 2        book-chapter     8
-#> 3           component     7
+#> 1     journal-article    79
+#> 2        book-chapter    13
+#> 3           component     3
 #> 4 proceedings-article     3
-#> 5                book     1
-#> 6             dataset     1
-#> 7        dissertation     1
-#> 8           monograph     1
-#> 9     reference-entry     1
+#> 5             dataset     1
+#> 6     reference-entry     1
 ```
 
 #### Calling oaDOI.org
@@ -267,7 +250,7 @@ Now let's call oaDOI.org
 
 
 ```r
-oa_df <- roadoi::oadoi_fetch(dois = random_dois$DOI)
+oa_df <- roadoi::oadoi_fetch(dois = random_dois$DOI, email = "name@example.com")
 ```
 
 and merge the resulting information about open access full-text links with our Crossref metadata-set
@@ -276,20 +259,20 @@ and merge the resulting information about open access full-text links with our C
 ```r
 my_df <- dplyr::left_join(oa_df, random_dois, by = c("doi" = "DOI"))
 my_df
-#> # A tibble: 100 × 52
-#>                                       `_best_open_url`
-#>                                                  <chr>
-#> 1  http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2790590
-#> 2                                                 <NA>
-#> 3                                                 <NA>
-#> 4                                                 <NA>
-#> 5                                                 <NA>
-#> 6                                                 <NA>
-#> 7                                                 <NA>
-#> 8                                                 <NA>
-#> 9                                                 <NA>
-#> 10                                                <NA>
-#> # ... with 90 more rows, and 51 more variables: doi <chr>,
+#> # A tibble: 100 × 51
+#>                                    `_best_open_url`
+#>                                               <chr>
+#> 1                                              <NA>
+#> 2             http://arxiv.org/abs/cond-mat/0312402
+#> 3                                              <NA>
+#> 4                                              <NA>
+#> 5  http://doi.org/10.1371/journal.pone.0085797.t001
+#> 6                                              <NA>
+#> 7                                              <NA>
+#> 8                                              <NA>
+#> 9                                              <NA>
+#> 10 http://doi.org/10.1371/journal.pone.0004498.g005
+#> # ... with 90 more rows, and 50 more variables: doi <chr>,
 #> #   doi_resolver <chr>, evidence <chr>, found_green <lgl>,
 #> #   found_hybrid <lgl>, free_fulltext_url <chr>,
 #> #   green_base_collections <list>, is_boai_license <lgl>,
@@ -304,7 +287,7 @@ my_df
 #> #   volume <chr>, assertion <list>, author <list>,
 #> #   `clinical-trial-number` <list>, license_date <chr>, license_URL <chr>,
 #> #   license_delay.in.days <chr>, license_content.version <chr>,
-#> #   subtitle <chr>, archive <chr>, update.policy <chr>, abstract <chr>
+#> #   update.policy <chr>, subtitle <chr>, abstract <chr>
 ```
 
 #### Reporting
@@ -327,12 +310,13 @@ my_df %>%
 
 |evidence                                              | Articles| Proportion|
 |:-----------------------------------------------------|--------:|----------:|
-|closed                                                |       76|       0.76|
-|oa repository (via BASE title and first author match) |        9|       0.09|
-|oa journal (via journal title in doaj)                |        6|       0.06|
-|oa journal (via publisher name)                       |        6|       0.06|
-|oa repository (via BASE title match)                  |        2|       0.02|
-|oa repository (via pmcid lookup)                      |        1|       0.01|
+|closed                                                |       84|       0.84|
+|oa repository (via BASE title and first author match) |        5|       0.05|
+|oa journal (via publisher name)                       |        3|       0.03|
+|oa repository (via BASE doi match)                    |        3|       0.03|
+|hybrid (via crossref license)                         |        2|       0.02|
+|oa journal (via journal title in doaj)                |        2|       0.02|
+|oa repository (via datacite prefix)                   |        1|       0.01|
 
 How many of them are provided as green or gold open access?
 
@@ -350,10 +334,10 @@ my_df %>%
 
 |oa_color | Articles| Proportion|
 |:--------|--------:|----------:|
-|NA       |       76|       0.76|
-|gold     |       12|       0.12|
-|green    |        9|       0.09|
-|blue     |        3|       0.03|
+|NA       |       84|       0.84|
+|green    |        7|       0.07|
+|gold     |        5|       0.05|
+|blue     |        4|       0.04|
 
 Let's take a closer look and assess how green and gold is distributed over publication types?
 
@@ -369,11 +353,11 @@ my_df %>%
 
 |oa_color |type            |  n|
 |:--------|:---------------|--:|
-|green    |journal-article |  8|
-|gold     |component       |  6|
-|gold     |journal-article |  6|
-|blue     |journal-article |  3|
-|green    |monograph       |  1|
+|green    |journal-article |  6|
+|blue     |journal-article |  4|
+|gold     |component       |  3|
+|gold     |journal-article |  2|
+|green    |book-chapter    |  1|
 
 
 ## Meta
