@@ -23,7 +23,7 @@ oaDOI uses different data sources to find open access full-texts including:
 
 ### Basic usage
 
-There is one major function to talk with oaDOI.org, `oadoi_fetch()`.
+There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking DOIs and your email address as required arguments.
 
 ```{r}
 library(roadoi)
@@ -31,6 +31,8 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1016/j.cognition.2014.07.007"), 
                     email = "name@example.com")
 ```
+
+#### What's returned?
 
 According to the [oaDOI.org API specification](https://oadoi.org/api), the following variables with the following definitions are returned:
 
@@ -57,17 +59,21 @@ According to the [oaDOI.org API specification](https://oadoi.org/api), the follo
 * `_open_base_ids`: ids of oai metadata records with open access
  full-text links collected by the Bielefeld Academic Search Engine (BASE) 
 * `_open_urls`: full-text urls
-* `reported_noncompliant_copies` \tab links to free full-texts found provided by service often considered as not open access compliant, e.g. ResearchGate
+* `reported_noncompliant_copies` links to free full-texts found provided by service often considered as non  compliant with open access policies and guidelines
 * `url`: the canonical DOI URL
 * `year`: year of publication
 
-Providing your email address when using this client is required by oaDOI.org. It not only helps the maintainer of oaDOI.org, the non-profit [Impactstory](https://impactstory.org/), to inform you when something breaks, but also to demonstrate API usage to its funders. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are tired to type in your email address every time you want to call oadDOI.
+#### Any API restrictions?
+
+There are no API restrictions. However, providing your email address when using this client is required by oaDOI.org. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are tired to type in your email address every time you want to call oadDOI.
 
 ```r
 options(roadoi_email = "name@example.com")
 ```
 
-To follow your API call, and to estimate the time until completion, use the `.progress` parameter inherited from plyr to display a progress bar.
+#### Keeping track of crawling
+
+To follow your API call, and to estimate the time until completion, use the `.progress` parameter inherited from `plyr` to display a progress bar.
 
 ```{r}
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
