@@ -37,7 +37,7 @@ There are no API restrictions. However, providing an email address is required a
 
 The dev version comes with a RStudio Addin.
 
-![](oadoi_addin.gif)
+![](inst/img/oadoi_addin.gif)
 
 ## How do I get it? 
 
