@@ -42,7 +42,7 @@ There are no API restrictions. However, providing an email address is required a
 
 ### RStudio Addin
 
-The dev version comes with a RStudio Addin.
+This package also has a RStudio Addin for easily finding free full-texts in RStudio.
 
 ![](inst/img/oadoi_addin.gif)
 
@@ -187,18 +187,18 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   .$data
 random_dois
 #> # A tibble: 100 × 35
-#>       alternative.id
-#>                <chr>
-#> 1                   
-#> 2                   
-#> 3                768
-#> 4               9360
-#> 5                   
-#> 6               1177
-#> 7                   
-#> 8  S1052305715004553
-#> 9                   
-#> 10                  
+#>                        alternative.id
+#>                                 <chr>
+#> 1                                    
+#> 2                                    
+#> 3                                    
+#> 4                       902065,902065
+#> 5  10.1111/j.1467-6494.1958.tb01595.x
+#> 6                                  88
+#> 7               S0165-2478(97)88690-7
+#> 8                                    
+#> 9                                    
+#> 10                                   
 #> # ... with 90 more rows, and 34 more variables: container.title <chr>,
 #> #   created <chr>, deposited <chr>, DOI <chr>, funder <list>,
 #> #   indexed <chr>, ISBN <chr>, ISSN <chr>, issue <chr>, issued <chr>,
@@ -207,8 +207,8 @@ random_dois
 #> #   title <chr>, type <chr>, URL <chr>, volume <chr>, assertion <list>,
 #> #   author <list>, `clinical-trial-number` <list>, license_date <chr>,
 #> #   license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, update.policy <chr>, archive <chr>,
-#> #   subtitle <chr>, abstract <chr>
+#> #   license_content.version <chr>, abstract <chr>, archive <chr>,
+#> #   subtitle <chr>, update.policy <chr>
 ```
 
 Let's see when these random publications were published
@@ -222,20 +222,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 45 × 2
+#> # A tibble: 47 × 2
 #>    issued  pubs
 #>     <dbl> <int>
-#> 1      NA    10
-#> 2    2016     9
-#> 3    2015     8
-#> 4    2006     5
-#> 5    2010     5
-#> 6    2011     5
-#> 7    2013     4
-#> 8    2014     4
-#> 9    1979     3
-#> 10   2008     3
-#> # ... with 35 more rows
+#> 1    2011     8
+#> 2      NA     7
+#> 3    2013     5
+#> 4    1993     4
+#> 5    1998     4
+#> 6    1999     4
+#> 7    2005     4
+#> 8    2006     4
+#> 9    2008     4
+#> 10   2002     3
+#> # ... with 37 more rows
 ```
 
 and of what type they are
@@ -246,16 +246,14 @@ random_dois %>%
   group_by(type) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 7 × 2
+#> # A tibble: 5 × 2
 #>                  type  pubs
 #>                 <chr> <int>
-#> 1     journal-article    75
-#> 2        book-chapter     8
-#> 3 proceedings-article     8
-#> 4             dataset     5
-#> 5           component     2
-#> 6                book     1
-#> 7       journal-issue     1
+#> 1     journal-article    83
+#> 2        book-chapter     5
+#> 3           component     5
+#> 4 proceedings-article     4
+#> 5             dataset     3
 ```
 
 #### Calling oaDOI.org
@@ -274,19 +272,19 @@ and merge the resulting information about open access full-text links with our C
 my_df <- dplyr::left_join(oa_df, random_dois, by = c("doi" = "DOI"))
 my_df
 #> # A tibble: 100 × 54
-#>                                       `_best_open_url` `_closed_base_ids`
-#>                                                  <chr>             <list>
-#> 1                                                 <NA>          <chr [1]>
-#> 2                                                 <NA>         <list [0]>
-#> 3                                                 <NA>         <list [0]>
-#> 4                                                 <NA>         <list [0]>
-#> 5          http://doi.org/10.1371/journal.pone.0078558         <list [0]>
-#> 6                                                 <NA>         <list [0]>
-#> 7                                                 <NA>         <list [0]>
-#> 8                                                 <NA>         <list [0]>
-#> 9                                                 <NA>         <list [0]>
-#> 10 http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2766215         <list [0]>
-#> # ... with 90 more rows, and 52 more variables:
+#>                                                               `_best_open_url`
+#>                                                                          <chr>
+#> 1                                                                         <NA>
+#> 2                                                                         <NA>
+#> 3                                                                         <NA>
+#> 4                                           http://doi.org/10.1155/2014/902065
+#> 5                                                                         <NA>
+#> 6  http://psasir.upm.edu.my/24536/1/Quantifying%20the%20effects%20of%20iodine%
+#> 7                                                                         <NA>
+#> 8                                                                         <NA>
+#> 9                                                                         <NA>
+#> 10                                                                        <NA>
+#> # ... with 90 more rows, and 53 more variables: `_closed_base_ids` <list>,
 #> #   `_green_base_collections` <list>, `_open_base_ids` <list>,
 #> #   `_open_urls` <list>, doi <chr>, doi_resolver <chr>, evidence <chr>,
 #> #   found_green <lgl>, found_hybrid <lgl>, free_fulltext_url <chr>,
@@ -301,8 +299,8 @@ my_df
 #> #   title <chr>, type <chr>, URL <chr>, volume <chr>, assertion <list>,
 #> #   author <list>, `clinical-trial-number` <list>, license_date <chr>,
 #> #   license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, update.policy <chr>, archive <chr>,
-#> #   subtitle <chr>, abstract <chr>
+#> #   license_content.version <chr>, abstract <chr>, archive <chr>,
+#> #   subtitle <chr>, update.policy <chr>
 ```
 
 #### Reporting
@@ -325,12 +323,12 @@ my_df %>%
 
 |evidence                                              | Articles| Proportion|
 |:-----------------------------------------------------|--------:|----------:|
-|closed                                                |       86|       0.86|
-|oa journal (via journal title in doaj)                |        6|       0.06|
-|oa repository (via BASE title and first author match) |        3|       0.03|
-|oa journal (via publisher name)                       |        2|       0.02|
-|oa repository (via pmcid lookup)                      |        2|       0.02|
-|oa repository (via BASE title match)                  |        1|       0.01|
+|closed                                                |       83|       0.83|
+|oa repository (via BASE title and first author match) |        6|       0.06|
+|oa repository (via pmcid lookup)                      |        5|       0.05|
+|oa journal (via publisher name)                       |        4|       0.04|
+|oa journal (via journal title in doaj)                |        1|       0.01|
+|oa repository (via BASE doi match)                    |        1|       0.01|
 
 How many of them are provided as green or gold open access?
 
@@ -348,10 +346,9 @@ my_df %>%
 
 |oa_color | Articles| Proportion|
 |:--------|--------:|----------:|
-|NA       |       86|       0.86|
-|gold     |        8|       0.08|
-|green    |        5|       0.05|
-|blue     |        1|       0.01|
+|NA       |       83|       0.83|
+|green    |       12|       0.12|
+|gold     |        5|       0.05|
 
 Let's take a closer look and assess how green and gold is distributed over publication types?
 
@@ -367,10 +364,10 @@ my_df %>%
 
 |oa_color |type            |  n|
 |:--------|:---------------|--:|
-|gold     |journal-article |  6|
-|green    |journal-article |  5|
-|gold     |component       |  2|
-|blue     |journal-article |  1|
+|green    |journal-article | 10|
+|gold     |component       |  4|
+|green    |book-chapter    |  2|
+|gold     |journal-article |  1|
 
 
 ## Meta

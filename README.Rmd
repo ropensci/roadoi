@@ -35,7 +35,7 @@ There are no API restrictions. However, providing an email address is required a
 
 ### RStudio Addin
 
-The dev version comes with a RStudio Addin.
+This package also has a RStudio Addin for easily finding free full-texts in RStudio.
 
 ![](inst/img/oadoi_addin.gif)
 

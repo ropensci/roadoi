@@ -1,10 +1,9 @@
-# roadoi initial submission v 0.1
 
 ## Test environments
 
-* local OS X install, R 3.3.2
-* ubuntu 12.04 (on travis-ci), R 3.3.2
-* win-builder (devel and release) and appveyor CI
+* local OS X install, R 3.4.0
+* ubuntu 12.04 (on travis-ci), R 3.4.0
+* win-builder (release, devel and oldrelease) and appveyor CI
 
 ## R CMD check results
 
@@ -24,9 +23,22 @@ and found no problems related to this submission.
 
 Dear CRAN maintainers, 
 
-This is a re-submission because the package did not pass the CRAN teams' auto-check service: There was a web API timeout while building the vignettes. This version now waits up to 5 seconds using the httr::timeout function.
+This submission implements the most recent API version, and includes new features including a RStudio Addin. 
 
-This is my initial submission of roadoi for CRAN.
+There is currently one warning on CRAN Package Check Results for roadoi (r-release-osx-x86_64) saying 
+
+"Result: WARN 
+    Error in re-building vignettes:
+     ...
+    Warning in engine$weave(file, quiet = quiet, encoding = enc) :
+     Pandoc (>= 1.12.3) and/or pandoc-citeproc not available. Falling back to R Markdown v1.
+    Quitting from lines 64-65 (intro.Rmd) 
+    Error: processing vignette 'intro.Rmd' failed with diagnostics:
+    Timeout was reached
+    Execution halted 
+"
+
+At least building the vignette should work now.
 
 Thanks!
 
