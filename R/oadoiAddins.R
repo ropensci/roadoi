@@ -21,7 +21,10 @@ roadoi_addin <- function() { # nocov start
     miniContentPanel(
       tags$h4("Find fulltexts for scholarly articles"),
       tags$p(
-        "If you have DOIs (Digital Object Identifier) for several articles and would like to find freely available copies, simply paste your DOIs in the text box below. Please note that only the first ten DOIs will be fetched."
+        "If you have DOIs (Digital Object Identifier) for several articles
+        and would like to find freely available copies, simply paste your DOIs
+        in the text box below. Please note that only the first ten DOIs will
+        be fetched."
       ),
       textAreaInput(
         inputId = "text",
