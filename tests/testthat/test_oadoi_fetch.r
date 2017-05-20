@@ -31,3 +31,10 @@ test_that("oadoi_fetch returns", {
   # missing email address
   expect_error(oadoi_fetch("10.1038/ng.3260"))
 })
+
+test_that("emails are validated", {
+  skip_on_cran()
+  expect_error(oadoi_fetch("10.1038/ng.3260", email = 123))
+  expect_error(oadoi_fetch("10.1038/ng.3260", email = "najko@gnx"))
+  expect_error(oadoi_fetch("10.1038/ng.3260", email = "FOOL"))
+})
