@@ -78,7 +78,8 @@ oadoi_fetch <-
            .progress = "none") {
     # limit
     # input validation
-    stopifnot(!is.null(dois), !is.null(email))
+    stopifnot(!is.null(dois))
+    email <- val_email(email)
     if (length(dois) > api_limit)
       stop(
         "A rate limit of 100k requests per day is suggested.
@@ -108,7 +109,7 @@ oadoi_fetch <-
 #' @export
 oadoi_fetch_ <- function(doi = NULL, email) {
   u <- httr::modify_url(oadoi_baseurl(),
-                        query = args_(email),
+                        query = list(email = email),
                         path = doi)
   # Call oaDOI API
   resp <- httr::GET(u,
@@ -117,7 +118,7 @@ oadoi_fetch_ <- function(doi = NULL, email) {
                     add_headers(
                       Accept = paste0("application/x.oadoi.",
                                       oadoi_api_version(), "+json")
-                    ), timeout(10))
+                    ), timeout(10), httr::verbose())
 
   # test for valid json
   if (httr::http_type(resp) != "application/json") {
