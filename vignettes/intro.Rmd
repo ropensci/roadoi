@@ -82,6 +82,16 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                     .progress = "text")
 ```
 
+#### Catching errors
+
+oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html) and throws an error when API does not return valid json or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
+
+```{r}
+random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
+purrr::map_df(random_dois, 
+              plyr::failwith(f = function(x) roadoi::oadoi_fetch(x, email ="name@example.com")))
+```
+
 ### Use Case: Studying the compliance with open access policies
 
 An increasing number of universities, research organisations and funders have launched open access policies in recent years. Using roadoi together with other R-packages makes it easy to examine how and to what extent researchers comply with these policies in a reproducible and transparent manner. In particular, the [rcrossref package](https://github.com/ropensci/rcrossref), maintained by rOpenSci, provides many helpful functions for this task.

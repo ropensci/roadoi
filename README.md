@@ -23,7 +23,7 @@ information and full-text links from oaDOI.
 ```r
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"), 
                     email = "name@example.com")
-#> # A tibble: 2 × 20
+#> # A tibble: 2 x 20
 #>                                                              `_best_open_url`
 #>                                                                         <chr>
 #> 1 https://dash.harvard.edu/bitstream/handle/1/25290367/mallet%202015%20polyte
@@ -91,18 +91,19 @@ library(roadoi)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1016/j.cognition.2014.07.007"), 
                     email = "name@example.com")
-#> # A tibble: 2 × 20
-#>                                       `_best_open_url` `_closed_base_ids`
-#>                                                  <chr>             <list>
-#> 1             http://doi.org/10.1186/s12864-016-2566-9         <list [0]>
-#> 2 http://hdl.handle.net/11858/00-001M-0000-0024-2A9E-8          <chr [1]>
-#> # ... with 18 more variables: `_green_base_collections` <list>,
-#> #   `_open_base_ids` <list>, `_open_urls` <list>, doi <chr>,
-#> #   doi_resolver <chr>, evidence <chr>, found_green <lgl>,
-#> #   found_hybrid <lgl>, free_fulltext_url <chr>, is_boai_license <lgl>,
-#> #   is_free_to_read <lgl>, is_subscription_journal <lgl>, license <chr>,
-#> #   oa_color <chr>, oa_color_long <chr>,
-#> #   reported_noncompliant_copies <list>, url <chr>, year <int>
+#> # A tibble: 2 x 20
+#>                                                              `_best_open_url`
+#>                                                                         <chr>
+#> 1                                    http://doi.org/10.1186/s12864-016-2566-9
+#> 2 http://pubman.mpdl.mpg.de/pubman/item/escidoc:2070098/component/escidoc:207
+#> # ... with 19 more variables: `_closed_base_ids` <list>,
+#> #   `_green_base_collections` <list>, `_open_base_ids` <list>,
+#> #   `_open_urls` <list>, doi <chr>, doi_resolver <chr>, evidence <chr>,
+#> #   found_green <lgl>, found_hybrid <lgl>, free_fulltext_url <chr>,
+#> #   is_boai_license <lgl>, is_free_to_read <lgl>,
+#> #   is_subscription_journal <lgl>, license <chr>, oa_color <chr>,
+#> #   oa_color_long <chr>, reported_noncompliant_copies <list>, url <chr>,
+#> #   year <int>
 ```
 
 #### What's returned?
@@ -155,18 +156,42 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                     email = "name@example.com", 
                     .progress = "text")
 #>   |                                                                         |                                                                 |   0%  |                                                                         |================================                                 |  50%  |                                                                         |=================================================================| 100%
-#> # A tibble: 2 × 20
-#>                                       `_best_open_url` `_closed_base_ids`
-#>                                                  <chr>             <list>
-#> 1             http://doi.org/10.1186/s12864-016-2566-9         <list [0]>
-#> 2 http://hdl.handle.net/11858/00-001M-0000-0024-2A9E-8          <chr [1]>
-#> # ... with 18 more variables: `_green_base_collections` <list>,
-#> #   `_open_base_ids` <list>, `_open_urls` <list>, doi <chr>,
-#> #   doi_resolver <chr>, evidence <chr>, found_green <lgl>,
-#> #   found_hybrid <lgl>, free_fulltext_url <chr>, is_boai_license <lgl>,
-#> #   is_free_to_read <lgl>, is_subscription_journal <lgl>, license <chr>,
-#> #   oa_color <chr>, oa_color_long <chr>,
-#> #   reported_noncompliant_copies <list>, url <chr>, year <int>
+#> # A tibble: 2 x 20
+#>                                                              `_best_open_url`
+#>                                                                         <chr>
+#> 1                                    http://doi.org/10.1186/s12864-016-2566-9
+#> 2 http://pubman.mpdl.mpg.de/pubman/item/escidoc:2070098/component/escidoc:207
+#> # ... with 19 more variables: `_closed_base_ids` <list>,
+#> #   `_green_base_collections` <list>, `_open_base_ids` <list>,
+#> #   `_open_urls` <list>, doi <chr>, doi_resolver <chr>, evidence <chr>,
+#> #   found_green <lgl>, found_hybrid <lgl>, free_fulltext_url <chr>,
+#> #   is_boai_license <lgl>, is_free_to_read <lgl>,
+#> #   is_subscription_journal <lgl>, license <chr>, oa_color <chr>,
+#> #   oa_color_long <chr>, reported_noncompliant_copies <list>, url <chr>,
+#> #   year <int>
+```
+
+#### Catching errors
+
+oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html) and throws an error when API does not return valid json or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
+
+
+```r
+random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
+purrr::map_df(random_dois, 
+              plyr::failwith(f = function(x) roadoi::oadoi_fetch(x, email ="name@example.com")))
+#> # A tibble: 1 x 20
+#>                                                              `_best_open_url`
+#>                                                                         <chr>
+#> 1 https://dash.harvard.edu/bitstream/handle/1/25290367/mallet%202015%20polyte
+#> # ... with 19 more variables: `_closed_base_ids` <list>,
+#> #   `_green_base_collections` <list>, `_open_base_ids` <list>,
+#> #   `_open_urls` <list>, doi <chr>, doi_resolver <chr>, evidence <chr>,
+#> #   found_green <lgl>, found_hybrid <lgl>, free_fulltext_url <chr>,
+#> #   is_boai_license <lgl>, is_free_to_read <lgl>,
+#> #   is_subscription_journal <lgl>, license <chr>, oa_color <chr>,
+#> #   oa_color_long <chr>, reported_noncompliant_copies <list>, url <chr>,
+#> #   year <int>
 ```
 
 ### Use Case: Studying the compliance with open access policies
@@ -186,19 +211,19 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   rcrossref::cr_works() %>%
   .$data
 random_dois
-#> # A tibble: 100 × 35
-#>                        alternative.id
-#>                                 <chr>
-#> 1                                    
-#> 2                                    
-#> 3                                    
-#> 4                       902065,902065
-#> 5  10.1111/j.1467-6494.1958.tb01595.x
-#> 6                                  88
-#> 7               S0165-2478(97)88690-7
-#> 8                                    
-#> 9                                    
-#> 10                                   
+#> # A tibble: 100 x 35
+#>                    alternative.id
+#>                             <chr>
+#>  1     10.1021/cen-v024n009.p1271
+#>  2                               
+#>  3                               
+#>  4                     BF01500284
+#>  5                               
+#>  6 scientificamerican12081900-363
+#>  7                               
+#>  8       10.1177/0883911508095517
+#>  9                               
+#> 10                               
 #> # ... with 90 more rows, and 34 more variables: container.title <chr>,
 #> #   created <chr>, deposited <chr>, DOI <chr>, funder <list>,
 #> #   indexed <chr>, ISBN <chr>, ISSN <chr>, issue <chr>, issued <chr>,
@@ -207,8 +232,8 @@ random_dois
 #> #   title <chr>, type <chr>, URL <chr>, volume <chr>, assertion <list>,
 #> #   author <list>, `clinical-trial-number` <list>, license_date <chr>,
 #> #   license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, abstract <chr>, archive <chr>,
-#> #   subtitle <chr>, update.policy <chr>
+#> #   license_content.version <chr>, subtitle <chr>, update.policy <chr>,
+#> #   abstract <chr>, archive <chr>
 ```
 
 Let's see when these random publications were published
@@ -222,20 +247,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 47 × 2
+#> # A tibble: 48 x 2
 #>    issued  pubs
 #>     <dbl> <int>
-#> 1    2011     8
-#> 2      NA     7
-#> 3    2013     5
-#> 4    1993     4
-#> 5    1998     4
-#> 6    1999     4
-#> 7    2005     4
-#> 8    2006     4
-#> 9    2008     4
-#> 10   2002     3
-#> # ... with 37 more rows
+#>  1     NA    10
+#>  2   2006     7
+#>  3   2014     7
+#>  4   2015     5
+#>  5   1997     4
+#>  6   2002     4
+#>  7   2011     4
+#>  8   2003     3
+#>  9   2009     3
+#> 10   2010     3
+#> # ... with 38 more rows
 ```
 
 and of what type they are
@@ -246,14 +271,15 @@ random_dois %>%
   group_by(type) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 5 × 2
+#> # A tibble: 6 x 2
 #>                  type  pubs
 #>                 <chr> <int>
-#> 1     journal-article    83
-#> 2        book-chapter     5
-#> 3           component     5
-#> 4 proceedings-article     4
-#> 5             dataset     3
+#> 1     journal-article    73
+#> 2        book-chapter    12
+#> 3 proceedings-article     8
+#> 4           component     5
+#> 5             dataset     1
+#> 6           monograph     1
 ```
 
 #### Calling oaDOI.org
@@ -271,19 +297,19 @@ and merge the resulting information about open access full-text links with our C
 ```r
 my_df <- dplyr::left_join(oa_df, random_dois, by = c("doi" = "DOI"))
 my_df
-#> # A tibble: 100 × 54
-#>                                                               `_best_open_url`
-#>                                                                          <chr>
-#> 1                                                                         <NA>
-#> 2                                                                         <NA>
-#> 3                                                                         <NA>
-#> 4                                           http://doi.org/10.1155/2014/902065
-#> 5                                                                         <NA>
-#> 6  http://psasir.upm.edu.my/24536/1/Quantifying%20the%20effects%20of%20iodine%
-#> 7                                                                         <NA>
-#> 8                                                                         <NA>
-#> 9                                                                         <NA>
-#> 10                                                                        <NA>
+#> # A tibble: 100 x 54
+#>                                     `_best_open_url`
+#>                                                <chr>
+#>  1                                              <NA>
+#>  2                                              <NA>
+#>  3                                              <NA>
+#>  4                                              <NA>
+#>  5                                              <NA>
+#>  6                                              <NA>
+#>  7                                              <NA>
+#>  8                                              <NA>
+#>  9 http://heart.bmj.com/cgi/content/short/35/12/1280
+#> 10                                              <NA>
 #> # ... with 90 more rows, and 53 more variables: `_closed_base_ids` <list>,
 #> #   `_green_base_collections` <list>, `_open_base_ids` <list>,
 #> #   `_open_urls` <list>, doi <chr>, doi_resolver <chr>, evidence <chr>,
@@ -299,8 +325,8 @@ my_df
 #> #   title <chr>, type <chr>, URL <chr>, volume <chr>, assertion <list>,
 #> #   author <list>, `clinical-trial-number` <list>, license_date <chr>,
 #> #   license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, abstract <chr>, archive <chr>,
-#> #   subtitle <chr>, update.policy <chr>
+#> #   license_content.version <chr>, subtitle <chr>, update.policy <chr>,
+#> #   abstract <chr>, archive <chr>
 ```
 
 #### Reporting
@@ -323,12 +349,13 @@ my_df %>%
 
 |evidence                                              | Articles| Proportion|
 |:-----------------------------------------------------|--------:|----------:|
-|closed                                                |       83|       0.83|
-|oa repository (via BASE title and first author match) |        6|       0.06|
-|oa repository (via pmcid lookup)                      |        5|       0.05|
-|oa journal (via publisher name)                       |        4|       0.04|
-|oa journal (via journal title in doaj)                |        1|       0.01|
-|oa repository (via BASE doi match)                    |        1|       0.01|
+|closed                                                |       81|       0.81|
+|oa repository (via BASE title and first author match) |        7|       0.07|
+|oa journal (via journal title in doaj)                |        5|       0.05|
+|oa journal (via publisher name)                       |        3|       0.03|
+|oa repository (via BASE doi match)                    |        2|       0.02|
+|hybrid (via crossref license)                         |        1|       0.01|
+|oa repository (via pmcid lookup)                      |        1|       0.01|
 
 How many of them are provided as green or gold open access?
 
@@ -346,9 +373,10 @@ my_df %>%
 
 |oa_color | Articles| Proportion|
 |:--------|--------:|----------:|
-|NA       |       83|       0.83|
-|green    |       12|       0.12|
-|gold     |        5|       0.05|
+|NA       |       81|       0.81|
+|gold     |        8|       0.08|
+|green    |        8|       0.08|
+|blue     |        3|       0.03|
 
 Let's take a closer look and assess how green and gold is distributed over publication types?
 
@@ -362,12 +390,14 @@ my_df %>%
 
 
 
-|oa_color |type            |  n|
-|:--------|:---------------|--:|
-|green    |journal-article | 10|
-|gold     |component       |  4|
-|green    |book-chapter    |  2|
-|gold     |journal-article |  1|
+|oa_color |type                |  n|
+|:--------|:-------------------|--:|
+|gold     |journal-article     |  5|
+|green    |journal-article     |  4|
+|blue     |journal-article     |  3|
+|gold     |component           |  3|
+|green    |proceedings-article |  3|
+|green    |monograph           |  1|
 
 
 ## Meta
