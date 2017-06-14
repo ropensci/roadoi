@@ -14,6 +14,8 @@
 #' }
 #'
 #' @export
+
+# nolint start
 roadoi_addin <- function() { # nocov start
   # create user interface like the one rcrossref provides
   ui <- miniPage(
@@ -82,3 +84,4 @@ create_link <- function(x) {
 }
 
 # nocov end
+# nolint end
