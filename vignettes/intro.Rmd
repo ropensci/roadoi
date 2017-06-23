@@ -63,9 +63,11 @@ According to the [oaDOI.org API specification](https://oadoi.org/api), the follo
 * `url`: the canonical DOI URL
 * `year`: year of publication
 
+Note that fields to be returned might change according to the [oaDOI.org API specs](https://oadoi.org/api)
+
 #### Any API restrictions?
 
-There are no API restrictions. However, providing your email address when using this client is required by oaDOI.org. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are tired to type in your email address every time you want to call oadDOI.
+There are no API restrictions. However, providing your email address when using this client is required by oaDOI.org. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are too tired to type in your email address every time you want to call oadDOI.
 
 ```r
 options(roadoi_email = "name@example.com")
@@ -84,7 +86,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### Catching errors
 
-oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html) and throws an error when API does not return valid json or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
+oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html) and throws an error when API does not return valid JSON or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
 
 ```{r}
 random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
