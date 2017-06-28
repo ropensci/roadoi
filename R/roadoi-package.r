@@ -18,7 +18,7 @@
 #' @importFrom plyr ldply create_progress_bar
 #' @importFrom dplyr as_data_frame %>% select mutate
 #' @importFrom miniUI miniContentPanel gadgetTitleBar miniPage
-#' @importFrom shiny dialogViewer runGadget renderTable reactive observeEvent tableOutput actionButton textAreaInput tags
+#' @importFrom shiny dialogViewer runGadget renderTable reactive observeEvent tableOutput actionButton textAreaInput tags stopApp
 #' @name roadoi-package
 #' @aliases roadoi
 #' @docType package
