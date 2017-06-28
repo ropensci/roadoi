@@ -20,8 +20,8 @@ roadoi_addin <- function() {
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Find freely available full-text via oaDOI.org"),
     miniUI::miniContentPanel(
-      tags$h4("Find fulltexts for scholarly articles"),
-      tags$p(
+      shiny::tags$h4("Find fulltexts for scholarly articles"),
+      shiny::tags$p(
         "If you have DOIs (Digital Object Identifier) for several articles
         and would like to find freely available copies, simply paste your DOIs
         in the text box below. Please note that only the first ten DOIs will
@@ -55,8 +55,8 @@ roadoi_addin <- function() {
                         "name@example.com")
         # fetch full-text links and return the best match
         roadoi::oadoi_fetch(dois, email) %>%
-          select(`Free fulltext link` = `_best_open_url`, doi) %>%
-          mutate(`Free fulltext link` = ifelse(
+          dplyr::select(`Free fulltext link` = `_best_open_url`, doi) %>%
+          dplyr::mutate(`Free fulltext link` = ifelse(
             is.na(`Free fulltext link`),
             NA,
             create_link(`Free fulltext link`)
@@ -68,6 +68,10 @@ roadoi_addin <- function() {
         sanitize.text.function = function(x)
           x
       )
+    })
+    # finish interacting with addin when 'done' is clicked
+    shiny::observeEvent(input$done, {
+      stopApp()
     })
   }
 
