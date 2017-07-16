@@ -3,7 +3,14 @@ Type: Package
 Title: Find Free Versions of Scholarly Publications via the oaDOI Service
 Version: 0.2.9000
 Authors@R: c(
-    person("Najko", "Jahn", role = c("aut", "cre"), email = "najko.jahn@gmail.com"))
+    person("Najko", "Jahn", role = c("aut", "cre"), email = "najko.jahn@gmail.com"),
+    person("Tuija", "Sonkkila", role = c("rev"), comment = "Tuija Sonkkila 
+    reviewed the package for rOpenSci, 
+    see https://github.com/ropensci/onboarding/issues/115"),
+    person("Ross Mounce", role = c("rev"), comment = "Ross Mounce
+    reviewed the package for rOpenSci, 
+    see https://github.com/ropensci/onboarding/issues/115")
+    )
 Description: This web client interfaces oaDOI <https://oadoi.org>, a service finding 
     free full-texts of academic papers by linking DOIs with open access journals and
     repositories. It provides unified access to various data sources for open access
@@ -11,8 +18,8 @@ Description: This web client interfaces oaDOI <https://oadoi.org>, a service fin
     the Directory of Open Access Journals (DOAJ). API usage is free and no 
     registration is required.
 License: MIT + file LICENSE
-URL: https://github.com/njahn82/roadoi
-BugReports: https://github.com/njahn82/roadoi/issues
+URL: https://github.com/ropensci/roadoi
+BugReports: https://github.com/ropensci/roadoi/issues
 LazyData: TRUE
 Imports:
     httr,
