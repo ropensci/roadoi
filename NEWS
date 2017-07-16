@@ -1,3 +1,16 @@
+## roadoi 0.3
+
+Accepted for rOpenSci:
+<https://github.com/ropensci/onboarding/issues/115>
+
+The following suggestions from the reviewers were added:
+
+- email validation, thanks @sckott
+- bugfix Shiny Addin, thanks @tts
+- add version number as package dependencies for shiny, thanks @rossmounce
+- add unit test using lintr package, thanks @maelle
+- improved documentation
+
 ## roadoi 0.2
 
 ### NEW FEATRUES

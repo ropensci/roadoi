@@ -71,7 +71,7 @@ roadoi_addin <- function() {
     })
     # finish interacting with addin when 'done' is clicked
     shiny::observeEvent(input$done, {
-      stopApp()
+      shiny::stopApp()
     })
   }
 

@@ -10,11 +10,12 @@ knitr::opts_chunk$set(
 ```
 
 
-[![Build Status](https://travis-ci.org/njahn82/roadoi.svg?branch=master)](https://travis-ci.org/njahn82/roadoi)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/njahn82/roadoi?branch=master&svg=true)](https://ci.appveyor.com/project/njahn82/roadoi)
-[![codecov.io](https://codecov.io/github/njahn82/roadoi/coverage.svg?branch=master)](https://codecov.io/github/njahn82/roadoi?branch=master)
+[![Build Status](https://travis-ci.org/ropensci/roadoi.svg?branch=master)](https://travis-ci.org/ropensci/roadoi)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/ropensci/roadoi?branch=master&svg=true)](https://ci.appveyor.com/project/ropensci/roadoi)
+[![codecov.io](https://codecov.io/github/ropensci/roadoi/coverage.svg?branch=master)](https://codecov.io/github/ropensci/roadoi?branch=master)
 [![cran version](http://www.r-pkg.org/badges/version/roadoi)](https://cran.r-project.org/package=roadoi)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/roadoi)](https://github.com/metacran/cranlogs.app)
+[![review](https://ropensci.org/badges/115_status.svg)](https://github.com/ropensci/onboarding/issues/115)
 
 roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple interface which links DOIs 
 and open access versions of scholarly works. oaDOI powers [unpaywall](http://unpaywall.org/).
@@ -51,7 +52,7 @@ library(roadoi)
 To install the development version, use the [devtools package](https://cran.r-project.org/package=devtools)
 
 ```{r eval = FALSE}
-devtools::install_github("njahn82/roadoi")
+devtools::install_github("ropensci/roadoi")
 library(roadoi)
 ```
 
@@ -66,5 +67,6 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 License: MIT
 
-Please use the [issue tracker](https://github.com/njahn82/roadoi/issues) for bug reporting and feature requests.
+Please use the [issue tracker](https://github.com/ropensci/roadoi/issues) for bug reporting and feature requests.
 
+[![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
