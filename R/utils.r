@@ -8,7 +8,7 @@ oadoi_api_version <- function()
 api_limit <- 100000
 
 # user agent, so oaDOI can track the usage of this client
-ua <- httr::user_agent("https://github.com/njahn82/roadoi")
+ua <- httr::user_agent("https://github.com/ropensci/roadoi")
 
 #' Email checker for roadoi API
 #'
