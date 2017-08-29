@@ -95,8 +95,8 @@ oadoi_fetch <-
         .call = FALSE
       )
     # Call API for every DOI, and return results as tbl_df
-    plyr::ldply(dois, oadoi_fetch_, email, .progress = .progress) %>%
-      dplyr::as_data_frame()
+    plyr::llply(dois, oadoi_fetch_, email, .progress = .progress) %>%
+      dplyr::bind_rows()
   }
 
 #' Get open access status information.
@@ -115,17 +115,13 @@ oadoi_fetch <-
 #' }
 #' @export
 oadoi_fetch_ <- function(doi = NULL, email) {
-  u <- httr::modify_url(oadoi_baseurl(),
-                        query = list(email = email),
-                        path = doi)
+  u <- httr::modify_url(
+    oadoi_baseurl(),
+    query = list(email = email),
+    path = c(oadoi_api_version(), doi)
+  )
   # Call oaDOI API
-  resp <- httr::GET(u,
-                    ua,
-                    # be explicit about the API version roadoi has to request
-                    add_headers(
-                      Accept = paste0("application/x.oadoi.",
-                                      oadoi_api_version(), "+json")
-                    ), timeout(10))
+  resp <- httr::GET(u, ua)
 
   # test for valid json
   if (httr::http_type(resp) != "application/json") {
@@ -151,6 +147,36 @@ oadoi_fetch_ <- function(doi = NULL, email) {
       ),
       call. = FALSE
     )
+    NULL
+  } else {
+    httr::content(resp, "text", encoding = "UTF-8") %>%
+      jsonlite::fromJSON() %>%
+      purrr::map(purrr::compact) %>% # remove empty list elements
+      parse_oadoi()
   }
-  jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))$results
+}
+
+#' Parser for OADOI JSON
+#'
+#' @param req unparsed JSON
+#'
+#' @noRd
+parse_oadoi <- function(req) {
+  # be aware of empty list elements
+  req <- purrr::map_if(req, is.null, ~ NA_character_)
+  tibble::tibble(
+    doi = req$doi,
+    best_oa_location = list(as_data_frame(req$best_oa_location)),
+    oa_locations = list(as_data_frame(req$oa_location)),
+    data_standard = req$data_standard,
+    is_oa = req$is_oa,
+    journal_is_oa = ifelse(!is.null(req$journal_is_oa),
+                           FALSE, req$journal_is_oa),
+    journal_issns = req$journal_issns,
+    journal_name = req$journal_name,
+    publisher = req$publisher,
+    title = req$title,
+    year = req$year,
+    updated = req$updated
+  )
 }
