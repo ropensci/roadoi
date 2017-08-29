@@ -170,7 +170,7 @@ parse_oadoi <- function(req) {
     oa_locations = list(as_data_frame(req$oa_location)),
     data_standard = req$data_standard,
     is_oa = req$is_oa,
-    journal_is_oa = ifelse(!is.null(req$journal_is_oa),
+    journal_is_oa = ifelse(is.null(req$journal_is_oa),
                            FALSE, req$journal_is_oa),
     journal_issns = req$journal_issns,
     journal_name = req$journal_name,
