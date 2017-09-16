@@ -16,9 +16,11 @@
 #' @importFrom httr GET content modify_url user_agent add_headers status_code timeout
 #' @importFrom jsonlite fromJSON
 #' @importFrom plyr ldply create_progress_bar
-#' @importFrom dplyr as_data_frame %>% select mutate
+#' @importFrom dplyr as_data_frame %>% select mutate tibble
 #' @importFrom miniUI miniContentPanel gadgetTitleBar miniPage
 #' @importFrom shiny dialogViewer runGadget renderTable reactive observeEvent tableOutput actionButton textAreaInput tags stopApp
+#' @importFrom purrr map map_if compact
+#' @importFrom tibble tibble
 #' @name roadoi-package
 #' @aliases roadoi
 #' @docType package
