@@ -43,7 +43,7 @@ roadoi_addin <- function() {
       my_input <- reactive({
         # avoid warnings about "no visible binding for global variable"
         `Free fulltext link` <- NULL
-        `_best_open_url` <- NULL
+        `best_oa_location` <- NULL
         doi <- NULL
         dois <- unlist(strsplit(input$text, "\n"))
         # limit input to 10
@@ -55,7 +55,8 @@ roadoi_addin <- function() {
                         "name@example.com")
         # fetch full-text links and return the best match
         roadoi::oadoi_fetch(dois, email) %>%
-          dplyr::select(`Free fulltext link` = `_best_open_url`, doi) %>%
+          tidyr::unnest(best_oa_location) %>%
+          dplyr::select(`Free fulltext link` = url, doi) %>%
           dplyr::mutate(`Free fulltext link` = ifelse(
             is.na(`Free fulltext link`),
             NA,
