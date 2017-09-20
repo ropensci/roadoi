@@ -170,7 +170,7 @@ parse_oadoi <- function(req) {
     journal_name = req$journal_name,
     publisher = req$publisher,
     title = req$title,
-    year = req$year,
+    year = as.character(req$year),
     updated = req$updated,
     non_compliant = list(req$x_reported_noncompliant_copies)
   )
