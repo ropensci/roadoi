@@ -21,7 +21,9 @@ knitr::opts_chunk$set(
 roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple interface which links DOIs 
 and open access versions of scholarly works. oaDOI powers [unpaywall](http://unpaywall.org/).
 
-API Documentation: <http://oadoi.org/api>
+This client supports the most recent API Version 2.
+
+API Documentation: <http://oadoi.org/api/v2>
 
 ## How do I use it? 
 
