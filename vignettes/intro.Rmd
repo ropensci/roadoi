@@ -8,24 +8,24 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [oaDOI.org](https://oadoi.org/) service where DOIs are matched with full-text links in open access journals and archives.
+Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [oaDOI.org](https://oadoi.org/) service where DOIs are matched with freely available full-texts available from open access journals and archives.
 
 ### About oaDOI.org
 
 [oaDOI.org](https://oadoi.org/), developed and maintained by the [team of Impactstory](https://oadoi.org/team), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
 
-oaDOI uses different data sources to find open access full-texts including:
+oaDOI.org uses different data sources to find open access full-texts including:
 
 - [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
 - [Datacite](https://www.datacite.org/): another DOI registration agency with main focus on research data
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
 - [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/): an aggregator of various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories.
 
-See Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2017). The State of OA: A large-scale analysis of the prevalence and impact of Open Access articles (Version 1). PeerJ Preprints. <https://doi.org/10.7287/peerj.preprints.3119v1> for a comprehensive overview of oaDOI.org.
+See Piwowar et al. (2017) for a comprehensive overview of oaDOI.org.[^1]
 
 ### Basic usage
 
-There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking DOIs and your email address as required arguments.
+There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking a character vector of DOIs and your email address as required arguments.
 
 ```{r}
 library(roadoi)
@@ -37,10 +37,11 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 #### What's returned?
 
 The client supports API version 2. According to the [oaDOI.org API specification](https://oadoi.org/api/v2), the following variables with the following definitions are returned:
+
 **Column**|**Description**
 |:------------|:----------------------------------------------
 `doi`|DOI (always in lowercase)
-`best_oa_location`|list-column describing the best OA location. Algorithm prioritizes publisher hosted content (eg Hybrid or Gold)
+`best_oa_location`|list-column describing the best OA location. Algorithm prioritizes publisher hosted content (e.g. Hybrid or Gold)
 `oa_locations`|list-column of all the OA locations. 
 `data_standard`|Indicates the data collection approaches used for this resource. `1` mostly uses Crossref for hybrid detection. `2` uses more comprehensive hybrid detection methods. 
 `is_oa`|Is there an OA copy (logical)? 
@@ -63,6 +64,36 @@ host_type`|OA full-text provided by `publisher` or `repository`.
 license`|The license under which this copy is published
 url`|The URL where you can find this OA copy.
 versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines evidence (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
+
+You can [simplify these list-columns in at least two ways](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
+
+To get the full-text links from the list-column `best_oa_location`, you may want to use `purrr::map_chr()`.
+
+```{r}
+library(dplyr)
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com") %>%
+  dplyr::mutate(urls = purrr::map_chr(best_oa_location, "url")) %>% 
+  .$urls
+```
+
+If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`:
+
+```{r}
+library(dplyr)
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com") %>%
+  tidyr::unnest(oa_locations) %>% 
+  dplyr::mutate(
+    hostname = purrr::map(url, httr::parse_url) %>% 
+                  purrr::map_chr(., "hostname", .null = NA_integer_)
+                ) %>% 
+  dplyr::mutate(hostname = gsub("www.", "", hostname)) %>% 
+  dplyr::count(hostname)
+```
+
 
 Note that fields to be returned might change according to the [oaDOI.org API specs](https://oadoi.org/api/v2)
 
@@ -87,7 +118,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### Catching errors
 
-oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when API does not return valid JSON or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
+oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
 
 ```{r}
 random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
@@ -165,26 +196,20 @@ my_df %>%
   knitr::kable()
 ```
 
-How did oaDOI find those Open Access full-texts, which were characterized as best matches.
+How did oaDOI find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
 ```{r, results='asis'}
 my_df %>%
   filter(is_oa == TRUE) %>%
   tidyr::unnest(best_oa_location) %>% 
-  group_by(evidence) %>%
+  group_by(evidence, type) %>%
   summarise(Articles = n()) %>%
-  mutate(Proportion = Articles / sum(Articles)) %>%
   arrange(desc(Articles)) %>%
   knitr::kable()
 ```
 
-Let's take a closer look and assess how these OA types are distributed over publication types?
+#### More examples
 
-```{r}
-my_df %>%
-  filter(is_oa == TRUE) %>%
-  tidyr::unnest(best_oa_location) %>% 
-  count(evidence, type, sort = TRUE) %>% 
-  knitr::kable()
-```
+For more  examples, see Piwowar et al. 2017.[^1] Together with the article, they shared their analysis of oaDOI-data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
 
+[^1]: Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2017). The State of OA: A large-scale analysis of the prevalence and impact of Open Access articles (Version 1). PeerJ Preprints.  <https://doi.org/10.7287/peerj.preprints.3119v1>

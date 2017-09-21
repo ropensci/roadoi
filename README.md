@@ -11,8 +11,9 @@
 [![review](https://badges.ropensci.org/115_status.svg)](https://github.com/ropensci/onboarding/issues/115)
 
 
-roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple interface which links DOIs 
-and open access versions of scholarly works. oaDOI powers [unpaywall](http://unpaywall.org/).
+roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple web-interface 
+which links DOIs  and open access versions of scholarly works. 
+oaDOI powers [unpaywall](http://unpaywall.org/).
 
 This client supports the most recent API Version 2.
 
@@ -34,7 +35,7 @@ roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"),
 #> 2 10.1093/nar/gkr1047 <tibble [1 x 7]> <tibble [4 x 7]>             2
 #> # ... with 9 more variables: is_oa <lgl>, journal_is_oa <lgl>,
 #> #   journal_issns <chr>, journal_name <chr>, publisher <chr>, title <chr>,
-#> #   year <int>, updated <chr>, non_compliant <list>
+#> #   year <chr>, updated <chr>, non_compliant <list>
 ```
 
 There are no API restrictions. However, providing an email address is required and a rate limit of 100k is implemented If you need to access more data, use the data dump <https://oadoi.org/api#dataset> instead.
@@ -67,24 +68,24 @@ library(roadoi)
 
 
 
-Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [oaDOI.org](https://oadoi.org/) service where DOIs are matched with full-text links in open access journals and archives.
+Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [oaDOI.org](https://oadoi.org/) service where DOIs are matched with freely available full-texts available from open access journals and archives.
 
 ### About oaDOI.org
 
 [oaDOI.org](https://oadoi.org/), developed and maintained by the [team of Impactstory](https://oadoi.org/team), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
 
-oaDOI uses different data sources to find open access full-texts including:
+oaDOI.org uses different data sources to find open access full-texts including:
 
 - [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
 - [Datacite](https://www.datacite.org/): another DOI registration agency with main focus on research data
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
 - [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/): an aggregator of various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories.
 
-See Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2017). The State of OA: A large-scale analysis of the prevalence and impact of Open Access articles (Version 1). PeerJ Preprints. <https://doi.org/10.7287/peerj.preprints.3119v1> for a comprehensive overview of oaDOI.org.
+See Piwowar et al. (2017) for a comprehensive overview of oaDOI.org.[^1]
 
 ### Basic usage
 
-There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking DOIs and your email address as required arguments.
+There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking a character vector of DOIs and your email address as required arguments.
 
 
 ```r
@@ -99,17 +100,18 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 #> 2 10.1016/j.cognition.2014.07.007 <tibble [1 x 6]> <tibble [2 x 7]>
 #> # ... with 10 more variables: data_standard <int>, is_oa <lgl>,
 #> #   journal_is_oa <lgl>, journal_issns <chr>, journal_name <chr>,
-#> #   publisher <chr>, title <chr>, year <int>, updated <chr>,
+#> #   publisher <chr>, title <chr>, year <chr>, updated <chr>,
 #> #   non_compliant <list>
 ```
 
 #### What's returned?
 
 The client supports API version 2. According to the [oaDOI.org API specification](https://oadoi.org/api/v2), the following variables with the following definitions are returned:
+
 **Column**|**Description**
 |:------------|:----------------------------------------------
 `doi`|DOI (always in lowercase)
-`best_oa_location`|list-column describing the best OA location. Algorithm prioritizes publisher hosted content (eg Hybrid or Gold)
+`best_oa_location`|list-column describing the best OA location. Algorithm prioritizes publisher hosted content (e.g. Hybrid or Gold)
 `oa_locations`|list-column of all the OA locations. 
 `data_standard`|Indicates the data collection approaches used for this resource. `1` mostly uses Crossref for hybrid detection. `2` uses more comprehensive hybrid detection methods. 
 `is_oa`|Is there an OA copy (logical)? 
@@ -132,6 +134,47 @@ host_type`|OA full-text provided by `publisher` or `repository`.
 license`|The license under which this copy is published
 url`|The URL where you can find this OA copy.
 versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines evidence (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
+
+You can [simplify these list-columns in at least two ways](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
+
+To get the full-text links from the list-column `best_oa_location`, you may want to use `purrr::map_chr()`.
+
+
+```r
+library(dplyr)
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com") %>%
+  dplyr::mutate(urls = purrr::map_chr(best_oa_location, "url")) %>% 
+  .$urls
+#> [1] "https://bmcgenomics.biomedcentral.com/track/pdf/10.1186/s12864-016-2566-9?site=bmcgenomics.biomedcentral.com"
+#> [2] "http://pubman.mpdl.mpg.de/pubman/item/escidoc:2070098/component/escidoc:2070097/Guerra_knoeferle_2014.pdf"
+```
+
+If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`:
+
+
+```r
+library(dplyr)
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com") %>%
+  tidyr::unnest(oa_locations) %>% 
+  dplyr::mutate(
+    hostname = purrr::map(url, httr::parse_url) %>% 
+                  purrr::map_chr(., "hostname", .null = NA_integer_)
+                ) %>% 
+  dplyr::mutate(hostname = gsub("www.", "", hostname)) %>% 
+  dplyr::count(hostname)
+#> # A tibble: 4 x 2
+#>                        hostname     n
+#>                           <chr> <int>
+#> 1 bmcgenomics.biomedcentral.com     1
+#> 2              ncbi.nlm.nih.gov     1
+#> 3          pub.uni-bielefeld.de     2
+#> 4            pubman.mpdl.mpg.de     1
+```
+
 
 Note that fields to be returned might change according to the [oaDOI.org API specs](https://oadoi.org/api/v2)
 
@@ -161,13 +204,13 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 #> 2 10.1016/j.cognition.2014.07.007 <tibble [1 x 6]> <tibble [2 x 7]>
 #> # ... with 10 more variables: data_standard <int>, is_oa <lgl>,
 #> #   journal_is_oa <lgl>, journal_issns <chr>, journal_name <chr>,
-#> #   publisher <chr>, title <chr>, year <int>, updated <chr>,
+#> #   publisher <chr>, title <chr>, year <chr>, updated <chr>,
 #> #   non_compliant <list>
 ```
 
 #### Catching errors
 
-oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when API does not return valid JSON or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
+oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
 
 
 ```r
@@ -179,7 +222,7 @@ purrr::map_df(random_dois,
 #>             <chr>           <list>           <list>         <int> <lgl>
 #> 1 10.1038/ng.3260 <tibble [1 x 6]> <tibble [1 x 7]>             2  TRUE
 #> # ... with 8 more variables: journal_is_oa <lgl>, journal_issns <chr>,
-#> #   journal_name <chr>, publisher <chr>, title <chr>, year <int>,
+#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>,
 #> #   updated <chr>, non_compliant <list>
 ```
 
@@ -201,28 +244,27 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   .$data
 random_dois
 #> # A tibble: 100 x 35
-#>               alternative.id
-#>                        <chr>
-#>  1 10.1108/03684920010312821
-#>  2                          
-#>  3                          
-#>  4                          
-#>  5         S0033350631805657
-#>  6         S0140670100967730
-#>  7                          
-#>  8                          
-#>  9                          
-#> 10                          
-#> # ... with 90 more rows, and 34 more variables: container.title <chr>,
-#> #   created <chr>, deposited <chr>, DOI <chr>, funder <list>,
-#> #   indexed <chr>, ISBN <chr>, ISSN <chr>, issue <chr>, issued <chr>,
-#> #   license_date <chr>, license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, link <list>, member <chr>, page <chr>,
-#> #   prefix <chr>, publisher <chr>, reference.count <chr>, score <chr>,
-#> #   source <chr>, subject <chr>, title <chr>, type <chr>, URL <chr>,
-#> #   volume <chr>, assertion <list>, author <list>,
-#> #   `clinical-trial-number` <list>, archive <chr>, update.policy <chr>,
-#> #   subtitle <chr>, abstract <chr>
+#>         alternative.id                                     container.title
+#>                  <chr>                                               <chr>
+#>  1                                                Southern Medical Journal
+#>  2   10.1021/cm000092r                              Chemistry of Materials
+#>  3                                         Overcoming Anxiety for Dummies®
+#>  4   S0006291X72800251 Biochemical and Biophysical Research Communications
+#>  5                                                       Acta Theriologica
+#>  6                                                     Virginia Law Review
+#>  7    0378475489900542             Mathematics and Computers in Simulation
+#>  8   S0169433212014869                             Applied Surface Science
+#>  9   S0922156500002120                 Leiden Journal of International Law
+#> 10 S000299041934058166       Bulletin of the American Mathematical Society
+#> # ... with 90 more rows, and 33 more variables: created <chr>,
+#> #   deposited <chr>, DOI <chr>, funder <list>, indexed <chr>, ISBN <chr>,
+#> #   ISSN <chr>, issue <chr>, issued <chr>, link <list>, member <chr>,
+#> #   page <chr>, prefix <chr>, publisher <chr>, reference.count <chr>,
+#> #   score <chr>, source <chr>, subject <chr>, subtitle <chr>, title <chr>,
+#> #   type <chr>, URL <chr>, volume <chr>, assertion <list>, author <list>,
+#> #   `clinical-trial-number` <list>, license_date <chr>, license_URL <chr>,
+#> #   license_delay.in.days <chr>, license_content.version <chr>,
+#> #   update.policy <chr>, abstract <chr>, archive <chr>
 ```
 
 Let's see when these random publications were published
@@ -236,20 +278,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 37 x 2
+#> # A tibble: 49 x 2
 #>    issued  pubs
 #>     <dbl> <int>
-#>  1   2016     8
-#>  2   1999     6
-#>  3   2010     6
-#>  4   2015     6
-#>  5     NA     6
-#>  6   2007     5
-#>  7   2013     5
-#>  8   2014     5
-#>  9   2000     4
-#> 10   2012     4
-#> # ... with 27 more rows
+#>  1   2010     5
+#>  2   2013     5
+#>  3     NA     5
+#>  4   1999     4
+#>  5   2004     4
+#>  6   2006     4
+#>  7   2007     4
+#>  8   2009     4
+#>  9   2011     4
+#> 10   2014     4
+#> # ... with 39 more rows
 ```
 
 and of what type they are
@@ -263,13 +305,13 @@ random_dois %>%
 #> # A tibble: 7 x 2
 #>                  type  pubs
 #>                 <chr> <int>
-#> 1     journal-article    71
-#> 2        book-chapter    13
-#> 3 proceedings-article    10
+#> 1     journal-article    78
+#> 2        book-chapter     8
+#> 3 proceedings-article     7
 #> 4           component     3
-#> 5                book     1
+#> 5       journal-issue     2
 #> 6           monograph     1
-#> 7     reference-entry     1
+#> 7               other     1
 ```
 
 #### Calling oaDOI.org
@@ -310,54 +352,37 @@ my_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       91|       0.91|
-|TRUE  |        9|       0.09|
+|FALSE |       82|       0.82|
+|TRUE  |       18|       0.18|
 
-How did oaDOI find those Open Access full-texts, which were characterized as best matches.
+How did oaDOI find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
 
 ```r
 my_df %>%
   filter(is_oa == TRUE) %>%
   tidyr::unnest(best_oa_location) %>% 
-  group_by(evidence) %>%
+  group_by(evidence, type) %>%
   summarise(Articles = n()) %>%
-  mutate(Proportion = Articles / sum(Articles)) %>%
   arrange(desc(Articles)) %>%
   knitr::kable()
 ```
 
 
 
-|evidence                         | Articles| Proportion|
-|:--------------------------------|--------:|----------:|
-|hybrid (via free pdf)            |        4|  0.4444444|
-|oa journal (via publisher name)  |        2|  0.2222222|
-|hybrid (via crossref license)    |        1|  0.1111111|
-|oa repository (via BASE)         |        1|  0.1111111|
-|oa repository (via pmcid lookup) |        1|  0.1111111|
+|evidence                        |type                | Articles|
+|:-------------------------------|:-------------------|--------:|
+|hybrid (via free pdf)           |journal-article     |        7|
+|oa repository (via BASE)        |journal-article     |        7|
+|oa repository (via BASE)        |proceedings-article |        2|
+|hybrid (via crossref license)   |journal-article     |        1|
+|oa journal (via publisher name) |component           |        1|
 
-Let's take a closer look and assess how these OA types are distributed over publication types?
+#### More examples
 
+For more  examples, see Piwowar et al. 2017.[^1] Together with the article, they shared their analysis of oaDOI-data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
 
-```r
-my_df %>%
-  filter(is_oa == TRUE) %>%
-  tidyr::unnest(best_oa_location) %>% 
-  count(evidence, type, sort = TRUE) %>% 
-  knitr::kable()
-```
-
-
-
-|evidence                         |type            |  n|
-|:--------------------------------|:---------------|--:|
-|hybrid (via free pdf)            |journal-article |  4|
-|oa journal (via publisher name)  |component       |  2|
-|hybrid (via crossref license)    |journal-article |  1|
-|oa repository (via BASE)         |journal-article |  1|
-|oa repository (via pmcid lookup) |journal-article |  1|
-
+[^1]: Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2017). The State of OA: A large-scale analysis of the prevalence and impact of Open Access articles (Version 1). PeerJ Preprints.  <https://doi.org/10.7287/peerj.preprints.3119v1>
 
 ## Meta
 
