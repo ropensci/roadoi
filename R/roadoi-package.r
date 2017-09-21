@@ -19,6 +19,9 @@
 #' @importFrom dplyr as_data_frame %>% select mutate
 #' @importFrom miniUI miniContentPanel gadgetTitleBar miniPage
 #' @importFrom shiny dialogViewer runGadget renderTable reactive observeEvent tableOutput actionButton textAreaInput tags stopApp
+#' @importFrom purrr map map_if compact
+#' @importFrom tibble tibble
+#' @importFrom tidyr unnest
 #' @name roadoi-package
 #' @aliases roadoi
 #' @docType package

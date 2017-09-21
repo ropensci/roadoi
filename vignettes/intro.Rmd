@@ -8,22 +8,24 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [oaDOI.org](https://oadoi.org/) service where DOIs are matched with full-text links in open access journals and archives.
+Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [oaDOI.org](https://oadoi.org/) service where DOIs are matched with freely available full-texts available from open access journals and archives.
 
 ### About oaDOI.org
 
 [oaDOI.org](https://oadoi.org/), developed and maintained by the [team of Impactstory](https://oadoi.org/team), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
 
-oaDOI uses different data sources to find open access full-texts including:
+oaDOI.org uses different data sources to find open access full-texts including:
 
 - [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
 - [Datacite](https://www.datacite.org/): another DOI registration agency with main focus on research data
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
 - [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/): an aggregator of various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories.
 
+See Piwowar et al. (2017) for a comprehensive overview of oaDOI.org.[^1]
+
 ### Basic usage
 
-There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking DOIs and your email address as required arguments.
+There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking a character vector of DOIs and your email address as required arguments.
 
 ```{r}
 library(roadoi)
@@ -34,40 +36,70 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### What's returned?
 
-According to the [oaDOI.org API specification](https://oadoi.org/api), the following variables with the following definitions are returned:
+The client supports API version 2. According to the [oaDOI.org API specification](https://oadoi.org/api/v2), the following variables with the following definitions are returned:
 
-* `_best_open_url`: Link to free full-text
-* `doi`: the requested DOI
-* `doi_resolver`: Possible values:
-    + crossref
-    + datacite
-* `evidence`: A phrase summarizing the step of the open access detection process where the `free_fulltext_url` was found.
-* `found_green` :logical indicating whether a self-archived copy in a repository was found
-* `found_hybrid`: logical indicating whether an open access
- article was published in a toll-access journal
-* `free_fulltext_url`: The URL where we found a free-to-read version of the DOI. None when no free-to-read version was found.
-* `green_base_collections`: internal collection ID from the
- Bielefeld Academic Search Engine (BASE)
-* `is_boai_license`: TRUE whenever the license indications Creative Commons - Attribution (CC BY), Creative Commons  CC - Universal(CC 0)) or Public Domain were found. These permissive licenses comply with the highly-regarded [BOAI definition of Open access](http://www.budapestopenaccessinitiative.org/)
-* `is_free_to_read`: TRUE whenever the free_fulltext_url is not None.
-* `is_subscription_journal`: TRUE whenever the journal is not in the Directory of Open Access Journals or DataCite. Please note that there might be a time-lag between the first publication of an open access journal and its registration in the DOAJ.
-* `license`: Contains the name of the [Creative Commons license](https://creativecommons.org/) associated with the `free_fulltext_url`, whenever one was found. Example: "cc-by".
-* `oa_color`: Possible values:
-    + green
-    + gold
-    + blue
-* `_open_base_ids`: ids of oai metadata records with open access
- full-text links collected by the Bielefeld Academic Search Engine (BASE) 
-* `_open_urls`: full-text urls
-* `reported_noncompliant_copies` links to free full-texts found provided by service often considered as non  compliant with open access policies and guidelines
-* `url`: the canonical DOI URL
-* `year`: year of publication
+**Column**|**Description**
+|:------------|:----------------------------------------------
+`doi`|DOI (always in lowercase)
+`best_oa_location`|list-column describing the best OA location. Algorithm prioritizes publisher hosted content (e.g. Hybrid or Gold)
+`oa_locations`|list-column of all the OA locations. 
+`data_standard`|Indicates the data collection approaches used for this resource. `1` mostly uses Crossref for hybrid detection. `2` uses more comprehensive hybrid detection methods. 
+`is_oa`|Is there an OA copy (logical)? 
+`journal_is_oa`|Is the article published in a fully OA journal? Uses the Directory of Open Access Journals (DOAJ) as source. 
+`journal_issns`|ISSNs
+`journal_name`|Journal title
+`publisher`|Publisher
+`title`|Publication title. 
+`year`|Year published. 
+`updated`|Time when the data for this resource was last updated. 
+`non_compliant`|Lists other full-text resources that are not hosted by either publishers or repositories. 
 
-Note that fields to be returned might change according to the [oaDOI.org API specs](https://oadoi.org/api)
+The columns  `best_oa_location` and  `oa_locations` are list-columns
+that contain useful metadata about the OA sources found by oaDOI. These are
+
+**Column**|**Description**
+|:------------|:----------------------------------------------
+evidence`|How the OA location was found and is characterized by oaDOI?
+host_type`|OA full-text provided by `publisher` or `repository`. 
+license`|The license under which this copy is published
+url`|The URL where you can find this OA copy.
+versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines evidence (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
+
+You can [simplify these list-columns in at least two ways](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
+
+To get the full-text links from the list-column `best_oa_location`, you may want to use `purrr::map_chr()`.
+
+```{r}
+library(dplyr)
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com") %>%
+  dplyr::mutate(urls = purrr::map_chr(best_oa_location, "url")) %>% 
+  .$urls
+```
+
+If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`:
+
+```{r}
+library(dplyr)
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                             "10.1016/j.cognition.2014.07.007"), 
+                    email = "name@example.com") %>%
+  tidyr::unnest(oa_locations) %>% 
+  dplyr::mutate(
+    hostname = purrr::map(url, httr::parse_url) %>% 
+                  purrr::map_chr(., "hostname", .null = NA_integer_)
+                ) %>% 
+  dplyr::mutate(hostname = gsub("www.", "", hostname)) %>% 
+  dplyr::count(hostname)
+```
+
+
+Note that fields to be returned might change according to the [oaDOI.org API specs](https://oadoi.org/api/v2)
 
 #### Any API restrictions?
 
-There are no API restrictions. However, providing your email address when using this client is required by oaDOI.org. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are too tired to type in your email address every time you want to call oadDOI.
+There are no API restrictions. However, providing your email address when using this client is required by oaDOI.org. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are too tired to type in your email address every time you want to call oaDOI.org.
 
 ```r
 options(roadoi_email = "name@example.com")
@@ -86,7 +118,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### Catching errors
 
-oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when API does not return valid JSON or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
+oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
 
 ```{r}
 random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
@@ -141,11 +173,12 @@ Now let's call oaDOI.org
 oa_df <- roadoi::oadoi_fetch(dois = random_dois$DOI, email = "name@example.com")
 ```
 
-and merge the resulting information about open access full-text links with our Crossref metadata-set
+and merge the resulting information about open access full-text links with parts of our Crossref metadata-set
 
 ```{r}
-my_df <- dplyr::left_join(oa_df, random_dois, by = c("doi" = "DOI"))
-my_df
+my_df <- random_dois %>%
+  select(DOI, type) %>% 
+  left_join(oa_df, by = c("DOI" = "doi"))
 ```
 
 #### Reporting
@@ -156,30 +189,27 @@ To display how many full-text links were found and which sources were used in a 
 
 ```{r, results='asis'}
 my_df %>%
-  group_by(evidence) %>%
+  group_by(is_oa) %>%
   summarise(Articles = n()) %>%
   mutate(Proportion = Articles / sum(Articles)) %>%
   arrange(desc(Articles)) %>%
   knitr::kable()
 ```
 
-How many of them are provided as green or gold open access?
+How did oaDOI find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
 ```{r, results='asis'}
 my_df %>%
-  group_by(oa_color) %>%
+  filter(is_oa == TRUE) %>%
+  tidyr::unnest(best_oa_location) %>% 
+  group_by(evidence, type) %>%
   summarise(Articles = n()) %>%
-  mutate(Proportion = Articles / sum(Articles)) %>%
   arrange(desc(Articles)) %>%
   knitr::kable()
 ```
 
-Let's take a closer look and assess how green and gold is distributed over publication types?
+#### More examples
 
-```{r}
-my_df %>%
-  filter(!evidence == "closed") %>% 
-  count(oa_color, type, sort = TRUE) %>% 
-  knitr::kable()
-```
+For more  examples, see Piwowar et al. 2017.[^1] Together with the article, they shared their analysis of oaDOI-data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
 
+[^1]: Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2017). The State of OA: A large-scale analysis of the prevalence and impact of Open Access articles (Version 1). PeerJ Preprints.  <https://doi.org/10.7287/peerj.preprints.3119v1>

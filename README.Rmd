@@ -18,10 +18,13 @@ knitr::opts_chunk$set(
 [![review](https://badges.ropensci.org/115_status.svg)](https://github.com/ropensci/onboarding/issues/115)
 
 
-roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple interface which links DOIs 
-and open access versions of scholarly works. oaDOI powers [unpaywall](http://unpaywall.org/).
+roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple web-interface 
+which links DOIs  and open access versions of scholarly works. 
+oaDOI powers [unpaywall](http://unpaywall.org/).
 
-API Documentation: <http://oadoi.org/api>
+This client supports the most recent API Version 2.
+
+API Documentation: <http://oadoi.org/api/v2>
 
 ## How do I use it? 
 

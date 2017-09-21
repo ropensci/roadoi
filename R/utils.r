@@ -3,7 +3,7 @@ oadoi_baseurl <- function()
   "https://api.oadoi.org/"
 # API version
 oadoi_api_version <- function()
-  "1.3.0"
+  "v2"
 # If you require access to more data, please use the data dump
 api_limit <- 100000
 

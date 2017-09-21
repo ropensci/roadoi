@@ -10,6 +10,7 @@ test_that("oadoi_fetch returns", {
   d <- oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                             "10.1016/j.cognition.2014.07.007"),
                    email)
+  e <- oadoi_fetch("10.1016/j.vaccine.2014.04.085", email)
 
 
   # correct classes
@@ -17,12 +18,17 @@ test_that("oadoi_fetch returns", {
   expect_is(b, "tbl_df")
   expect_is(c, "tbl_df")
   expect_is(d, "tbl_df")
+  expect_is(e, "tbl_df")
+
 
   # correct dimensions
   expect_equal(nrow(a), 1)
   expect_equal(nrow(b), 2)
   expect_equal(nrow(c), 1)
   expect_equal(nrow(d), 2)
+  expect_equal(nrow(e), 1)
+
+
 
   # wrong DOI
   expect_warning(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260"), email))
