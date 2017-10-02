@@ -10,7 +10,7 @@ oadoi_fetch(dois = NULL, email = getOption("roadoi_email"),
 \arguments{
 \item{dois}{character vector, search by a single DOI or many DOIs.
 A rate limit of 100k requests per day is suggested. If you need to access
-more data, use the data dump \url{https://oadoi.org/api#dataset} instead.}
+more data, request the data dump \url{https://oadoi.org/api} instead.}
 
 \item{email}{character vector, mandatory! oaDOI requires your email address,
 so that they can track usage and notify you when something breaks.
@@ -23,9 +23,8 @@ See \code{\link[plyr]{create_progress_bar}} for details
 of each. By default, no progress bar is displayed.}
 }
 \value{
-The result is a tibble with each row representing a publication and
-  and the following columns. Here are some fields returned by the API.
-  However, other fields can be added by oaDOI over time.
+The result is a tibble with each row representing a publication.
+  Here are the returned columns and descriptions according to the API docu:
 
 
 \tabular{ll}{
@@ -71,7 +70,7 @@ that contain useful metadata about the OA sources found by oaDOI. These are
 
 
 To unnest list-columns, you want to use tidyr's unnest function
-\code{\link[tidyr]{unnest}} makes each element of the list its own row.
+\code{\link[tidyr]{unnest}}.
 }
 \description{
 This is the main function to retrieve comprehensive open access status

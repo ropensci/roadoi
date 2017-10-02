@@ -7,7 +7,7 @@
 #'
 #' @param dois character vector, search by a single DOI or many DOIs.
 #'   A rate limit of 100k requests per day is suggested. If you need to access
-#'   more data, use the data dump \url{https://oadoi.org/api#dataset} instead.
+#'   more data, request the data dump \url{https://oadoi.org/api} instead.
 #' @param email character vector, mandatory! oaDOI requires your email address,
 #'   so that they can track usage and notify you when something breaks.
 #'   Set email address in your `.Rprofile` file with
@@ -17,9 +17,8 @@
 #'   See \code{\link[plyr]{create_progress_bar}} for details
 #'   of each. By default, no progress bar is displayed.
 #'
-#' @return The result is a tibble with each row representing a publication and
-#'   and the following columns. Here are some fields returned by the API.
-#'   However, other fields can be added by oaDOI over time.
+#' @return The result is a tibble with each row representing a publication.
+#'   Here are the returned columns and descriptions according to the API docu:
 #'
 #'
 #' \tabular{ll}{
@@ -65,7 +64,7 @@
 #'
 #'
 #' To unnest list-columns, you want to use tidyr's unnest function
-#' \code{\link[tidyr]{unnest}} makes each element of the list its own row.
+#' \code{\link[tidyr]{unnest}}.
 
 #' @examples \dontrun{
 #' oadoi_fetch("10.1038/nature12373", email = "name@example.com")
@@ -84,8 +83,8 @@ oadoi_fetch <-
     if (length(dois) > api_limit)
       stop(
         "A rate limit of 100k requests per day is suggested.
-        If you need to access tomore data, use the data dump
-        https://oadoi.org/api#dataset instead",
+        If you need to access more data, request the data dump
+        https://oadoi.org/api instead",
         .call = FALSE
       )
     # Call API for every DOI, and return results as tbl_df
