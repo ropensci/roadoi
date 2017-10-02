@@ -2,7 +2,7 @@
 ## Test environments
 
 * local OS X install, R 3.4.1
-* ubuntu 12.04 (on travis-ci), R 3.4.0
+* ubuntu 12.04 (on travis-ci), R 3.4.1
 * win-builder (release, devel and oldrelease) and appveyor CI
 
 ## R CMD check results
@@ -21,7 +21,7 @@ and found no problems related to this submission.
 
 Dear CRAN maintainers, 
 
-This submission implements suggestions made during the rOpenSci onboarding process. 
+This submission implements the newest oadoi.org API version. 
 
 Thanks!
 
