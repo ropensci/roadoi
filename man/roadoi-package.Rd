@@ -22,9 +22,8 @@ information and full-text links from oaDOI.
 
 \section{Contribute}{
 
-I would be very happy for people willing to contribute to this package.
-It is important to keep in mind that oaDOI is still in early development,
-which could affect the API and this client.
+I would be very happy for people willing to contribute to this package. Use
+GitHubs issue tracker for bug reporting and feature requests.
 }
 
 \keyword{package}

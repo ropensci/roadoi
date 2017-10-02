@@ -59,11 +59,11 @@ that contain useful metadata about the OA sources found by oaDOI. These are
 
 **Column**|**Description**
 |:------------|:----------------------------------------------
-evidence`|How the OA location was found and is characterized by oaDOI?
-host_type`|OA full-text provided by `publisher` or `repository`. 
-license`|The license under which this copy is published
-url`|The URL where you can find this OA copy.
-versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines evidence (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
+`evidence`|How the OA location was found and is characterized by oaDOI?
+`host_type`|OA full-text provided by `publisher` or `repository`. 
+`license`|The license under which this copy is published
+`url`|The URL where you can find this OA copy.
+`versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines  (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
 
 You can [simplify these list-columns in at least two ways](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
 
