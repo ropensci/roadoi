@@ -74,7 +74,11 @@ library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1016/j.cognition.2014.07.007"), 
                     email = "name@example.com") %>%
-  dplyr::mutate(urls = purrr::map_chr(best_oa_location, "url")) %>% 
+  dplyr::mutate(
+    urls = purrr::map(best_oa_location, "url") %>% 
+                  purrr::map_if(purrr::is_empty, ~ NA_character_) %>% 
+                  purrr::flatten_chr()
+                ) %>%
   .$urls
 ```
 

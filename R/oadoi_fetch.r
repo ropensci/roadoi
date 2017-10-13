@@ -145,6 +145,8 @@ oadoi_fetch_ <- function(doi = NULL, email) {
     httr::content(resp, "text", encoding = "UTF-8") %>%
       jsonlite::fromJSON() %>%
       purrr::map(purrr::compact) %>% # remove empty list elements
+      purrr::map_if(is.null, ~ NA_character_) %>%
+      # remove empty list elements
       parse_oadoi()
   }
 }
@@ -156,7 +158,6 @@ oadoi_fetch_ <- function(doi = NULL, email) {
 #' @noRd
 parse_oadoi <- function(req) {
   # be aware of empty list elements
-  req <- purrr::map_if(req, is.null, ~ NA_character_)
   tibble::tibble(
     doi = req$doi,
     best_oa_location = list(as_data_frame(req$best_oa_location)),

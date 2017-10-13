@@ -31,8 +31,8 @@ roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"),
 #> # A tibble: 2 x 13
 #>                   doi best_oa_location     oa_locations data_standard
 #>                 <chr>           <list>           <list>         <int>
-#> 1     10.1038/ng.3260 <tibble [1 x 6]> <tibble [1 x 7]>             2
-#> 2 10.1093/nar/gkr1047 <tibble [1 x 7]> <tibble [4 x 7]>             2
+#> 1     10.1038/ng.3260 <tibble [1 x 1]> <tibble [0 x 0]>             2
+#> 2 10.1093/nar/gkr1047 <tibble [1 x 7]> <tibble [2 x 8]>             2
 #> # ... with 9 more variables: is_oa <lgl>, journal_is_oa <lgl>,
 #> #   journal_issns <chr>, journal_name <chr>, publisher <chr>, title <chr>,
 #> #   year <chr>, updated <chr>, non_compliant <list>
@@ -96,8 +96,8 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 #> # A tibble: 2 x 13
 #>                               doi best_oa_location     oa_locations
 #>                             <chr>           <list>           <list>
-#> 1       10.1186/s12864-016-2566-9 <tibble [1 x 7]> <tibble [3 x 7]>
-#> 2 10.1016/j.cognition.2014.07.007 <tibble [1 x 6]> <tibble [2 x 7]>
+#> 1       10.1186/s12864-016-2566-9 <tibble [1 x 7]> <tibble [2 x 8]>
+#> 2 10.1016/j.cognition.2014.07.007 <tibble [1 x 1]> <tibble [0 x 0]>
 #> # ... with 10 more variables: data_standard <int>, is_oa <lgl>,
 #> #   journal_is_oa <lgl>, journal_issns <chr>, journal_name <chr>,
 #> #   publisher <chr>, title <chr>, year <chr>, updated <chr>,
@@ -145,10 +145,14 @@ library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1016/j.cognition.2014.07.007"), 
                     email = "name@example.com") %>%
-  dplyr::mutate(urls = purrr::map_chr(best_oa_location, "url")) %>% 
+  dplyr::mutate(
+    urls = purrr::map(best_oa_location, "url") %>% 
+                  purrr::map_if(purrr::is_empty, ~ NA_character_) %>% 
+                  purrr::flatten_chr()
+                ) %>%
   .$urls
 #> [1] "https://bmcgenomics.biomedcentral.com/track/pdf/10.1186/s12864-016-2566-9?site=bmcgenomics.biomedcentral.com"
-#> [2] "http://pubman.mpdl.mpg.de/pubman/item/escidoc:2070098/component/escidoc:2070097/Guerra_knoeferle_2014.pdf"
+#> [2] NA
 ```
 
 If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`:
@@ -166,13 +170,11 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                 ) %>% 
   dplyr::mutate(hostname = gsub("www.", "", hostname)) %>% 
   dplyr::count(hostname)
-#> # A tibble: 4 x 2
+#> # A tibble: 2 x 2
 #>                        hostname     n
 #>                           <chr> <int>
 #> 1 bmcgenomics.biomedcentral.com     1
 #> 2              ncbi.nlm.nih.gov     1
-#> 3          pub.uni-bielefeld.de     2
-#> 4            pubman.mpdl.mpg.de     1
 ```
 
 
@@ -200,8 +202,8 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 #> # A tibble: 2 x 13
 #>                               doi best_oa_location     oa_locations
 #>                             <chr>           <list>           <list>
-#> 1       10.1186/s12864-016-2566-9 <tibble [1 x 7]> <tibble [3 x 7]>
-#> 2 10.1016/j.cognition.2014.07.007 <tibble [1 x 6]> <tibble [2 x 7]>
+#> 1       10.1186/s12864-016-2566-9 <tibble [1 x 7]> <tibble [2 x 8]>
+#> 2 10.1016/j.cognition.2014.07.007 <tibble [1 x 1]> <tibble [0 x 0]>
 #> # ... with 10 more variables: data_standard <int>, is_oa <lgl>,
 #> #   journal_is_oa <lgl>, journal_issns <chr>, journal_name <chr>,
 #> #   publisher <chr>, title <chr>, year <chr>, updated <chr>,
@@ -220,7 +222,7 @@ purrr::map_df(random_dois,
 #> # A tibble: 1 x 13
 #>               doi best_oa_location     oa_locations data_standard is_oa
 #>             <chr>           <list>           <list>         <int> <lgl>
-#> 1 10.1038/ng.3260 <tibble [1 x 6]> <tibble [1 x 7]>             2  TRUE
+#> 1 10.1038/ng.3260 <tibble [1 x 1]> <tibble [0 x 0]>             2 FALSE
 #> # ... with 8 more variables: journal_is_oa <lgl>, journal_issns <chr>,
 #> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>,
 #> #   updated <chr>, non_compliant <list>
@@ -243,29 +245,29 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   rcrossref::cr_works() %>%
   .$data
 random_dois
-#> # A tibble: 100 x 35
-#>               alternative.id
-#>                        <chr>
-#>  1                          
-#>  2                          
-#>  3                          
-#>  4 10.1080/10739149908085828
-#>  5                          
-#>  6                          
-#>  7                          
-#>  8         S0266462300004918
-#>  9                          
-#> 10                BF00202270
-#> # ... with 90 more rows, and 34 more variables: container.title <chr>,
+#> # A tibble: 100 x 34
+#>       alternative.id
+#>                <chr>
+#>  1 S0033350685800834
+#>  2                  
+#>  3               116
+#>  4                  
+#>  5  0003986184904727
+#>  6 S095965269800064X
+#>  7                  
+#>  8                  
+#>  9                  
+#> 10                  
+#> # ... with 90 more rows, and 33 more variables: container.title <chr>,
 #> #   created <chr>, deposited <chr>, DOI <chr>, funder <list>,
 #> #   indexed <chr>, ISBN <chr>, ISSN <chr>, issue <chr>, issued <chr>,
-#> #   link <list>, member <chr>, page <chr>, prefix <chr>, publisher <chr>,
-#> #   reference.count <chr>, score <chr>, source <chr>, subject <chr>,
-#> #   title <chr>, type <chr>, URL <chr>, assertion <list>, author <list>,
-#> #   `clinical-trial-number` <list>, volume <chr>, archive <chr>,
 #> #   license_date <chr>, license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, subtitle <chr>, abstract <chr>,
-#> #   update.policy <chr>
+#> #   license_content.version <chr>, link <list>, member <chr>, page <chr>,
+#> #   prefix <chr>, publisher <chr>, reference.count <chr>, score <chr>,
+#> #   source <chr>, subject <chr>, title <chr>, type <chr>, URL <chr>,
+#> #   volume <chr>, assertion <list>, author <list>,
+#> #   `clinical-trial-number` <list>, subtitle <chr>, update.policy <chr>,
+#> #   archive <chr>
 ```
 
 Let's see when these random publications were published
@@ -279,20 +281,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 49 x 2
+#> # A tibble: 45 x 2
 #>    issued  pubs
 #>     <dbl> <int>
-#>  1     NA    12
-#>  2   2003     5
-#>  3   2006     4
-#>  4   2012     4
-#>  5   2014     4
-#>  6   1985     3
-#>  7   1993     3
-#>  8   1994     3
-#>  9   1998     3
-#> 10   2007     3
-#> # ... with 39 more rows
+#>  1     NA    10
+#>  2   2016     8
+#>  3   2013     6
+#>  4   2008     5
+#>  5   2009     4
+#>  6   2012     4
+#>  7   1994     3
+#>  8   1997     3
+#>  9   2014     3
+#> 10   2015     3
+#> # ... with 35 more rows
 ```
 
 and of what type they are
@@ -303,16 +305,17 @@ random_dois %>%
   group_by(type) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 7 x 2
+#> # A tibble: 8 x 2
 #>                  type  pubs
 #>                 <chr> <int>
-#> 1     journal-article    72
-#> 2        book-chapter     8
-#> 3           component     7
-#> 4 proceedings-article     7
-#> 5             dataset     3
-#> 6     reference-entry     2
-#> 7       journal-issue     1
+#> 1     journal-article    66
+#> 2        book-chapter    17
+#> 3 proceedings-article     6
+#> 4           component     4
+#> 5             dataset     4
+#> 6               other     1
+#> 7     reference-entry     1
+#> 8            standard     1
 ```
 
 #### Calling oaDOI.org
@@ -353,8 +356,8 @@ my_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       80|        0.8|
-|TRUE  |       20|        0.2|
+|FALSE |       90|        0.9|
+|TRUE  |       10|        0.1|
 
 How did oaDOI find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -371,14 +374,12 @@ my_df %>%
 
 
 
-|evidence                        |type                | Articles|
-|:-------------------------------|:-------------------|--------:|
-|hybrid (via free pdf)           |journal-article     |        8|
-|oa journal (via publisher name) |component           |        5|
-|oa repository (via BASE)        |journal-article     |        3|
-|hybrid (via crossref license)   |journal-article     |        2|
-|oa journal (via publisher name) |journal-article     |        1|
-|oa repository (via BASE)        |proceedings-article |        1|
+|evidence                         |type            | Articles|
+|:--------------------------------|:---------------|--------:|
+|hybrid (via free pdf)            |journal-article |        4|
+|oa journal (via publisher name)  |component       |        4|
+|hybrid (via crossref license)    |journal-article |        1|
+|oa repository (via pmcid lookup) |journal-article |        1|
 
 #### More examples
 

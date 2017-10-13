@@ -11,6 +11,8 @@ test_that("oadoi_fetch returns", {
                             "10.1016/j.cognition.2014.07.007"),
                    email)
   e <- oadoi_fetch("10.1016/j.vaccine.2014.04.085", email)
+  f <- oadoi_fetch(dois = c("10.1016/0898-1221(94)90121-x",
+                           "10.1093/ref:odnb/20344"), email)
 
 
   # correct classes
@@ -19,6 +21,7 @@ test_that("oadoi_fetch returns", {
   expect_is(c, "tbl_df")
   expect_is(d, "tbl_df")
   expect_is(e, "tbl_df")
+  expect_is(f, "tbl_df")
 
 
   # correct dimensions
