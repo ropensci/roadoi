@@ -144,9 +144,7 @@ oadoi_fetch_ <- function(doi = NULL, email) {
   } else {
     httr::content(resp, "text", encoding = "UTF-8") %>%
       jsonlite::fromJSON() %>%
-      purrr::map(purrr::compact) %>% # remove empty list elements
       purrr::map_if(is.null, ~ NA_character_) %>%
-      # remove empty list elements
       parse_oadoi()
   }
 }
@@ -160,12 +158,14 @@ parse_oadoi <- function(req) {
   # be aware of empty list elements
   tibble::tibble(
     doi = req$doi,
-    best_oa_location = list(as_data_frame(req$best_oa_location)),
+    best_oa_location = list(oa_lct_parser(req$best_oa_location)),
     oa_locations = list(as_data_frame(req$oa_location)),
     data_standard = req$data_standard,
     is_oa = req$is_oa,
-    journal_is_oa = as.logical(ifelse(is.null(req$journal_is_oa),
-                           FALSE, req$journal_is_oa)),
+    journal_is_oa = as.logical(ifelse(
+      is.na(req$journal_is_oa),
+      FALSE, req$journal_is_oa
+    )),
     journal_issns = req$journal_issns,
     journal_name = req$journal_name,
     publisher = req$publisher,
@@ -174,4 +174,18 @@ parse_oadoi <- function(req) {
     updated = req$updated,
     non_compliant = list(req$x_reported_noncompliant_copies)
   )
+}
+
+#' Parse best oa locations
+#'
+#' @param x list element
+#'
+#' @noRd
+oa_lct_parser <- function(x) {
+  if (!length(x) == 1) {
+    purrr::compact(x) %>%
+      dplyr::bind_rows()
+    } else {
+    dplyr::data_frame()
+  }
 }
