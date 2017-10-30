@@ -1,3 +1,10 @@
+## roadoi 0.4.1
+
+Minor fixes:
+
+- remove BASE examples because BASE is no longer a data source of oaDOI
+- bug fix json parser
+
 ## roadoi 0.4
 
 Implements the oaDOI.org API version 2.

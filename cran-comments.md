@@ -1,8 +1,8 @@
 
 ## Test environments
 
-* local OS X install, R 3.4.1
-* ubuntu 12.04 (on travis-ci), R 3.4.1
+* local OS X install, R 3.4.2
+* ubuntu 12.04 (on travis-ci), R 3.4.2
 * win-builder (release, devel and oldrelease) and appveyor CI
 
 ## R CMD check results
@@ -21,7 +21,7 @@ and found no problems related to this submission.
 
 Dear CRAN maintainers, 
 
-This submission implements the newest oadoi.org API version. 
+This submission includes minor bug fixes, and fixes current CRAN checks warning messages.
 
 Thanks!
 
