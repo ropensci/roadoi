@@ -4,7 +4,7 @@
 \alias{oadoi_fetch_}
 \title{Get open access status information.}
 \usage{
-oadoi_fetch_(doi = NULL, email)
+oadoi_fetch_(doi = NULL, email = NULL)
 }
 \arguments{
 \item{doi}{character vector,a DOI}

@@ -107,7 +107,7 @@ oadoi_fetch <-
 #' oadoi_fetch_(doi = c("10.1016/j.jbiotec.2010.07.030"))
 #' }
 #' @export
-oadoi_fetch_ <- function(doi = NULL, email) {
+oadoi_fetch_ <- function(doi = NULL, email = NULL) {
   u <- httr::modify_url(
     oadoi_baseurl(),
     query = list(email = email),
