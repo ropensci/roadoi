@@ -19,7 +19,7 @@ oaDOI.org uses different data sources to find open access full-texts including:
 - [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
 - [Datacite](https://www.datacite.org/): another DOI registration agency with main focus on research data
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
-- [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/): an aggregator of various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories.
+- Various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories such as arXiv and PubMed Central.
 
 See Piwowar et al. (2017) for a comprehensive overview of oaDOI.org.[^1]
 
@@ -30,7 +30,7 @@ There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking a ch
 ```{r}
 library(roadoi)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1016/j.cognition.2014.07.007"), 
+                             "10.1103/physreve.88.012814"), 
                     email = "name@example.com")
 ```
 
@@ -65,14 +65,14 @@ that contain useful metadata about the OA sources found by oaDOI. These are
 `url`|The URL where you can find this OA copy.
 `versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines  (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
 
-You can [simplify these list-columns in at least two ways](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
+There at least [two ways to simplify these list-columns](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
 
 To get the full-text links from the list-column `best_oa_location`, you may want to use `purrr::map_chr()`.
 
 ```{r}
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1016/j.cognition.2014.07.007"), 
+                             "10.1103/physreve.88.012814"), 
                     email = "name@example.com") %>%
   dplyr::mutate(
     urls = purrr::map(best_oa_location, "url") %>% 
@@ -87,7 +87,7 @@ If you want to gather all full-text links and to explore where these links are h
 ```{r}
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1016/j.cognition.2014.07.007"), 
+                             "10.1103/physreve.88.012814"), 
                     email = "name@example.com") %>%
   tidyr::unnest(oa_locations) %>% 
   dplyr::mutate(
@@ -115,7 +115,7 @@ To follow your API call, and to estimate the time until completion, use the `.pr
 
 ```{r}
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1016/j.cognition.2014.07.007"), 
+                             "10.1103/physreve.88.012814"), 
                     email = "name@example.com", 
                     .progress = "text")
 ```

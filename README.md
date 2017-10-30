@@ -32,7 +32,7 @@ roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"),
 #>                   doi best_oa_location      oa_locations data_standard
 #>                 <chr>           <list>            <list>         <int>
 #> 1     10.1038/ng.3260 <tibble [0 x 0]>  <tibble [0 x 0]>             2
-#> 2 10.1093/nar/gkr1047 <tibble [1 x 9]> <tibble [2 x 10]>             2
+#> 2 10.1093/nar/gkr1047 <tibble [1 x 8]> <tibble [3 x 10]>             2
 #> # ... with 9 more variables: is_oa <lgl>, journal_is_oa <lgl>,
 #> #   journal_issns <chr>, journal_name <chr>, publisher <chr>, title <chr>,
 #> #   year <chr>, updated <chr>, non_compliant <list>
@@ -79,7 +79,7 @@ oaDOI.org uses different data sources to find open access full-texts including:
 - [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
 - [Datacite](https://www.datacite.org/): another DOI registration agency with main focus on research data
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
-- [Bielefeld Academic Search Engine (BASE)](https://www.base-search.net/): an aggregator of various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories.
+- Various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories such as arXiv and PubMed Central.
 
 See Piwowar et al. (2017) for a comprehensive overview of oaDOI.org.[^1]
 
@@ -91,13 +91,13 @@ There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking a ch
 ```r
 library(roadoi)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1016/j.cognition.2014.07.007"), 
+                             "10.1103/physreve.88.012814"), 
                     email = "name@example.com")
 #> # A tibble: 2 x 13
-#>                               doi best_oa_location      oa_locations
-#>                             <chr>           <list>            <list>
-#> 1       10.1186/s12864-016-2566-9 <tibble [1 x 9]> <tibble [2 x 10]>
-#> 2 10.1016/j.cognition.2014.07.007 <tibble [0 x 0]>  <tibble [0 x 0]>
+#>                          doi best_oa_location      oa_locations
+#>                        <chr>           <list>            <list>
+#> 1  10.1186/s12864-016-2566-9 <tibble [1 x 8]> <tibble [3 x 10]>
+#> 2 10.1103/physreve.88.012814 <tibble [1 x 9]> <tibble [1 x 10]>
 #> # ... with 10 more variables: data_standard <int>, is_oa <lgl>,
 #> #   journal_is_oa <lgl>, journal_issns <chr>, journal_name <chr>,
 #> #   publisher <chr>, title <chr>, year <chr>, updated <chr>,
@@ -135,7 +135,7 @@ that contain useful metadata about the OA sources found by oaDOI. These are
 `url`|The URL where you can find this OA copy.
 `versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines  (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
 
-You can [simplify these list-columns in at least two ways](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
+There at least [two ways to simplify these list-columns](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
 
 To get the full-text links from the list-column `best_oa_location`, you may want to use `purrr::map_chr()`.
 
@@ -143,7 +143,7 @@ To get the full-text links from the list-column `best_oa_location`, you may want
 ```r
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1016/j.cognition.2014.07.007"), 
+                             "10.1103/physreve.88.012814"), 
                     email = "name@example.com") %>%
   dplyr::mutate(
     urls = purrr::map(best_oa_location, "url") %>% 
@@ -152,7 +152,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                 ) %>%
   .$urls
 #> [1] "https://bmcgenomics.biomedcentral.com/track/pdf/10.1186/s12864-016-2566-9?site=bmcgenomics.biomedcentral.com"
-#> [2] NA
+#> [2] "http://arxiv.org/pdf/1304.0473"
 ```
 
 If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`:
@@ -161,7 +161,7 @@ If you want to gather all full-text links and to explore where these links are h
 ```r
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1016/j.cognition.2014.07.007"), 
+                             "10.1103/physreve.88.012814"), 
                     email = "name@example.com") %>%
   tidyr::unnest(oa_locations) %>% 
   dplyr::mutate(
@@ -170,11 +170,13 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                 ) %>% 
   dplyr::mutate(hostname = gsub("www.", "", hostname)) %>% 
   dplyr::count(hostname)
-#> # A tibble: 2 x 2
+#> # A tibble: 4 x 2
 #>                        hostname     n
 #>                           <chr> <int>
-#> 1 bmcgenomics.biomedcentral.com     1
-#> 2              ncbi.nlm.nih.gov     1
+#> 1                     arxiv.org     1
+#> 2 bmcgenomics.biomedcentral.com     1
+#> 3                       doi.org     1
+#> 4              ncbi.nlm.nih.gov     1
 ```
 
 
@@ -195,15 +197,15 @@ To follow your API call, and to estimate the time until completion, use the `.pr
 
 ```r
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1016/j.cognition.2014.07.007"), 
+                             "10.1103/physreve.88.012814"), 
                     email = "name@example.com", 
                     .progress = "text")
 #>   |                                                                         |                                                                 |   0%  |                                                                         |================================                                 |  50%  |                                                                         |=================================================================| 100%
 #> # A tibble: 2 x 13
-#>                               doi best_oa_location      oa_locations
-#>                             <chr>           <list>            <list>
-#> 1       10.1186/s12864-016-2566-9 <tibble [1 x 9]> <tibble [2 x 10]>
-#> 2 10.1016/j.cognition.2014.07.007 <tibble [0 x 0]>  <tibble [0 x 0]>
+#>                          doi best_oa_location      oa_locations
+#>                        <chr>           <list>            <list>
+#> 1  10.1186/s12864-016-2566-9 <tibble [1 x 8]> <tibble [3 x 10]>
+#> 2 10.1103/physreve.88.012814 <tibble [1 x 9]> <tibble [1 x 10]>
 #> # ... with 10 more variables: data_standard <int>, is_oa <lgl>,
 #> #   journal_is_oa <lgl>, journal_issns <chr>, journal_name <chr>,
 #> #   publisher <chr>, title <chr>, year <chr>, updated <chr>,
@@ -246,28 +248,27 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   .$data
 random_dois
 #> # A tibble: 100 x 35
-#>                  alternative.id
-#>                           <chr>
-#>  1 10.1021/acs.analchem.5b01077
-#>  2                             
-#>  3                   BF02030497
-#>  4                             
-#>  5                1746-4811-5-7
-#>  6                             
-#>  7                             
-#>  8                         3129
-#>  9                             
-#> 10    10.1080/01619565309536426
-#> # ... with 90 more rows, and 34 more variables: container.title <chr>,
-#> #   created <chr>, deposited <chr>, DOI <chr>, funder <list>,
-#> #   indexed <chr>, ISBN <chr>, ISSN <chr>, issue <chr>, issued <chr>,
-#> #   link <list>, member <chr>, page <chr>, prefix <chr>, publisher <chr>,
-#> #   reference.count <chr>, score <chr>, source <chr>, subject <chr>,
-#> #   title <chr>, type <chr>, URL <chr>, volume <chr>, assertion <list>,
-#> #   author <list>, `clinical-trial-number` <list>, license_date <chr>,
-#> #   license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, subtitle <chr>, archive <chr>,
-#> #   update.policy <chr>, abstract <chr>
+#>       alternative.id                          container.title    created
+#>                <chr>                                    <chr>      <chr>
+#>  1                                                            2015-12-21
+#>  2 S0090429510019503                                  Urology 2011-05-03
+#>  3                                  physica status solidi (c) 2010-02-04
+#>  4 S1878875017315589                       World Neurosurgery 2017-09-19
+#>  5                           Journal of Differential Geometry 2017-03-16
+#>  6                               Chinese Journal of Chemistry 2010-09-09
+#>  7  0550321380904678                        Nuclear Physics B 2002-11-12
+#>  8                            Journal of Experimental Zoology 2005-06-10
+#>  9                                                 ChemInform 2012-04-26
+#> 10 S0399832006731293 Gastroentérologie Clinique et Biologique 2008-05-04
+#> # ... with 90 more rows, and 32 more variables: deposited <chr>,
+#> #   DOI <chr>, funder <list>, indexed <chr>, ISBN <chr>, ISSN <chr>,
+#> #   issued <chr>, link <list>, member <chr>, prefix <chr>,
+#> #   publisher <chr>, reference.count <chr>, score <chr>, source <chr>,
+#> #   subject <chr>, title <chr>, type <chr>, URL <chr>, assertion <list>,
+#> #   author <list>, `clinical-trial-number` <list>, issue <chr>,
+#> #   license_date <chr>, license_URL <chr>, license_delay.in.days <chr>,
+#> #   license_content.version <chr>, page <chr>, volume <chr>,
+#> #   abstract <chr>, subtitle <chr>, update.policy <chr>, archive <chr>
 ```
 
 Let's see when these random publications were published
@@ -281,20 +282,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 35 x 2
+#> # A tibble: 47 x 2
 #>    issued  pubs
 #>     <dbl> <int>
-#>  1     NA    13
-#>  2   2016     8
-#>  3   2008     6
-#>  4   2014     6
-#>  5   2002     5
-#>  6   2011     5
-#>  7   2007     4
-#>  8   2013     4
-#>  9   1991     3
-#> 10   1992     3
-#> # ... with 25 more rows
+#>  1     NA     9
+#>  2   2015     5
+#>  3   2002     4
+#>  4   2006     4
+#>  5   2008     4
+#>  6   2010     4
+#>  7   2011     4
+#>  8   2012     4
+#>  9   2013     4
+#> 10   1994     3
+#> # ... with 37 more rows
 ```
 
 and of what type they are
@@ -308,13 +309,13 @@ random_dois %>%
 #> # A tibble: 7 x 2
 #>                  type  pubs
 #>                 <chr> <int>
-#> 1     journal-article    70
+#> 1     journal-article    75
 #> 2        book-chapter    12
-#> 3 proceedings-article     9
-#> 4           component     5
+#> 3 proceedings-article     6
+#> 4           component     3
 #> 5             dataset     2
-#> 6                book     1
-#> 7     reference-entry     1
+#> 6        dissertation     1
+#> 7              report     1
 ```
 
 #### Calling oaDOI.org
@@ -355,9 +356,8 @@ my_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       85|       0.85|
-|TRUE  |       14|       0.14|
-|NA    |        1|       0.01|
+|FALSE |       84|       0.84|
+|TRUE  |       16|       0.16|
 
 How did oaDOI find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -374,14 +374,13 @@ my_df %>%
 
 
 
-|evidence                                                 |type                | Articles|
-|:--------------------------------------------------------|:-------------------|--------:|
-|oa journal (via publisher name)                          |component           |        5|
-|hybrid (via page says license)                           |journal-article     |        4|
-|hybrid (via free pdf)                                    |journal-article     |        2|
-|oa repository (via OAI-PMH doi match)                    |journal-article     |        1|
-|oa repository (via OAI-PMH title and first author match) |proceedings-article |        1|
-|oa repository (via pmcid lookup)                         |journal-article     |        1|
+|evidence                                                 |type            | Articles|
+|:--------------------------------------------------------|:---------------|--------:|
+|open (via free pdf)                                      |journal-article |        7|
+|oa journal (via issn in doaj)                            |journal-article |        4|
+|oa repository (via OAI-PMH title and first author match) |journal-article |        2|
+|open (via crossref license)                              |journal-article |        2|
+|oa journal (via publisher name)                          |component       |        1|
 
 #### More examples
 
