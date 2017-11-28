@@ -35,7 +35,7 @@ roadoi_addin <- function() {
       ),
       shiny::actionButton(inputId = "submit", "Run!"),
       shiny::tableOutput("table")
-    )
+      )
   )
   # here's the server-side R code that will be executed to find OA copies
   server <- function(input, output) {
@@ -46,6 +46,7 @@ roadoi_addin <- function() {
         `best_oa_location` <- NULL
         doi <- NULL
         dois <- unlist(strsplit(input$text, "\n"))
+        dois <- dois[dois != ""]
         # limit input to 10
         if (length(dois) > 9)
           dois <- dois[1:10]
@@ -54,14 +55,19 @@ roadoi_addin <- function() {
                         getOption("roadoi_email"),
                         "name@example.com")
         # fetch full-text links and return the best match
-        roadoi::oadoi_fetch(dois, email) %>%
-          tidyr::unnest(best_oa_location) %>%
-          dplyr::select(`Free fulltext link` = url, doi) %>%
-          dplyr::mutate(`Free fulltext link` = ifelse(
-            is.na(`Free fulltext link`),
-            NA,
-            create_link(`Free fulltext link`)
-          ))
+        tt <- roadoi::oadoi_fetch(dois, email)
+        if (any(tt$is_oa)) {
+          tt %>%
+            tidyr::unnest(best_oa_location) %>%
+            dplyr::select(`Free fulltext link` = url, doi) %>%
+            dplyr::mutate(`Free fulltext link` = ifelse(
+              is.na(`Free fulltext link`),
+              NA,
+              create_link(`Free fulltext link`)
+            ))
+        } else {
+          data.frame(`Free fulltext link` = "Sorry, nothing found")
+        }
       })
       # output as table
       output$table <- shiny::renderTable(
@@ -78,7 +84,7 @@ roadoi_addin <- function() {
 
   # finally, define where and how the gadget is displayed
   viewer <- shiny::dialogViewer("Find free full-texts",
-                         width = 800, height = 800)
+                                width = 800, height = 800)
   shiny::runGadget(ui, server, viewer = viewer)
 }
 
