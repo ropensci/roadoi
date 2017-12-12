@@ -79,6 +79,11 @@ oadoi_fetch <-
            .progress = "none") {
     # input validation
     stopifnot(!is.null(dois))
+    # remove empty characters
+    if (any(dois %in% "")) {
+      dois <- dois[dois != ""]
+      warning("Removed empty characters from DOI vector")
+    }
     email <- val_email(email)
     if (length(dois) > api_limit)
       stop(
