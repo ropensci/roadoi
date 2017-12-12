@@ -1,7 +1,7 @@
 Package: roadoi
 Type: Package
 Title: Find Free Versions of Scholarly Publications via the oaDOI Service
-Version: 0.4.1
+Version: 0.4.1.9000
 Authors@R: c(
     person("Najko", "Jahn", role = c("aut", "cre"), email = "najko.jahn@gmail.com"),
     person("Tuija", "Sonkkila", role = c("ctb"), comment = "Tuija Sonkkila 
