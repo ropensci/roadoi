@@ -94,8 +94,9 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
     hostname = purrr::map(url, httr::parse_url) %>% 
                   purrr::map_chr(., "hostname", .null = NA_integer_)
                 ) %>% 
-  dplyr::mutate(hostname = gsub("www.", "", hostname)) %>% 
-  dplyr::count(hostname)
+  dplyr::mutate(hostname = gsub("www.", "", hostname)) %>%
+  dplyr::group_by(hostname) %>%
+  dplyr::summarize(hosts = n())
 ```
 
 
