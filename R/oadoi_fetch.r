@@ -1,4 +1,4 @@
-#' Fetch open access status information and full-text links from oaDOI
+#' Fetch open access status information and full-text links using Unpaywall
 #'
 #' This is the main function to retrieve comprehensive open access status
 #' information from Unpaywall data service. Please play nice with the API.

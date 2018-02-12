@@ -18,7 +18,7 @@ roadoi_addin <- function() {
   # nocov start
   # create user interface like the one rcrossref provides
   ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar("Find freely available full-text via oaDOI.org"),
+    miniUI::gadgetTitleBar("Find freely available full-text via Unpaywall"),
     miniUI::miniContentPanel(
       shiny::tags$h4("Find fulltexts for scholarly articles"),
       shiny::tags$p(
@@ -34,7 +34,10 @@ roadoi_addin <- function() {
         height = 200
       ),
       shiny::actionButton(inputId = "submit", "Run!"),
-      shiny::tableOutput("table")
+      shiny::tableOutput("table"),
+      shiny::tags$hr(),
+      shiny::tags$img(src = "http://unpaywall.org/static/img/logo-green.png",
+                      align = "right")
       )
   )
   # here's the server-side R code that will be executed to find OA copies

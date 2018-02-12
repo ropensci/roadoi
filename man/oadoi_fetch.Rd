@@ -2,7 +2,7 @@
 % Please edit documentation in R/oadoi_fetch.r
 \name{oadoi_fetch}
 \alias{oadoi_fetch}
-\title{Fetch open access status information and full-text links from oaDOI}
+\title{Fetch open access status information and full-text links using Unpaywall}
 \usage{
 oadoi_fetch(dois = NULL, email = getOption("roadoi_email"),
   .progress = "none")
