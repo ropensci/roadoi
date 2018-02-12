@@ -10,9 +10,9 @@ oadoi_fetch(dois = NULL, email = getOption("roadoi_email"),
 \arguments{
 \item{dois}{character vector, search by a single DOI or many DOIs.
 A rate limit of 100k requests per day is suggested. If you need to access
-more data, request the data dump \url{https://oadoi.org/api} instead.}
+more data, request the data dump \url{https://unpaywall.org/dataset} instead.}
 
-\item{email}{character vector, mandatory! oaDOI requires your email address,
+\item{email}{character vector, mandatory! Unpaywall requires your email address,
 so that they can track usage and notify you when something breaks.
 Set email address in your `.Rprofile` file with
 the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.}
@@ -53,11 +53,13 @@ The result is a tibble with each row representing a publication.
 }
 
 The columns  \code{best_oa_location} and  \code{oa_locations} are list-columns
-that contain useful metadata about the OA sources found by oaDOI. These are
+that contain useful metadata about the OA sources found by Unpaywall.
+
+These are:
 
 \tabular{ll}{
  \code{evidence}        \tab How the OA location was found and is characterized
-  by oaDOI? \cr
+  by Unpaywall? \cr
  \code{host_type}       \tab OA full-text provided by \code{publisher} or
   \code{repository}. \cr
  \code{license}         \tab The license under which this copy is published,
@@ -74,9 +76,10 @@ To unnest list-columns, you want to use tidyr's unnest function
 }
 \description{
 This is the main function to retrieve comprehensive open access status
-information from the oaDOI service. Please play nice with the API. At the
-moment only 100k request are suggested per user and day.
-For more info see \url{https://oadoi.org/api}.
+information from Unpaywall data service. Please play nice with the API.
+For each user, 100k calls per day are suggested. If you need to access
+more data, there is also a data dump available.
+For more info see \url{https://unpaywall.org/api/v2}.
 }
 \examples{
 \dontrun{

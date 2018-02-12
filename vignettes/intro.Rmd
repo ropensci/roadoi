@@ -8,24 +8,24 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [oaDOI.org](https://oadoi.org/) service where DOIs are matched with freely available full-texts available from open access journals and archives.
+Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [Unpaywall](https://unpaywall.org/) service where DOIs are matched with freely available full-texts available from open access journals and archives.
 
-### About oaDOI.org
+### About Unpaywall
 
-[oaDOI.org](https://oadoi.org/), developed and maintained by the [team of Impactstory](https://oadoi.org/team), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
+[Unpaywall](https://unpaywall.org/), developed and maintained by the [team of Impactstory](https://profiles.impactstory.org/about), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
 
-oaDOI.org uses different data sources to find open access full-texts including:
+Unpaywall uses different data sources to find open access full-texts including:
 
 - [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
 - [Datacite](https://www.datacite.org/): another DOI registration agency with main focus on research data
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
 - Various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories such as arXiv and PubMed Central.
 
-See Piwowar et al. (2017) for a comprehensive overview of oaDOI.org.[^1]
+See Piwowar et al. (2017) for a comprehensive overview of Unpaywall.[^1]
 
 ### Basic usage
 
-There is one major function to talk with oaDOI.org, `oadoi_fetch()`, taking a character vector of DOIs and your email address as required arguments.
+There is one major function to talk with Unpaywall, `oadoi_fetch()`, taking a character vector of DOIs and your email address as required arguments.
 
 ```{r}
 library(roadoi)
@@ -36,7 +36,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### What's returned?
 
-The client supports API version 2. According to the [oaDOI.org API specification](https://oadoi.org/api/v2), the following variables with the following definitions are returned:
+The client supports API version 2. According to the [Unpaywall API specification](https://unpaywall.org/api/v2), the following variables with the following definitions are returned:
 
 **Column**|**Description**
 |:------------|:----------------------------------------------
@@ -100,11 +100,11 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 ```
 
 
-Note that fields to be returned might change according to the [oaDOI.org API specs](https://oadoi.org/api/v2)
+Note that fields to be returned might change according to the [Unpaywall API specs](https://unpaywall.org/api/v2)
 
 #### Any API restrictions?
 
-There are no API restrictions. However, providing your email address when using this client is required by oaDOI.org. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are too tired to type in your email address every time you want to call oaDOI.org.
+There are no API restrictions. However, providing your email address when using this client is required by Unpaywall. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are too tired to type in your email address every time you want to call Unpaywall.
 
 ```r
 options(roadoi_email = "name@example.com")
@@ -170,9 +170,9 @@ random_dois %>%
   arrange(desc(pubs))
 ```
 
-#### Calling oaDOI.org
+#### Calling Unpaywall
 
-Now let's call oaDOI.org
+Now let's call Unpaywall
 
 ```{r}
 oa_df <- roadoi::oadoi_fetch(dois = random_dois$DOI, email = "name@example.com")

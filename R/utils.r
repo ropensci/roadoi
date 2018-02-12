@@ -1,13 +1,13 @@
 # meta
 oadoi_baseurl <- function()
-  "https://api.oadoi.org/"
+  "https://api.unpaywall.org/"
 # API version
 oadoi_api_version <- function()
   "v2"
 # If you require access to more data, please use the data dump
 api_limit <- 100000
 
-# user agent, so oaDOI can track the usage of this client
+# user agent, so Unpaywall can track the usage of this client
 ua <- httr::user_agent("https://github.com/ropensci/roadoi")
 
 #' Email checker for roadoi API

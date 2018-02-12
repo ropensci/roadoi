@@ -1,14 +1,15 @@
 #' Fetch open access status information and full-text links from oaDOI
 #'
 #' This is the main function to retrieve comprehensive open access status
-#' information from the oaDOI service. Please play nice with the API. At the
-#' moment only 100k request are suggested per user and day.
-#' For more info see \url{https://oadoi.org/api}.
+#' information from Unpaywall data service. Please play nice with the API.
+#' For each user, 100k calls per day are suggested. If you need to access
+#' more data, there is also a data dump available.
+#' For more info see \url{https://unpaywall.org/api/v2}.
 #'
 #' @param dois character vector, search by a single DOI or many DOIs.
 #'   A rate limit of 100k requests per day is suggested. If you need to access
-#'   more data, request the data dump \url{https://oadoi.org/api} instead.
-#' @param email character vector, mandatory! oaDOI requires your email address,
+#'   more data, request the data dump \url{https://unpaywall.org/dataset} instead.
+#' @param email character vector, mandatory! Unpaywall requires your email address,
 #'   so that they can track usage and notify you when something breaks.
 #'   Set email address in your `.Rprofile` file with
 #'   the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.
@@ -47,11 +48,13 @@
 #' }
 #'
 #' The columns  \code{best_oa_location} and  \code{oa_locations} are list-columns
-#' that contain useful metadata about the OA sources found by oaDOI. These are
+#' that contain useful metadata about the OA sources found by Unpaywall.
+#'
+#' These are:
 #'
 #' \tabular{ll}{
 #'  \code{evidence}        \tab How the OA location was found and is characterized
-#'   by oaDOI? \cr
+#'   by Unpaywall? \cr
 #'  \code{host_type}       \tab OA full-text provided by \code{publisher} or
 #'   \code{repository}. \cr
 #'  \code{license}         \tab The license under which this copy is published,
@@ -89,7 +92,7 @@ oadoi_fetch <-
       stop(
         "A rate limit of 100k requests per day is suggested.
         If you need to access more data, request the data dump
-        https://oadoi.org/api instead",
+        https://unpaywall.org/dataset",
         .call = FALSE
       )
     # Call API for every DOI, and return results as tbl_df
@@ -104,7 +107,7 @@ oadoi_fetch <-
 #'
 #' @param doi character vector,a DOI
 #' @param email character vector, required! It is strongly encourage to tell
-#'   oaDOI your email adress, so that they can track usage and notify you
+#'   Unpaywall your email adress, so that they can track usage and notify you
 #'   when something breaks. Set email address in your `.Rprofile` file with
 #'   the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.
 #' @return A tibble
@@ -118,12 +121,12 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
     query = list(email = email),
     path = c(oadoi_api_version(), doi)
   )
-  # Call oaDOI API
+  # Call Unpaywall Data API
   resp <- httr::GET(u, ua)
 
   # test for valid json
   if (httr::http_type(resp) != "application/json") {
-    # test needed because oaDOI throws 505 when non-encoded whitespace
+    # test needed because Unpaywall throws 505 when non-encoded whitespace
     # is provided by this client
     stop(
       sprintf(
@@ -139,7 +142,7 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
   if (httr::status_code(resp) != 200) {
     warning(
       sprintf(
-        "oaDOI request failed [%s]\n%s",
+        "Unpaywall request failed [%s]\n%s",
         httr::status_code(resp),
         httr::content(resp)$message
       ),
@@ -154,7 +157,7 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
   }
 }
 
-#' Parser for OADOI JSON
+#' Parser for Unpaywall Data JSON
 #'
 #' @param req unparsed JSON
 #'

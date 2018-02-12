@@ -1,4 +1,4 @@
-# roadoi - Use oaDOI.org with R
+# roadoi - Use Unpaywall with R
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(
@@ -18,25 +18,27 @@ knitr::opts_chunk$set(
 [![review](https://badges.ropensci.org/115_status.svg)](https://github.com/ropensci/onboarding/issues/115)
 
 
-roadoi interacts with the [oaDOI API](http://oadoi.org/), a simple web-interface 
-which links DOIs  and open access versions of scholarly works. 
-oaDOI powers [unpaywall](http://unpaywall.org/).
+
+roadoi interacts with the [Unpaywall API](https://unpaywall.org/api/v2), 
+a simple web-interface which links DOIs and open access versions of scholarly works. 
+The API powers [Unpaywall](http://unpaywall.org/).
 
 This client supports the most recent API Version 2.
 
-API Documentation: <http://oadoi.org/api/v2>
+API Documentation: <http://unpaywall.org/api/v2>
 
 ## How do I use it? 
 
 Use the `oadoi_fetch()` function in this package to get open access status
-information and full-text links from oaDOI.
+information and full-text links from Unpaywall.
+
 
 ```{r}
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"), 
                     email = "name@example.com")
 ```
 
-There are no API restrictions. However, providing an email address is required and a rate limit of 100k is suggested. If you need to access more data, ask for the data dump <https://oadoi.org/api> instead.
+There are no API restrictions. However, providing an email address is required and a rate limit of 100k is suggested. If you need to access more data, use the [data dump](https://unpaywall.org/dataset) instead.
 
 ### RStudio Addin
 

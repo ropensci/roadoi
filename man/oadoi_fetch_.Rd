@@ -10,7 +10,7 @@ oadoi_fetch_(doi = NULL, email = NULL)
 \item{doi}{character vector,a DOI}
 
 \item{email}{character vector, required! It is strongly encourage to tell
-oaDOI your email adress, so that they can track usage and notify you
+Unpaywall your email adress, so that they can track usage and notify you
 when something breaks. Set email address in your `.Rprofile` file with
 the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.}
 }
