@@ -52,14 +52,14 @@ The client supports API version 2. According to the [Unpaywall Data Format](http
 `year`|Year published. 
 `updated`|Time when the data for this resource was last updated. 
 `non_compliant`|Lists other full-text resources that are not hosted by either publishers or repositories. 
-`authors`~|Lists authors (if available)
+`authors`|Lists authors (if available)
 
 The columns  `best_oa_location` and  `oa_locations` are list-columns
-that contain useful metadata about the OA sources found by oaDOI. These are
+that contain useful metadata about the OA sources found by Unpaywall These are
 
 **Column**|**Description**
 |:------------|:----------------------------------------------
-`evidence`|How the OA location was found and is characterized by oaDOI?
+`evidence`|How the OA location was found and is characterized by Unpaywall?
 `host_type`|OA full-text provided by `publisher` or `repository`. 
 `license`|The license under which this copy is published
 `url`|The URL where you can find this OA copy.
@@ -123,7 +123,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### Catching errors
 
-oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [purrr's `safely()`](https://purrr.tidyverse.org/reference/safely.html) function
+Unpaywall is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [purrr's `safely()`](https://purrr.tidyverse.org/reference/safely.html) function
 
 ```{r}
 random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
@@ -209,7 +209,7 @@ my_df %>%
   knitr::kable()
 ```
 
-How did oaDOI find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
+How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
 ```{r, results='asis'}
 my_df %>%
@@ -223,6 +223,6 @@ my_df %>%
 
 #### More examples
 
-For more  examples, see Piwowar et al. 2018.[^1] Together with the article, they shared their analysis of oaDOI-data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
+For more  examples, see Piwowar et al. 2018.[^1] Together with the article, they shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
 
 [^1]: Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2018). The state of OA: a large-scale analysis of the prevalence and impact of Open Access articles. PeerJ, 6, e4375. <https://doi.org/10.7717/peerj.4375>
