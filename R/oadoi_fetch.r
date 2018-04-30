@@ -122,7 +122,7 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
     path = c(oadoi_api_version(), doi)
   )
   # Call Unpaywall Data API
-  resp <- httr::GET(u, ua)
+  resp <- httr::RETRY("GET", u, ua)
 
   # test for valid json
   if (httr::http_type(resp) != "application/json") {
