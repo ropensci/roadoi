@@ -2,7 +2,7 @@ context("testing oadoi_fetch")
 
 test_that("oadoi_fetch returns", {
   skip_on_cran()
-  email <- "test@test.com"
+  email <- "najko.jahn@gmail.com"
   a <- oadoi_fetch(dois = "10.7717/peerj.2323", email)
   b <- oadoi_fetch(dois = c("10.1038/ng.919", "10.1105/tpc.111.088682"),
                    email)
