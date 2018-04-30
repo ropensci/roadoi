@@ -52,6 +52,7 @@ The client supports API version 2. According to the [Unpaywall Data Format](http
 `year`|Year published. 
 `updated`|Time when the data for this resource was last updated. 
 `non_compliant`|Lists other full-text resources that are not hosted by either publishers or repositories. 
+`authors`~|Lists authors (if available)
 
 The columns  `best_oa_location` and  `oa_locations` are list-columns
 that contain useful metadata about the OA sources found by oaDOI. These are

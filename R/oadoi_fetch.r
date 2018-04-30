@@ -45,6 +45,7 @@
 #'  \code{updated}          \tab Time when the data for this resource was last updated. \cr
 #'  \code{non_compliant}    \tab Lists other full-text resources that are not
 #'  hosted by either publishers or repositories. \cr
+#'  \code{authors}          \tab Lists author information (if available) \cr
 #' }
 #'
 #' The columns  \code{best_oa_location} and  \code{oa_locations} are list-columns
@@ -119,7 +120,7 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
   u <- httr::modify_url(
     oadoi_baseurl(),
     query = list(email = email),
-    path = c(oadoi_api_version(), doi)
+    path = c(oadoi_api_version(), trimws(doi))
   )
   # Call Unpaywall Data API
   resp <- httr::RETRY("GET", u, ua)
@@ -180,7 +181,8 @@ parse_oadoi <- function(req) {
     title = req$title,
     year = as.character(req$year),
     updated = req$updated,
-    non_compliant = list(req$x_reported_noncompliant_copies)
+    non_compliant = list(req$x_reported_noncompliant_copies),
+    authors = list(req$z_authors)
   )
 }
 

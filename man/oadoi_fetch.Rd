@@ -50,6 +50,7 @@ The result is a tibble with each row representing a publication.
  \code{updated}          \tab Time when the data for this resource was last updated. \cr
  \code{non_compliant}    \tab Lists other full-text resources that are not
  hosted by either publishers or repositories. \cr
+ \code{authors}          \tab Lists author information (if available) \cr
 }
 
 The columns  \code{best_oa_location} and  \code{oa_locations} are list-columns
