@@ -36,11 +36,15 @@ roadoi_addin <- function() {
       shiny::actionButton(inputId = "submit", "Run!"),
       shiny::tableOutput("table"),
       shiny::tags$hr(),
-      shiny::tags$p("Free full-text links from ",
-                    shiny::tags$a(
-                    shiny::tags$img(src = "http://unpaywall.org/static/img/logo-green.png"),
-                    href = "http://unpaywall.org/"),
-                    align = "right"
+      shiny::tags$p(
+        "Free full-text links from ",
+        shiny::tags$a(
+          shiny::tags$img(
+            src = "http://unpaywall.org/static/img/logo-green.png"
+            ),
+          href = "http://unpaywall.org/"
+        ),
+        align = "right"
       )
       )
   )
