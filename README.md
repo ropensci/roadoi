@@ -12,13 +12,13 @@
 
 
 
-roadoi interacts with the [Unpaywall API](https://unpaywall.org/api/v2), 
+roadoi interacts with the [Unpaywall API](http://unpaywall.org/products/api), 
 a simple web-interface which links DOIs and open access versions of scholarly works. 
 The API powers [Unpaywall](http://unpaywall.org/).
 
 This client supports the most recent API Version 2.
 
-API Documentation: <http://unpaywall.org/api/v2>
+API Documentation: <http://unpaywall.org/products/api>
 
 ## How do I use it? 
 
@@ -29,7 +29,7 @@ information and full-text links from Unpaywall.
 
 ```r
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"), 
-                    email = "name@example.com")
+                    email = "najko.jahn@gmail.com")
 #> # A tibble: 2 x 13
 #>   doi      best_oa_location oa_locations data_standard is_oa journal_is_oa
 #>   <chr>    <list>           <list>               <int> <lgl> <lgl>        
@@ -40,7 +40,7 @@ roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"),
 #> #   non_compliant <list>
 ```
 
-There are no API restrictions. However, providing an email address is required and a rate limit of 100k is suggested. If you need to access more data, use the [data dump](https://unpaywall.org/dataset) instead.
+There are no API restrictions. However, providing an email address is required and a rate limit of 100k is suggested. If you need to access more data, use the [data dump](https://unpaywall.org/products/snapshot) instead.
 
 ### RStudio Addin
 
@@ -79,7 +79,6 @@ Open access copies of scholarly publications are sometimes hard to find. Some ar
 Unpaywall uses different data sources to find open access full-texts including:
 
 - [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
-- [Datacite](https://www.datacite.org/): another DOI registration agency with main focus on research data
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
 - Various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories such as arXiv and PubMed Central.
 
@@ -94,7 +93,7 @@ There is one major function to talk with Unpaywall, `oadoi_fetch()`, taking a ch
 library(roadoi)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
-                    email = "name@example.com")
+                    email = "najko.jahn@gmail.com")
 #> # A tibble: 2 x 13
 #>   doi      best_oa_location oa_locations data_standard is_oa journal_is_oa
 #>   <chr>    <list>           <list>               <int> <lgl> <lgl>        
@@ -107,7 +106,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### What's returned?
 
-The client supports API version 2. According to the [Unpaywall API specification](https://unpaywall.org/api/v2), the following variables with the following definitions are returned:
+The client supports API version 2. According to the [Unpaywall Data Format](http://unpaywall.org/data-format), the following variables with the following definitions are returned:
 
 **Column**|**Description**
 |:------------|:----------------------------------------------
@@ -145,7 +144,7 @@ To get the full-text links from the list-column `best_oa_location`, you may want
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
-                    email = "name@example.com") %>%
+                    email = "najko.jahn@gmail.com") %>%
   dplyr::mutate(
     urls = purrr::map(best_oa_location, "url") %>% 
                   purrr::map_if(purrr::is_empty, ~ NA_character_) %>% 
@@ -163,7 +162,7 @@ If you want to gather all full-text links and to explore where these links are h
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
-                    email = "name@example.com") %>%
+                    email = "najko.jahn@gmail.com") %>%
   tidyr::unnest(oa_locations) %>% 
   dplyr::mutate(
     hostname = purrr::map(url, httr::parse_url) %>% 
@@ -184,14 +183,14 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 ```
 
 
-Note that fields to be returned might change according to the [Unpaywall API specs](https://unpaywall.org/api/v2)
+Note that fields to be returned might change according to the [Unpaywall API specs](http://unpaywall.org/products/api)
 
 #### Any API restrictions?
 
 There are no API restrictions. However, providing your email address when using this client is required by Unpaywall. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are too tired to type in your email address every time you want to call Unpaywall.
 
 ```r
-options(roadoi_email = "name@example.com")
+options(roadoi_email = "najko.jahn@gmail.com")
 ```
 
 #### Keeping track of crawling
@@ -202,7 +201,7 @@ To follow your API call, and to estimate the time until completion, use the `.pr
 ```r
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
-                    email = "name@example.com", 
+                    email = "najko.jahn@gmail.com", 
                     .progress = "text")
 #>   |                                                                         |                                                                 |   0%  |                                                                         |================================                                 |  50%  |                                                                         |=================================================================| 100%
 #> # A tibble: 2 x 13
@@ -217,13 +216,15 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### Catching errors
 
-oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [plyr's `failwith()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.4/topics/failwith) function
+oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [purrr's `safely()`](https://purrr.tidyverse.org/reference/safely.html) function
 
 
 ```r
 random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
-purrr::map_df(random_dois, 
-              plyr::failwith(f = function(x) roadoi::oadoi_fetch(x, email ="name@example.com")))
+my_data <- purrr::map(random_dois, 
+              .f = purrr::safely(function(x) roadoi::oadoi_fetch(x, email ="najko.jahn@gmail.com")))
+# return results as data.frame
+purrr::map_df(my_data, "result")
 #> # A tibble: 1 x 13
 #>   doi     best_oa_location oa_locations  data_standard is_oa journal_is_oa
 #>   <chr>   <list>           <list>                <int> <lgl> <lgl>        
@@ -231,6 +232,17 @@ purrr::map_df(random_dois,
 #> # ... with 7 more variables: journal_issns <chr>, journal_name <chr>,
 #> #   publisher <chr>, title <chr>, year <chr>, updated <chr>,
 #> #   non_compliant <list>
+#show errors
+purrr::map(my_data, "error")
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> NULL
+#> 
+#> [[3]]
+#> <simpleError: Oops, API did not return json after calling '§dldl  ':
+#>         check your query - or api.oadoi.org may experience problems>
 ```
 
 ### Use Case: Studying the compliance with open access policies
@@ -250,26 +262,27 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   rcrossref::cr_works() %>%
   .$data
 random_dois
-#> # A tibble: 100 x 32
-#>    container.title    created  deposited DOI    indexed ISSN  issue issued
-#>    <chr>              <chr>    <chr>     <chr>  <chr>   <chr> <chr> <chr> 
-#>  1 The Analyst        2004-03… 2017-01-… 10.10… 2017-1… 0003… 715   1935  
-#>  2 The Mathematical … 2007-01… 2007-02-… 10.23… 2017-1… 0025… 78    1909-…
-#>  3 Science China Phy… 2016-07… 2017-06-… 10.10… 2017-1… 1674… 8     2016-…
-#>  4 1977 Antennas and… 2005-03… 2017-03-… 10.11… 2018-0… <NA>  <NA>  <NA>  
-#>  5 Journal of Sport … 2016-08… 2016-08-… 10.11… 2018-0… 0895… 2     1995-…
-#>  6 Sensor Letters     2013-10… 2013-10-… 10.11… 2017-1… 1546… 5     2013-…
-#>  7 Industrial Lubric… 2008-02… 2016-11-… 10.11… 2017-1… 0036… 12    1950-…
-#>  8 Colonial Waterbir… 2006-04… 2007-02-… 10.23… 2018-0… 0738… 2     1987  
-#>  9 Telecommunication… 2014-09… 2014-09-… 10.16… 2017-1… 0040… 11-12 2002  
-#> 10 MELUS              2006-06… 2017-08-… 10.23… 2017-1… 0163… 4     1991  
-#> # ... with 90 more rows, and 24 more variables: member <chr>, page <chr>,
-#> #   prefix <chr>, publisher <chr>, reference.count <chr>, score <chr>,
-#> #   source <chr>, subject <chr>, title <chr>, type <chr>, URL <chr>,
-#> #   volume <chr>, link <list>, author <list>, alternative.id <chr>,
-#> #   license_date <chr>, license_URL <chr>, license_delay.in.days <chr>,
-#> #   license_content.version <chr>, update.policy <chr>, ISBN <chr>,
-#> #   assertion <list>, funder <list>, subtitle <chr>
+#> # A tibble: 100 x 34
+#>    container.title    created  deposited DOI   indexed ISBN  issued member
+#>    <chr>              <chr>    <chr>     <chr> <chr>   <chr> <chr>  <chr> 
+#>  1 2010 Second IITA … 2010-10… 2017-03-… 10.1… 2017-1… 9781… 2010-… 263   
+#>  2 2011 IEEE PES CON… 2011-11… 2017-03-… 10.1… 2018-0… 9781… 2011-… 263   
+#>  3 Paediatrics and C… 2014-12… 2015-03-… 10.1… 2017-1… <NA>  2015-… 78    
+#>  4 Journal Français … 2009-01… 2017-06-… 10.1… 2018-0… <NA>  2008-… 78    
+#>  5 Books Abroad       2010-11… 2010-11-… 10.2… 2017-1… <NA>  1941   1121  
+#>  6 Acta Psychiatrica… 2007-08… 2017-04-… 10.1… 2017-1… <NA>  1960-… 311   
+#>  7 Cancer Biology & … 2016-06… 2016-12-… 10.1… 2018-0… <NA>  2016-… 301   
+#>  8 Solar Energy       2003-11… 2015-06-… 10.1… 2018-0… <NA>  1993-… 78    
+#>  9 International Jou… 2014-11… 2014-11-… 10.1… 2017-1… <NA>  2014-… 7168  
+#> 10 Cytokine           2011-09… 2016-01-… 10.1… 2017-1… <NA>  2011-… 78    
+#> # ... with 90 more rows, and 26 more variables: prefix <chr>,
+#> #   publisher <chr>, reference.count <chr>, score <chr>, source <chr>,
+#> #   title <chr>, type <chr>, URL <chr>, author <list>, link <list>,
+#> #   alternative.id <chr>, ISSN <chr>, issue <chr>, license_date <chr>,
+#> #   license_URL <chr>, license_delay.in.days <chr>,
+#> #   license_content.version <chr>, page <chr>, subject <chr>,
+#> #   volume <chr>, update.policy <chr>, assertion <list>, funder <list>,
+#> #   abstract <chr>, subtitle <chr>, archive <chr>
 ```
 
 Let's see when these random publications were published
@@ -283,20 +296,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 47 x 2
+#> # A tibble: 45 x 2
 #>    issued  pubs
 #>     <dbl> <int>
 #>  1     NA    10
-#>  2   2006     6
-#>  3   2013     5
-#>  4   2017     5
-#>  5   1991     4
-#>  6   2009     4
-#>  7   1988     3
-#>  8   1997     3
-#>  9   1998     3
-#> 10   2007     3
-#> # ... with 37 more rows
+#>  2   2017     8
+#>  3   2011     6
+#>  4   2013     5
+#>  5   1995     4
+#>  6   1996     4
+#>  7   1997     4
+#>  8   2014     4
+#>  9   2015     4
+#> 10   1993     3
+#> # ... with 35 more rows
 ```
 
 and of what type they are
@@ -310,23 +323,26 @@ random_dois %>%
 #> # A tibble: 8 x 2
 #>   type                 pubs
 #>   <chr>               <int>
-#> 1 journal-article        71
+#> 1 journal-article        73
 #> 2 book-chapter           12
-#> 3 proceedings-article    10
-#> 4 component               2
-#> 5 report                  2
+#> 3 proceedings-article     7
+#> 4 component               3
+#> 5 book                    2
 #> 6 dataset                 1
 #> 7 journal-issue           1
-#> 8 monograph               1
+#> 8 standard                1
 ```
 
 #### Calling Unpaywall
 
-Now let's call Unpaywall
+Now let's call Unpaywall. We are capturing possible errors.
 
 
 ```r
-oa_df <- roadoi::oadoi_fetch(dois = random_dois$DOI, email = "name@example.com")
+oa_df <- purrr::map(random_dois$DOI, .f = purrr::safely(
+  function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")
+  )) %>%
+  purrr::map_df("result")
 ```
 
 and merge the resulting information about open access full-text links with parts of our Crossref metadata-set
@@ -358,9 +374,8 @@ my_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       77|       0.77|
-|TRUE  |       21|       0.21|
-|NA    |        2|       0.02|
+|FALSE |       85|       0.85|
+|TRUE  |       15|       0.15|
 
 How did oaDOI find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -377,25 +392,21 @@ my_df %>%
 
 
 
-|evidence                                                 |type                | Articles|
-|:--------------------------------------------------------|:-------------------|--------:|
-|open (via free pdf)                                      |journal-article     |        5|
-|open (via crossref license)                              |journal-article     |        4|
-|oa repository (via OAI-PMH title and first author match) |journal-article     |        2|
-|oa repository (via OAI-PMH title and first author match) |proceedings-article |        2|
-|oa repository (via OAI-PMH title and first author match) |report              |        2|
-|oa journal (via doaj)                                    |journal-article     |        1|
-|oa journal (via publisher name)                          |component           |        1|
-|oa repository (via OAI-PMH doi match)                    |book-chapter        |        1|
-|oa repository (via OAI-PMH doi match)                    |journal-article     |        1|
-|oa repository (via OAI-PMH title and first author match) |monograph           |        1|
-|oa repository (via pmcid lookup)                         |journal-article     |        1|
+|evidence                                                 |type            | Articles|
+|:--------------------------------------------------------|:---------------|--------:|
+|open (via free pdf)                                      |journal-article |        7|
+|oa journal (via publisher name)                          |component       |        2|
+|oa repository (via OAI-PMH doi match)                    |journal-article |        2|
+|oa repository (via OAI-PMH title and first author match) |book-chapter    |        1|
+|open (via crossref license)                              |journal-article |        1|
+|open (via page says license)                             |journal-article |        1|
+|open (via page says Open Access)                         |journal-article |        1|
 
 #### More examples
 
-For more  examples, see Piwowar et al. 2017.[^1] Together with the article, they shared their analysis of oaDOI-data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
+For more  examples, see Piwowar et al. 2018.[^1] Together with the article, they shared their analysis of oaDOI-data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
 
-[^1]: Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2017). The State of OA: A large-scale analysis of the prevalence and impact of Open Access articles (Version 1). PeerJ Preprints.  <https://doi.org/10.7287/peerj.preprints.3119v1>
+[^1]: Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2018). The state of OA: a large-scale analysis of the prevalence and impact of Open Access articles. PeerJ, 6, e4375. <https://doi.org/10.7717/peerj.4375>
 
 ## Meta
 

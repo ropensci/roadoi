@@ -19,13 +19,13 @@ knitr::opts_chunk$set(
 
 
 
-roadoi interacts with the [Unpaywall API](https://unpaywall.org/api/v2), 
+roadoi interacts with the [Unpaywall API](http://unpaywall.org/products/api), 
 a simple web-interface which links DOIs and open access versions of scholarly works. 
 The API powers [Unpaywall](http://unpaywall.org/).
 
 This client supports the most recent API Version 2.
 
-API Documentation: <http://unpaywall.org/api/v2>
+API Documentation: <http://unpaywall.org/products/api>
 
 ## How do I use it? 
 
@@ -35,10 +35,10 @@ information and full-text links from Unpaywall.
 
 ```{r}
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"), 
-                    email = "name@example.com")
+                    email = "najko.jahn@gmail.com")
 ```
 
-There are no API restrictions. However, providing an email address is required and a rate limit of 100k is suggested. If you need to access more data, use the [data dump](https://unpaywall.org/dataset) instead.
+There are no API restrictions. However, providing an email address is required and a rate limit of 100k is suggested. If you need to access more data, use the [data dump](https://unpaywall.org/products/snapshot) instead.
 
 ### RStudio Addin
 
