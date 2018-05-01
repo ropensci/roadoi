@@ -126,7 +126,7 @@ The client supports API version 2. According to the [Unpaywall Data Format](http
 `authors`|Lists authors (if available)
 
 The columns  `best_oa_location` and  `oa_locations` are list-columns
-that contain useful metadata about the OA sources found by Unpaywall These are
+that contain useful metadata about the OA sources found by Unpaywall. These are
 
 **Column**|**Description**
 |:------------|:----------------------------------------------
@@ -204,7 +204,13 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
                     email = "najko.jahn@gmail.com", 
                     .progress = "text")
-#>   |                                                                         |                                                                 |   0%  |                                                                         |================================                                 |  50%  |                                                                         |=================================================================| 100%
+#> 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |================================                                 |  50%
+  |                                                                       
+  |=================================================================| 100%
 #> # A tibble: 2 x 14
 #>   doi      best_oa_location oa_locations data_standard is_oa journal_is_oa
 #>   <chr>    <list>           <list>               <int> <lgl> <lgl>        
@@ -217,7 +223,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### Catching errors
 
-Unpaywall is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [purrr's `safely()`](https://purrr.tidyverse.org/reference/safely.html) function
+oaDOI is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [purrr's `safely()`](https://purrr.tidyverse.org/reference/safely.html) function
 
 
 ```r
@@ -263,26 +269,26 @@ random_dois <- rcrossref::cr_r(sample = 100) %>%
   .$data
 random_dois
 #> # A tibble: 100 x 34
-#>    container.title    created deposited DOI    indexed ISSN  issued member
-#>    <chr>              <chr>   <chr>     <chr>  <chr>   <chr> <chr>  <chr> 
-#>  1 Applied Mechanics… 2014-0… 2015-08-… 10.40… 2017-1… 1662… 2014-… 2457  
-#>  2 Frontiers in Phar… 2017-1… 2017-11-… 10.33… 2017-1… 1663… 2017-… 1965  
-#>  3 Physical Review S… 2002-0… 2017-06-… 10.11… 2018-0… 1098… 2000-… 16    
-#>  4 Crafting the Fema… 2017-0… 2018-04-… 10.23… 2018-0… <NA>  <NA>   1121  
-#>  5 FLORESTA           2014-0… 2016-07-… 10.53… 2017-1… 1982… 2006-… 3785  
-#>  6 Proceedings of th… 2012-0… 2016-12-… 10.11… 2017-1… <NA>  2011   320   
-#>  7 Journal of Food a… 2014-0… 2014-05-… 10.12… 2017-1… 2333… 2014-… 4952  
-#>  8 FEBS Letters       2003-0… 2017-10-… 10.10… 2018-0… 0014… 1995-… 311   
-#>  9 Osong Public Heal… 2014-0… 2018-02-… 10.10… 2018-0… 2210… 2014-… 10266 
-#> 10 " Proceedings of … 2007-1… 2015-04-… 10.25… 2017-1… <NA>  2001-… 861   
-#> # ... with 90 more rows, and 26 more variables: page <chr>, prefix <chr>,
-#> #   publisher <chr>, reference.count <chr>, score <chr>, source <chr>,
-#> #   title <chr>, type <chr>, URL <chr>, volume <chr>, author <list>,
-#> #   link <list>, alternative.id <chr>, subject <chr>, update.policy <chr>,
-#> #   issue <chr>, license_date <chr>, license_URL <chr>,
+#>    container.title    created  deposited DOI    indexed ISSN  issue issued
+#>    <chr>              <chr>    <chr>     <chr>  <chr>   <chr> <chr> <chr> 
+#>  1 Japanese Journal … 2012-02… 2012-02-… 10.24… 2017-1… 1880… 2     1995  
+#>  2 Journal of Physic… 2002-07… 2018-03-… 10.10… 2018-0… 0022… 8     1974-…
+#>  3 Marine Biology     2004-11… 2013-01-… 10.10… 2018-0… 0025… 2     1980  
+#>  4 Pure and Applied … 2011-07… 2017-06-… 10.10… 2017-1… 0033… 7     2011-…
+#>  5 Revista MVZ Córdo… 2017-09… 2017-09-… 10.21… 2017-1… 1909… 1     2009-…
+#>  6 Grundlagen der Im… 2012-01… 2014-01-… 10.10… 2017-1… <NA>  <NA>  1987  
+#>  7 Modern Drama       2013-03… 2015-04-… 10.13… 2017-1… 1712… 4     1987  
+#>  8 Handbook of Drugs… 2011-01… 2018-04-… 10.10… 2018-0… <NA>  <NA>  <NA>  
+#>  9 Choice Reviews On… 2013-01… 2016-08-… 10.58… 2017-1… 0009… 04    1989-…
+#> 10 Clinical Medicine  2013-02… 2017-06-… 10.78… 2018-0… 1470… 3     2009-…
+#> # ... with 90 more rows, and 26 more variables: member <chr>, page <chr>,
+#> #   prefix <chr>, publisher <chr>, reference.count <chr>, score <chr>,
+#> #   source <chr>, title <chr>, type <chr>, URL <chr>, volume <chr>,
+#> #   author <list>, subject <chr>, link <list>, alternative.id <chr>,
+#> #   abstract <chr>, ISBN <chr>, license_date <chr>, license_URL <chr>,
 #> #   license_delay.in.days <chr>, license_content.version <chr>,
-#> #   ISBN <chr>, abstract <chr>, subtitle <chr>, archive <chr>,
-#> #   assertion <list>, funder <list>
+#> #   update.policy <chr>, assertion <list>, archive <chr>, subtitle <chr>,
+#> #   funder <list>
 ```
 
 Let's see when these random publications were published
@@ -296,20 +302,20 @@ random_dois %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 42 x 2
+#> # A tibble: 43 x 2
 #>    issued  pubs
 #>     <dbl> <int>
-#>  1   2016     7
-#>  2   2017     7
-#>  3     NA     7
-#>  4   2001     6
-#>  5   2014     5
-#>  6   1995     4
-#>  7   2002     4
-#>  8   2015     4
-#>  9   1991     3
-#> 10   1992     3
-#> # ... with 32 more rows
+#>  1   2016     6
+#>  2     NA     6
+#>  3   1999     5
+#>  4   2009     5
+#>  5   2011     5
+#>  6   2013     5
+#>  7   2015     5
+#>  8   1989     4
+#>  9   2001     4
+#> 10   2004     4
+#> # ... with 33 more rows
 ```
 
 and of what type they are
@@ -320,16 +326,17 @@ random_dois %>%
   group_by(type) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
-#> # A tibble: 7 x 2
+#> # A tibble: 8 x 2
 #>   type                 pubs
 #>   <chr>               <int>
-#> 1 journal-article        79
+#> 1 journal-article        83
 #> 2 book-chapter           11
-#> 3 proceedings-article     4
-#> 4 component               2
-#> 5 dataset                 2
-#> 6 journal-issue           1
-#> 7 report                  1
+#> 3 book                    1
+#> 4 component               1
+#> 5 dataset                 1
+#> 6 other                   1
+#> 7 proceedings-article     1
+#> 8 report                  1
 ```
 
 #### Calling Unpaywall
@@ -373,10 +380,11 @@ my_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       81|       0.81|
-|TRUE  |       19|       0.19|
+|FALSE |       83|       0.83|
+|TRUE  |       16|       0.16|
+|NA    |        1|       0.01|
 
-How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
+How did oaDOI find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
 
 ```r
@@ -391,22 +399,19 @@ my_df %>%
 
 
 
-|evidence                                                 |type                | Articles|
-|:--------------------------------------------------------|:-------------------|--------:|
-|open (via free pdf)                                      |journal-article     |        6|
-|open (via page says license)                             |journal-article     |        4|
-|oa repository (via OAI-PMH title and first author match) |journal-article     |        2|
-|oa journal (via doaj)                                    |journal-article     |        1|
-|oa journal (via publisher name)                          |component           |        1|
-|oa repository (via OAI-PMH doi match)                    |journal-article     |        1|
-|oa repository (via OAI-PMH doi match)                    |proceedings-article |        1|
-|open (via crossref license)                              |journal-article     |        1|
-|open (via page says license)                             |book-chapter        |        1|
-|open (via page says Open Access)                         |journal-article     |        1|
+|evidence                                                 |type            | Articles|
+|:--------------------------------------------------------|:---------------|--------:|
+|open (via free pdf)                                      |journal-article |        8|
+|oa repository (via OAI-PMH doi match)                    |journal-article |        2|
+|open (via page says license)                             |journal-article |        2|
+|oa journal (via publisher name)                          |component       |        1|
+|oa repository (via OAI-PMH title and first author match) |journal-article |        1|
+|open (via crossref license)                              |journal-article |        1|
+|open (via free pdf)                                      |report          |        1|
 
 #### More examples
 
-For more  examples, see Piwowar et al. 2018.[^1] Together with the article, they shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
+For more  examples, see Piwowar et al. 2018.[^1] Together with the article, they shared their analysis of oaDOI-data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
 
 [^1]: Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander, B., … Haustein, S. (2018). The state of OA: a large-scale analysis of the prevalence and impact of Open Access articles. PeerJ, 6, e4375. <https://doi.org/10.7717/peerj.4375>
 

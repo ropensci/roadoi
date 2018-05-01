@@ -39,8 +39,10 @@ The result is a tibble with each row representing a publication.
  for this resource. \code{1} mostly uses Crossref for hybrid detection. \code{2}
  uses more comprehensive hybrid detection methods. \cr
  \code{is_oa}            \tab Is there an OA copy (logical)? \cr
- \code{journal_is_oa}    \tab Is the article published in a fully OA journal?
- Uses the Directory of Open Access Journals (DOAJ) as source. \cr
+ \code{genre}            \tab Publication type \cr
+ \code{journal_is_oa}    \tab Is the article published in a fully OA journal? \cr
+ \code{journal_is_in_doaj} \ Is the journal listed in
+  the Directory of Open Access Journals (DOAJ). \cr
  \code{journal_issns}    \tab ISSNs, i.e. unique numbers to identify
  journals. \cr
  \code{journal_name}     \tab Journal title, not normalized. \cr
@@ -80,7 +82,7 @@ This is the main function to retrieve comprehensive open access status
 information from Unpaywall data service. Please play nice with the API.
 For each user, 100k calls per day are suggested. If you need to access
 more data, there is also a data dump available.
-For more info see \url{https://unpaywall.org/api/v2}.
+For more info see \url{https://unpaywall.org/products/snapshot}.
 }
 \examples{
 \dontrun{

@@ -4,7 +4,7 @@
 #' information from Unpaywall data service. Please play nice with the API.
 #' For each user, 100k calls per day are suggested. If you need to access
 #' more data, there is also a data dump available.
-#' For more info see \url{https://unpaywall.org/api/v2}.
+#' For more info see \url{https://unpaywall.org/products/snapshot}.
 #'
 #' @param dois character vector, search by a single DOI or many DOIs.
 #'   A rate limit of 100k requests per day is suggested. If you need to access
@@ -34,8 +34,10 @@
 #'  for this resource. \code{1} mostly uses Crossref for hybrid detection. \code{2}
 #'  uses more comprehensive hybrid detection methods. \cr
 #'  \code{is_oa}            \tab Is there an OA copy (logical)? \cr
-#'  \code{journal_is_oa}    \tab Is the article published in a fully OA journal?
-#'  Uses the Directory of Open Access Journals (DOAJ) as source. \cr
+#'  \code{genre}            \tab Publication type \cr
+#'  \code{journal_is_oa}    \tab Is the article published in a fully OA journal? \cr
+#'  \code{journal_is_in_doaj} \ Is the journal listed in
+#'   the Directory of Open Access Journals (DOAJ). \cr
 #'  \code{journal_issns}    \tab ISSNs, i.e. unique numbers to identify
 #'  journals. \cr
 #'  \code{journal_name}     \tab Journal title, not normalized. \cr
@@ -171,9 +173,14 @@ parse_oadoi <- function(req) {
     oa_locations = list(as_data_frame(req$oa_location)),
     data_standard = req$data_standard,
     is_oa = req$is_oa,
+    genre = req$genre,
     journal_is_oa = as.logical(ifelse(
       is.na(req$journal_is_oa),
       FALSE, req$journal_is_oa
+    )),
+    journal_is_in_doaj = as.logical(ifelse(
+      is.na(req$journal_is_in_doaj),
+      FALSE, req$journal_is_in_doaj
     )),
     journal_issns = req$journal_issns,
     journal_name = req$journal_name,
