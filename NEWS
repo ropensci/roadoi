@@ -1,3 +1,14 @@
+## roadoi 0.5
+
+- re-branding of oaDOI to Unpaywall data
+
+Minor fixes:
+
+- adding httr::RETRY to play nicely with time-outs
+- return author and oa journal information
+- fix problems when CRAN checks builds vignette
+- change contributor role for onboarding reviewers
+
 ## roadoi 0.4.1
 
 Minor fixes:

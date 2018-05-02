@@ -12,7 +12,7 @@
 #' I would be very happy for people willing to contribute to this package. Use
 #' GitHubs issue tracker for bug reporting and feature requests.
 #'
-#' @importFrom httr GET content modify_url user_agent add_headers status_code timeout
+#' @importFrom httr GET content modify_url user_agent add_headers status_code timeout RETRY
 #' @importFrom jsonlite fromJSON
 #' @importFrom plyr ldply create_progress_bar
 #' @importFrom dplyr as_data_frame %>% select mutate
