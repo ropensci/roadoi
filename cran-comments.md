@@ -23,7 +23,7 @@ and found no problems related to this submission.
 
 Dear CRAN maintainers, 
 
-This submission is due to rebranding of oaDOI to Unpaywall Data. Besides update of documentation, this release provides improved handling of possible time-outs when calling the API. This fixes current CRAN check warnings.
+As requested by email, this submission declares lintr as package dependency.
 
 Thanks!
 
