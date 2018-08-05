@@ -180,7 +180,7 @@ random_dois %>%
 Now let's call Unpaywall. We are capturing possible errors.
 
 ```{r}
-oa_df <- purrr::map(random_dois$DOI, .f = purrr::safely(
+oa_df <- purrr::map(random_dois$doi, .f = purrr::safely(
   function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")
   )) %>%
   purrr::map_df("result")
@@ -190,8 +190,8 @@ and merge the resulting information about open access full-text links with parts
 
 ```{r}
 my_df <- random_dois %>%
-  select(DOI, type) %>% 
-  left_join(oa_df, by = c("DOI" = "doi"))
+  select(doi, type) %>% 
+  left_join(oa_df, by = c("doi" = "doi"))
 ```
 
 #### Reporting
