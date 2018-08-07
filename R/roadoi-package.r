@@ -12,10 +12,10 @@
 #' I would be very happy for people willing to contribute to this package. Use
 #' GitHubs issue tracker for bug reporting and feature requests.
 #'
-#' @importFrom httr GET content modify_url user_agent add_headers status_code timeout RETRY
+#' @importFrom httr GET content modify_url user_agent add_headers status_code timeout RETRY http_type
 #' @importFrom jsonlite fromJSON
-#' @importFrom plyr ldply create_progress_bar
-#' @importFrom dplyr as_data_frame %>% select mutate
+#' @importFrom plyr ldply create_progress_bar llply
+#' @importFrom dplyr as_data_frame %>% select mutate bind_rows data_frame
 #' @importFrom miniUI miniContentPanel gadgetTitleBar miniPage
 #' @importFrom shiny dialogViewer runGadget renderTable reactive observeEvent tableOutput actionButton textAreaInput tags stopApp
 #' @importFrom purrr map map_if compact
