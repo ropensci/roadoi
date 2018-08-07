@@ -16,6 +16,7 @@
 #' @export
 roadoi_addin <- function() {
   # nocov start
+  # nolint start
   # create user interface like the one rcrossref provides
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Find freely available full-text via Unpaywall"),
@@ -30,9 +31,11 @@ roadoi_addin <- function() {
       shiny::textAreaInput(
         inputId = "email",
         label = "Please add your email address",
-        value = ifelse(!is.null(getOption("roadoi_email")),
-                       getOption("roadoi_email"),
-                       "Enter your email ...")
+        value = ifelse(
+          !is.null(getOption("roadoi_email")),
+          getOption("roadoi_email"),
+          "Enter your email ..."
+        )
       ),
       shiny::textAreaInput(
         inputId = "text",
@@ -46,9 +49,7 @@ roadoi_addin <- function() {
       shiny::tags$p(
         "Free full-text links from Unpaywall",
         shiny::tags$a(
-          shiny::tags$img(
-            src = "https://raw.githubusercontent.com/Impactstory/unpaywall/master/static/img/icon-128.png"
-            ),
+          shiny::tags$img(src = "https://raw.githubusercontent.com/Impactstory/unpaywall/master/static/img/icon-128.png"),
           href = "https://unpaywall.org/"
         ),
         align = "right"
@@ -104,7 +105,6 @@ roadoi_addin <- function() {
 }
 
 # helper to make links clickable
-# nolint start
 create_link <- function(x) {
   paste0('<a href="', x, '" target="_blank">', x, '</a>')
 }
