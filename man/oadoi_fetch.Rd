@@ -15,7 +15,7 @@ more data, request the data dump \url{https://unpaywall.org/dataset} instead.}
 \item{email}{character vector, mandatory! Unpaywall requires your email address,
 so that they can track usage and notify you when something breaks.
 Set email address in your `.Rprofile` file with
-the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.}
+the option `roadoi_email` \code{options(roadoi_email = "najko.jahn@gmail.com")}.}
 
 \item{.progress}{Shows the \code{plyr}-style progress bar.
 Options are "none", "text", "tk", "win", and "time".

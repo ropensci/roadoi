@@ -20,10 +20,12 @@ ua <- httr::user_agent("https://github.com/ropensci/roadoi")
 #' @noRd
 val_email <- function(email) {
   if (is.null(email) && !is.character(email))
-    stop("An email address is required to use oaDOI API", call. = FALSE)
+    stop("An email address is required to use Unpaywall API", call. = FALSE)
   if (!grepl(email_regex(), email))
     stop("Email address seems not properly formatted - Please check!",
          call. = FALSE)
+  if (grepl("example.com", email))
+    stop("Unpaywall Data does not allow usage of 'example.com' email addresses")
   return(email)
 }
 

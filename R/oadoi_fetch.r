@@ -12,7 +12,7 @@
 #' @param email character vector, mandatory! Unpaywall requires your email address,
 #'   so that they can track usage and notify you when something breaks.
 #'   Set email address in your `.Rprofile` file with
-#'   the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.
+#'   the option `roadoi_email` \code{options(roadoi_email = "najko.jahn@gmail.com")}.
 #' @param .progress Shows the \code{plyr}-style progress bar.
 #'   Options are "none", "text", "tk", "win", and "time".
 #'   See \code{\link[plyr]{create_progress_bar}} for details
