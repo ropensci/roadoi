@@ -28,6 +28,13 @@ roadoi_addin <- function() {
         be fetched."
       ),
       shiny::textAreaInput(
+        inputId = "email",
+        label = "Please add your email address",
+        value = ifelse(!is.null(getOption("roadoi_email")),
+                       getOption("roadoi_email"),
+                       "Enter your email ...")
+      ),
+      shiny::textAreaInput(
         inputId = "text",
         label = "DOIs (line separated):",
         value = "10.1007/s13752-012-0049-z\n10.1098/rsta.2016.0122",
@@ -37,12 +44,12 @@ roadoi_addin <- function() {
       shiny::tableOutput("table"),
       shiny::tags$hr(),
       shiny::tags$p(
-        "Free full-text links from ",
+        "Free full-text links from Unpaywall",
         shiny::tags$a(
           shiny::tags$img(
-            src = "http://unpaywall.org/static/img/logo-green.png"
+            src = "https://raw.githubusercontent.com/Impactstory/unpaywall/master/static/img/icon-128.png"
             ),
-          href = "http://unpaywall.org/"
+          href = "https://unpaywall.org/"
         ),
         align = "right"
       )
@@ -62,11 +69,8 @@ roadoi_addin <- function() {
         if (length(dois) > 9)
           dois <- dois[1:10]
         # prepare API call
-        email <- ifelse(!is.null(getOption("roadoi_email")),
-                        getOption("roadoi_email"),
-                        "name@example.com")
         # fetch full-text links and return the best match
-        tt <- roadoi::oadoi_fetch(dois, email)
+        tt <- roadoi::oadoi_fetch(dois, input$email)
         if (any(tt$is_oa)) {
           tt %>%
             tidyr::unnest(best_oa_location) %>%
