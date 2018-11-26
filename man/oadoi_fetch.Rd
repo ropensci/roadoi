@@ -88,7 +88,7 @@ For more info see \url{https://unpaywall.org/products/snapshot}.
 \dontrun{
 oadoi_fetch("10.1038/nature12373", email = "name@example.com")
 oadoi_fetch(dois = c("10.1016/j.jbiotec.2010.07.030",
-"10.1186/1471-2164-11-245", email = "name@example.com"))
+"10.1186/1471-2164-11-245"), email = "name@example.com")
 }
 
 }
