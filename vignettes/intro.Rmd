@@ -82,14 +82,15 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
   .$urls
 ```
 
-If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`:
+If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`. Note the  column `updated`, which belongs to the main data.frame and the nested list-column. It will cause an error when flatting into regular columns. Either de-select `updated` or change the argument `names_repair`.
 
 ```{r}
 library(dplyr)
+library(tidyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
                     email = "najko.jahn@gmail.com") %>%
-  tidyr::unnest(oa_locations) %>% 
+  tidyr::unnest(oa_locations, names_repair = "universal") %>% 
   dplyr::mutate(
     hostname = purrr::map(url, httr::parse_url) %>% 
                   purrr::map_chr(., "hostname", .null = NA_integer_)
@@ -214,6 +215,7 @@ How did Unpaywall find those Open Access full-texts, which were characterized as
 ```{r, results='asis'}
 my_df %>%
   filter(is_oa == TRUE) %>%
+  select(best_oa_location, type) %>%
   tidyr::unnest(best_oa_location) %>% 
   group_by(evidence, type) %>%
   summarise(Articles = n()) %>%
