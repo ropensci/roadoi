@@ -52,6 +52,8 @@ test_that("oadoi_fetch returns", {
   expect_warning(oadoi_fetch(dois = c("10.7717/peerj.2323", ""), email))
   # missing email address
   expect_error(oadoi_fetch("10.1038/ng.3260", email = NULL))
+  # too many dois
+  expect_error(oadoi_fetch(rep("10.1016/j.aim.2009.06.008", 200000)))
 })
 
 test_that("emails are validated", {
