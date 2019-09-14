@@ -11,8 +11,11 @@
 #'   more data, request the data dump \url{https://unpaywall.org/dataset} instead.
 #' @param email character vector, mandatory! Unpaywall requires your email address,
 #'   so that they can track usage and notify you when something breaks.
-#'   Set email address in your `.Rprofile` file with
+#'   Set email address in your `.Renviron` file with
 #'   the option `roadoi_email` \code{options(roadoi_email = "najko.jahn@gmail.com")}.
+#'   You can open your `.Renviron` file calling `file.edit("~/.Renviron")`.
+#'   Save the file and restart your R session. To stop sharing your email
+#'   when using rcrossref, delete it from your `.Renviron` file.
 #' @param .progress Shows the \code{plyr}-style progress bar.
 #'   Options are "none", "text", "tk", "win", and "time".
 #'   See \code{\link[plyr]{create_progress_bar}} for details
@@ -86,7 +89,7 @@
 #' @export
 oadoi_fetch <-
   function(dois = NULL,
-           email = getOption("roadoi_email"),
+           email = Sys.getenv("roadoi_email"),
            .progress = "none") {
     # input validation
     stopifnot(!is.null(dois))
@@ -114,10 +117,13 @@ oadoi_fetch <-
 #' method, returning open access status information from all your requests.
 #'
 #' @param doi character vector,a DOI
-#' @param email character vector, required! It is strongly encourage to tell
-#'   Unpaywall your email adress, so that they can track usage and notify you
-#'   when something breaks. Set email address in your `.Rprofile` file with
-#'   the option `roadoi_email` \code{options(roadoi_email = "name@example.com")}.
+#' @param email character vector, mandatory! Unpaywall requires your email address,
+#'   so that they can track usage and notify you when something breaks.
+#'   Set email address in your `.Renviron` file with
+#'   the option `roadoi_email` \code{options(roadoi_email = "najko.jahn@gmail.com")}.
+#'   You can open your `.Renviron` file calling `file.edit("~/.Renviron")`.
+#'   Save the file and restart your R session. To stop sharing your email
+#'   when using rcrossref, delete it from your `.Renviron` file.
 #' @return A tibble
 #' @examples \dontrun{
 #' oadoi_fetch_(doi = c("10.1016/j.jbiotec.2010.07.030"))

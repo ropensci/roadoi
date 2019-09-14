@@ -4,7 +4,7 @@
 \alias{oadoi_fetch}
 \title{Fetch open access status information and full-text links using Unpaywall}
 \usage{
-oadoi_fetch(dois = NULL, email = getOption("roadoi_email"),
+oadoi_fetch(dois = NULL, email = Sys.getenv("roadoi_email"),
   .progress = "none")
 }
 \arguments{
@@ -14,8 +14,11 @@ more data, request the data dump \url{https://unpaywall.org/dataset} instead.}
 
 \item{email}{character vector, mandatory! Unpaywall requires your email address,
 so that they can track usage and notify you when something breaks.
-Set email address in your `.Rprofile` file with
-the option `roadoi_email` \code{options(roadoi_email = "najko.jahn@gmail.com")}.}
+Set email address in your `.Renviron` file with
+the option `roadoi_email` \code{options(roadoi_email = "najko.jahn@gmail.com")}.
+You can open your `.Renviron` file calling `file.edit("~/.Renviron")`.
+Save the file and restart your R session. To stop sharing your email
+when using rcrossref, delete it from your `.Renviron` file.}
 
 \item{.progress}{Shows the \code{plyr}-style progress bar.
 Options are "none", "text", "tk", "win", and "time".
