@@ -170,7 +170,7 @@ parse_oadoi <- function(req) {
   tibble::tibble(
     doi = req$doi,
     best_oa_location = list(oa_lct_parser(req$best_oa_location)),
-    oa_locations = list(as_data_frame(req$oa_location)),
+    oa_locations = list(tibble::as_tibble(req$oa_location)),
     data_standard = req$data_standard,
     is_oa = req$is_oa,
     genre = req$genre,
@@ -203,6 +203,6 @@ oa_lct_parser <- function(x) {
     purrr::compact(x) %>%
       dplyr::bind_rows()
     } else {
-    dplyr::data_frame()
+    tibble::tibble()
   }
 }
