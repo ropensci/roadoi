@@ -44,14 +44,19 @@ The client supports API version 2. According to the [Unpaywall Data Format](http
 `oa_locations`|list-column of all the OA locations. 
 `data_standard`|Indicates the data collection approaches used for this resource. `1` mostly uses Crossref for hybrid detection. `2` uses more comprehensive hybrid detection methods. 
 `is_oa`|Is there an OA copy (logical)? 
+`genre`|Publication type
+`oa_status`|Classifies OA resources by location and license terms as one of: gold, hybrid, bronze, green or closed. See here for more information <https://support.unpaywall.org/support/solutions/articles/44001777288-what-do-the-types-of-oa-status-green-gold-hybrid-and-bronze-mean->.
+`has_repository_copy`|Is a full-text available in a repository?
 `journal_is_oa`|Is the article published in a fully OA journal? Uses the Directory of Open Access Journals (DOAJ) as source. 
-`journal_issns`|ISSNs
+`journal_is_in_doaj`|Is the journal listed in the Directory of Open Access Journals (DOAJ).
+`journal_issns`|ISSNs, i.e. unique code to identify journals.
+`journal_issns_l`|Linking ISSN.
 `journal_name`|Journal title
 `publisher`|Publisher
 `title`|Publication title. 
 `year`|Year published. 
+`published_date`|Date published.
 `updated`|Time when the data for this resource was last updated. 
-`non_compliant`|Lists other full-text resources that are not hosted by either publishers or repositories. 
 `authors`|Lists authors (if available)
 
 The columns  `best_oa_location` and  `oa_locations` are list-columns
@@ -64,6 +69,8 @@ that contain useful metadata about the OA sources found by Unpaywall These are
 `license`|The license under which this copy is published
 `url`|The URL where you can find this OA copy.
 `versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines  (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
+
+Note that Unpaywall schema is only informally described. Check also with <https://unpaywall.org/data-format>.
 
 There at least [two ways to simplify these list-columns](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
 
@@ -105,11 +112,20 @@ Note that fields to be returned might change according to the [Unpaywall API spe
 
 #### Any API restrictions?
 
-There are no API restrictions. However, providing your email address when using this client is required by Unpaywall. Set email address in your `.Rprofile` file with the option `roadoi_email` when you are too tired to type in your email address every time you want to call Unpaywall.
+There are no API restrictions. However, providing your email address when using this client is required by Unpaywall. Set email address in your `.Renviron` file with
+the option `roadoi_email` 
+
+```
+roadoi_email = "najko.jahn@gmail.com"
+```.
+
+You can open your `.Renviron` file calling 
 
 ```r
-options(roadoi_email = "najko.jahn@gmail.com")
+file.edit("~/.Renviron")`
 ```
+
+Save the file and restart your R session. To stop sharing your email when using rcrossref, delete it from your `.Renviron` file.
 
 #### Keeping track of crawling
 
@@ -143,13 +159,13 @@ An increasing number of universities, research organisations and funders have la
 
 #### Gathering DOIs representing scholarly publications
 
-DOIs have become essential for referencing scholarly publications, and thus many digital libraries and institutional databases keep track of these persistent identifiers. For the sake of this vignette, instead of starting with a pre-defined set of publications originating from these sources, we simply generate a random sample of 100 DOIs registered with Crossref by using the [rcrossref package](https://github.com/ropensci/rcrossref).
+DOIs have become essential for referencing scholarly publications, and thus many digital libraries and institutional databases keep track of these persistent identifiers. For the sake of this vignette, instead of starting with a pre-defined set of publications originating from these sources, we simply generate a random sample of 50 DOIs registered with Crossref by using the [rcrossref package](https://github.com/ropensci/rcrossref).
 
 ```{r, message=FALSE}
 library(dplyr)
 library(rcrossref)
 # get a random sample of DOIs and metadata describing these works
-random_dois <- rcrossref::cr_r(sample = 100) %>%
+random_dois <- rcrossref::cr_r(sample = 50) %>%
   rcrossref::cr_works() %>%
   .$data
 random_dois
