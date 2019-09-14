@@ -1,9 +1,9 @@
 
 ## Test environments
 
-* local OS X El Captitan install, R 3.5.0
-* on travis Ubuntu 14.04.5 LTS, R 3.5.0
-* win-builder (release, devel) and appveyor CI
+* local OS X Mojave install, R version 3.6.1 
+* on travis Ubuntu Ubuntu 16.04.6 LTS, R version 3.6.1 
+* win-builder (release, devel)
 
 ## R CMD check results
 
@@ -13,15 +13,15 @@ win-builder (release, devel): OK
 
 ## Reverse dependencies
 
-* I have run R CMD check on downstream dependencies using devtools::revdep_check()
-and found no problems related to this submission.
+I have run R CMD check on downstream dependencies using revdepcheck::revdep_check(num_workers = 4) and found no problems related to this submission.
 
 ---
 
 Dear CRAN maintainers, 
 
-This submission includes minor bug fixes.
+This submission fixes the problems shown on
+<https://cran.r-project.org/web/checks/check_results_roadoi.html>.
 
-Thanks!
+Thanks for alerting me!
 
 Najko Jahn

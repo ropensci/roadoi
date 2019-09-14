@@ -1,3 +1,17 @@
+## roadoi 0.6
+
+New features:
+
+- Update data import. New Unpaywall data fields include `oa_status`, `has_repository_copy`, `journal_issns_l` and `published_date`
+
+Minor fixes:
+
+- support new `tidyr::unnest()` interface introduced in version 1.0.0
+- store email in `.Renviron` instead of `.Rprofile`
+- bug fix RStudio addin
+- build data frames with `tibble::tibble`
+- improved tests and test coverage
+
 ## roadoi 0.5.2
 
 Minor fixes:
