@@ -14,6 +14,7 @@ test_that("oadoi_fetch returns", {
   f <- oadoi_fetch(dois = c("10.1016/0898-1221(94)90121-x",
                            "10.1093/ref:odnb/20344"), email)
   g <- oadoi_fetch(dois = c("10.7717/peerj.2323"), email)
+  h <- oadoi_fetch("10.1016/j.aim.2009.06.008", email)
 
 
   # correct classes
@@ -24,6 +25,11 @@ test_that("oadoi_fetch returns", {
   expect_is(e, "tbl_df")
   expect_is(f, "tbl_df")
   expect_is(g, "tbl_df")
+  expect_is(h, "tbl_df")
+
+  # some character matches
+  expect_match(h$oa_status, "hybrid")
+  expect_match(h$journal_issn_l, "0001-8708")
 
 
 
@@ -34,6 +40,7 @@ test_that("oadoi_fetch returns", {
   expect_equal(nrow(d), 2)
   expect_equal(nrow(e), 1)
   expect_equal(nrow(g), 1)
+  expect_equal(ncol(e), 18)
 
 
 
