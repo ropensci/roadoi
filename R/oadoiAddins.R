@@ -24,7 +24,7 @@ roadoi_addin <- function() {
       shiny::tags$h4("Find fulltexts for scholarly articles"),
       shiny::tags$p(
         "If you have DOIs (Digital Object Identifier) for several articles
-        and would like to find freely available copies, simply paste your DOIs
+        and would like to find freely available copies, paste your DOIs
         in the text box below. Please note that only the first ten DOIs will
         be fetched."
       ),
@@ -32,15 +32,15 @@ roadoi_addin <- function() {
         inputId = "email",
         label = "Please add your email address",
         value = ifelse(
-          !is.null(getOption("roadoi_email")),
-          getOption("roadoi_email"),
+          !is.null(Sys.getenv("roadoi_email")),
+          Sys.getenv("roadoi_email"),
           "Enter your email ..."
         )
       ),
       shiny::textAreaInput(
         inputId = "text",
         label = "DOIs (line separated):",
-        value = "10.1007/s13752-012-0049-z\n10.1098/rsta.2016.0122",
+        value = "10.1007/s13752-012-0049-z\n10.1098/rsta.2016.0122\n10.1002/asi.24179",
         height = 200
       ),
       shiny::actionButton(inputId = "submit", "Run!"),
@@ -49,12 +49,12 @@ roadoi_addin <- function() {
       shiny::tags$p(
         "Free full-text links from Unpaywall",
         shiny::tags$a(
-          shiny::tags$img(src = "https://raw.githubusercontent.com/Impactstory/unpaywall/master/static/img/icon-128.png"),
+          shiny::tags$img(src = "https://github.com/Impactstory/unpaywall/blob/master/extension/img/icon-128.png?raw=true"),
           href = "https://unpaywall.org/"
         ),
         align = "right"
       )
-      )
+    )
   )
   # here's the server-side R code that will be executed to find OA copies
   server <- function(input, output) {
@@ -72,18 +72,15 @@ roadoi_addin <- function() {
         # prepare API call
         # fetch full-text links and return the best match
         tt <- roadoi::oadoi_fetch(dois, input$email)
-        if (any(tt$is_oa)) {
-          tt %>%
-            tidyr::unnest(best_oa_location) %>%
-            dplyr::select(`Free fulltext link` = url, doi) %>%
-            dplyr::mutate(`Free fulltext link` = ifelse(
-              is.na(`Free fulltext link`),
-              NA,
-              create_link(`Free fulltext link`)
-            ))
-        } else {
-          data.frame(`Free fulltext link` = "Sorry, nothing found")
-        }
+        tibble::tibble(
+          DOI = tt$doi,
+          `Free fulltext link` = purrr::map_chr(tt$best_oa_location, "url", .null = NA)
+        ) %>%
+          dplyr::mutate(`Free fulltext link` = ifelse(
+            is.na(`Free fulltext link`),
+            NA,
+            create_link(`Free fulltext link`)
+          ))
       })
       # output as table
       output$table <- shiny::renderTable(
