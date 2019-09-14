@@ -13,7 +13,7 @@ test_that("oadoi_fetch returns", {
   e <- oadoi_fetch("10.1016/j.vaccine.2014.04.085", email)
   f <- oadoi_fetch(dois = c("10.1016/0898-1221(94)90121-x",
                            "10.1093/ref:odnb/20344"), email)
-  g <- oadoi_fetch(dois = c("10.7717/peerj.2323", ""), email)
+  g <- oadoi_fetch(dois = c("10.7717/peerj.2323"), email)
 
 
   # correct classes
@@ -38,7 +38,7 @@ test_that("oadoi_fetch returns", {
 
 
   # wrong DOI
-  expect_warning(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260"), email))
+  expect_error(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260"), email))
   # wrong .progress value
   expect_warning(oadoi_fetch("10.1038/ng.3260", email, .progress = "TEXT"))
   # empty character
