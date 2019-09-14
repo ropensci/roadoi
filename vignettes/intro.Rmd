@@ -129,7 +129,7 @@ Unpaywall is a reliable API. However, this client follows [Hadley Wickham's Best
 ```{r}
 random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
 my_data <- purrr::map(random_dois, 
-              .f = purrr::safely(function(x) roadoi::oadoi_fetch(x, email ="najko.jahn@gmail.com")))
+              .f = purrr::safely(function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")))
 # return results as data.frame
 purrr::map_df(my_data, "result")
 #show errors
@@ -160,8 +160,8 @@ Let's see when these random publications were published
 ```{r}
 random_dois %>%
   # convert to years
-  mutate(issued, issued = lubridate::parse_date_time(issued, c('y', 'ymd', 'ym'))) %>%
-  mutate(issued, issued = lubridate::year(issued)) %>%
+  mutate(issued = lubridate::parse_date_time(issued, c('y', 'ymd', 'ym'))) %>%
+  mutate(issued = lubridate::year(issued)) %>%
   group_by(issued) %>%
   summarize(pubs = n()) %>%
   arrange(desc(pubs))
