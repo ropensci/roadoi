@@ -1,5 +1,8 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "roadoi",
   "description": "This web client interfaces Unpaywall <https://unpaywall.org/products/api>, formerly\n    oaDOI, a service finding free full-texts of academic papers by linking DOIs with \n    open access journals and repositories. It provides unified access to various data sources \n    for open access full-text links including Crossref and the Directory of Open Access \n    Journals (DOAJ). API usage is free and no registration is required.",
@@ -7,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/roadoi",
   "issueTracker": "https://github.com/ropensci/roadoi/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.5.2",
+  "version": "0.6",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -101,18 +104,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "lubridate",
-      "name": "lubridate",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=lubridate"
     },
     {
       "@type": "SoftwareApplication",
@@ -252,11 +243,25 @@
   ],
   "releaseNotes": "https://github.com/ropensci/roadoi/blob/master/NEWS",
   "readme": "https://github.com/ropensci/roadoi/blob/master/README.md",
-  "contIntegration": ["https://travis-ci.org/ropensci/roadoi", "https://ci.appveyor.com/project/ropensci/roadoi", "https://codecov.io/github/ropensci/roadoi?branch=master"],
+  "contIntegration": [
+    "https://travis-ci.org/ropensci/roadoi",
+    "https://ci.appveyor.com/project/ropensci/roadoi",
+    "https://codecov.io/github/ropensci/roadoi?branch=master"
+  ],
   "review": {
     "@type": "Review",
     "url": "https://github.com/ropensci/onboarding/issues/115",
     "provider": "http://ropensci.org"
   },
-  "keywords": ["open-access", "oadoi", "r", "webclient", "code4lib", "altmetrics", "rstats", "r-package", "peer-reviewed"]
+  "keywords": [
+    "open-access",
+    "oadoi",
+    "r",
+    "webclient",
+    "code4lib",
+    "altmetrics",
+    "rstats",
+    "r-package",
+    "peer-reviewed"
+  ]
 }

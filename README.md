@@ -305,6 +305,7 @@ To display how many full-text links were found and which sources were used in a 
 
 
 ```r
+if(!is.null(oa_df))
 oa_df %>%
   group_by(is_oa) %>%
   summarise(Articles = n()) %>%
@@ -317,13 +318,14 @@ oa_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       35|        0.7|
-|TRUE  |       15|        0.3|
+|FALSE |       33|       0.66|
+|TRUE  |       17|       0.34|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
 
 ```r
+if(!is.null(oa_df))
 oa_df %>%
   filter(is_oa == TRUE) %>%
   select(best_oa_location, genre) %>%
@@ -336,17 +338,14 @@ oa_df %>%
 
 
 
-|evidence                                                 |genre           | Articles|
-|:--------------------------------------------------------|:---------------|--------:|
-|open (via page says license)                             |journal-article |        4|
-|open (via free pdf)                                      |journal-article |        3|
-|oa repository (via OAI-PMH title and first author match) |journal-article |        2|
-|oa journal (via doaj)                                    |journal-article |        1|
-|oa journal (via observed oa rate)                        |journal-article |        1|
-|oa repository (via OAI-PMH title match)                  |report          |        1|
-|open (via crossref license)                              |journal-article |        1|
-|open (via free pdf)                                      |book-chapter    |        1|
-|open (via free pdf)                                      |other           |        1|
+|evidence                                                 |genre               | Articles|
+|:--------------------------------------------------------|:-------------------|--------:|
+|open (via free pdf)                                      |journal-article     |        7|
+|open (via page says license)                             |journal-article     |        6|
+|oa repository (via OAI-PMH doi match)                    |journal-article     |        1|
+|oa repository (via OAI-PMH title and first author match) |journal-article     |        1|
+|open (via free pdf)                                      |book-chapter        |        1|
+|open (via page says license)                             |proceedings-article |        1|
 
 #### More examples
 

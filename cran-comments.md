@@ -20,7 +20,7 @@ I have run R CMD check on downstream dependencies using revdepcheck::revdep_chec
 Dear CRAN maintainers, 
 
 This submission fixes the problems shown on
-<https://cran.r-project.org/web/checks/check_results_roadoi.html>.
+<https://cran.r-project.org/web/checks/check_results_roadoi.html>, and problems encountered in the last submission.
 
 Thanks for alerting me!
 
