@@ -199,8 +199,7 @@ Note that fields to be returned might change according to the [Unpaywall API spe
 
 #### Any API restrictions?
 
-There are no API restrictions. However, providing your email address when using this client is required by Unpaywall. Set email address in your `.Renviron` file with
-the option `roadoi_email` 
+There are no API restrictions. However, Unpaywall requires an email address when using its API. If you are too tired to type in your email address every time, you can store the email  in the `.Renviron` file with the option `roadoi_email` 
 
 ```
 roadoi_email = "najko.jahn@gmail.com"
@@ -212,7 +211,7 @@ You can open your `.Renviron` file calling
 file.edit("~/.Renviron")`
 ```
 
-Save the file and restart your R session. To stop sharing your email when using rcrossref, delete it from your `.Renviron` file.
+Save the file and restart your R session. To stop sharing the email when using roadoi, delete it from your `.Renviron` file.
 
 #### Keeping track of crawling
 
@@ -282,75 +281,7 @@ DOIs have become essential for referencing scholarly publications, and thus many
 library(dplyr)
 library(rcrossref)
 # get a random sample of DOIs and metadata describing these works
-random_dois <- rcrossref::cr_r(sample = 50) %>%
-  rcrossref::cr_works() %>%
-  .$data
-random_dois
-#> # A tibble: 50 x 34
-#>    container.title created deposited published.print doi   indexed isbn 
-#>    <chr>           <chr>   <chr>     <chr>           <chr> <chr>   <chr>
-#>  1 The Aesthetic … 2011-0… 2019-03-… 2000            10.1… 2019-0… 9789…
-#>  2 Archives of De… 2011-1… 2016-12-… 1942-08-01      10.1… 2019-0… <NA> 
-#>  3 Scientia Agric… 2014-1… 2017-05-… 2014-12         10.1… 2019-0… <NA> 
-#>  4 Chester Arthur… 2018-0… 2018-07-… <NA>            10.3… 2019-0… <NA> 
-#>  5 Pensamiento Ps… 2016-1… 2016-12-… <NA>            10.1… 2019-0… <NA> 
-#>  6 Progrès en Uro… 2015-1… 2018-09-… 2015-11         10.1… 2019-0… <NA> 
-#>  7 The Natural Hi… 2015-0… 2018-04-… <NA>            10.1… 2019-0… 9781…
-#>  8 Gene            2003-0… 2019-03-… 1993-06         10.1… 2019-0… <NA> 
-#>  9 Tetrahedron Le… 2002-0… 2019-04-… 1982-01         10.1… 2019-0… <NA> 
-#> 10 The Journal of… 2015-0… 2018-06-… 2015-09         10.1… 2019-0… <NA> 
-#> # … with 40 more rows, and 27 more variables: issued <chr>, member <chr>,
-#> #   page <chr>, prefix <chr>, publisher <chr>, reference.count <chr>,
-#> #   score <chr>, source <chr>, title <chr>, type <chr>, url <chr>,
-#> #   author <list>, link <list>, reference <list>, issn <chr>, issue <chr>,
-#> #   subject <chr>, volume <chr>, alternative.id <chr>,
-#> #   published.online <chr>, update.policy <chr>, assertion <list>,
-#> #   license <list>, abstract <chr>, funder <list>, subtitle <chr>,
-#> #   archive <chr>
-```
-
-Let's see when these random publications were published
-
-
-```r
-random_dois %>%
-  # convert to years
-  mutate(issued = lubridate::parse_date_time(issued, c('y', 'ymd', 'ym'))) %>%
-  mutate(issued = lubridate::year(issued)) %>%
-  group_by(issued) %>%
-  summarize(pubs = n()) %>%
-  arrange(desc(pubs))
-#> # A tibble: 30 x 2
-#>    issued  pubs
-#>     <dbl> <int>
-#>  1     NA     5
-#>  2   2015     4
-#>  3   2018     3
-#>  4   2019     3
-#>  5   1982     2
-#>  6   2002     2
-#>  7   2005     2
-#>  8   2008     2
-#>  9   2009     2
-#> 10   2012     2
-#> # … with 20 more rows
-```
-
-and of what type they are
-
-
-```r
-random_dois %>%
-  group_by(type) %>%
-  summarize(pubs = n()) %>%
-  arrange(desc(pubs))
-#> # A tibble: 4 x 2
-#>   type             pubs
-#>   <chr>           <int>
-#> 1 journal-article    35
-#> 2 book-chapter       13
-#> 3 dataset             1
-#> 4 report              1
+random_dois <- rcrossref::cr_r(sample = 50)
 ```
 
 #### Calling Unpaywall
@@ -359,30 +290,22 @@ Now let's call Unpaywall. We are capturing possible errors.
 
 
 ```r
-oa_df <- purrr::map(random_dois$doi, .f = purrr::safely(
+oa_df <- purrr::map(random_dois, .f = purrr::safely(
   function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")
   )) %>%
   purrr::map_df("result")
 ```
 
-and merge the resulting information about open access full-text links with parts of our Crossref metadata-set
-
-
-```r
-my_df <- random_dois %>%
-  select(doi, type) %>% 
-  left_join(oa_df, by = c("doi" = "doi"))
-```
 
 #### Reporting
 
-After gathering the data, reporting with R is very straightforward. You can even generate dynamic reports using [R Markdown](http://rmarkdown.rstudio.com/) and related packages, thus making your study reproducible and transparent for others.
+After obtaining the data, reporting with R is straightforward. You can even generate dynamic reports using [R Markdown](http://rmarkdown.rstudio.com/) and related packages, thus making your study reproducible and transparent.
 
 To display how many full-text links were found and which sources were used in a nicely formatted markdown-table using the [`knitr`](https://yihui.name/knitr/)-package:
 
 
 ```r
-my_df %>%
+oa_df %>%
   group_by(is_oa) %>%
   summarise(Articles = n()) %>%
   mutate(Proportion = Articles / sum(Articles)) %>%
@@ -394,18 +317,18 @@ my_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       42|       0.84|
-|TRUE  |        8|       0.16|
+|FALSE |       35|        0.7|
+|TRUE  |       15|        0.3|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
 
 ```r
-my_df %>%
+oa_df %>%
   filter(is_oa == TRUE) %>%
-  select(best_oa_location, type) %>%
+  select(best_oa_location, genre) %>%
   tidyr::unnest(best_oa_location) %>% 
-  group_by(evidence, type) %>%
+  group_by(evidence, genre) %>%
   summarise(Articles = n()) %>%
   arrange(desc(Articles)) %>%
   knitr::kable()
@@ -413,17 +336,23 @@ my_df %>%
 
 
 
-|evidence                                                 |type            | Articles|
+|evidence                                                 |genre           | Articles|
 |:--------------------------------------------------------|:---------------|--------:|
-|open (via page says license)                             |journal-article |        3|
-|open (via free pdf)                                      |journal-article |        2|
+|open (via page says license)                             |journal-article |        4|
+|open (via free pdf)                                      |journal-article |        3|
+|oa repository (via OAI-PMH title and first author match) |journal-article |        2|
 |oa journal (via doaj)                                    |journal-article |        1|
-|oa repository (via OAI-PMH title and first author match) |book-chapter    |        1|
-|oa repository (via OAI-PMH title match)                  |journal-article |        1|
+|oa journal (via observed oa rate)                        |journal-article |        1|
+|oa repository (via OAI-PMH title match)                  |report          |        1|
+|open (via crossref license)                              |journal-article |        1|
+|open (via free pdf)                                      |book-chapter    |        1|
+|open (via free pdf)                                      |other           |        1|
 
 #### More examples
 
-For more  examples, see Piwowar et al. 2018. Together with the article, they shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
+For more  examples, see Piwowar et al. 2018. Together with the article, the authors shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
+
+This blog post describes how to analyze the Unpaywall data dump with R: <https://subugoe.github.io/scholcomm_analytics/posts/unpaywall_evidence/>
 
 ### References 
 
@@ -431,7 +360,7 @@ Piwowar, H., Priem, J., Larivière, V., Alperin, J. P., Matthias, L., Norlander,
 
 ## Meta
 
-Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/ropensci/roadoi/blob/master/CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 License: MIT
 

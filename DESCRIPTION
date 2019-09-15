@@ -36,7 +36,6 @@ Suggests:
     knitr,
     covr,
     rmarkdown,
-    lubridate,
     rcrossref,
     lintr
 RoxygenNote: 6.1.1
