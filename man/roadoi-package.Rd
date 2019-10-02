@@ -10,14 +10,14 @@ R Client for the Unpaywall-API
 }
 \section{What is this client for?}{
 
-roadoi interacts with the Unpaywall data service, which links DOIs representing
-scholarly works with open access versions.
+roadoi interacts with the Unpaywall data service, which
+links DOIs representing scholarly works with open access versions.
 }
 
 \section{General usage}{
 
-Use the \code{oadoi_fetch()} function in this package to get open access status
-information and full-text links from Unpaywall
+Use the \code{oadoi_fetch()} function in this package to get
+open access status information and full-text links from Unpaywall
 }
 
 \section{Contribute}{

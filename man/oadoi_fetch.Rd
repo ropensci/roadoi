@@ -10,12 +10,15 @@ oadoi_fetch(dois = NULL, email = Sys.getenv("roadoi_email"),
 \arguments{
 \item{dois}{character vector, search by a single DOI or many DOIs.
 A rate limit of 100k requests per day is suggested. If you need to access
-more data, request the data dump \url{https://unpaywall.org/dataset} instead.}
+more data, request the data dump
+\url{https://unpaywall.org/dataset} instead.}
 
-\item{email}{character vector, mandatory! Unpaywall requires your email address,
+\item{email}{character vector, mandatory!
+Unpaywall requires your email address,
 so that they can track usage and notify you when something breaks.
 Set email address in your `.Renviron` file with
-the option `roadoi_email` \code{options(roadoi_email = "najko.jahn@gmail.com")}.
+the option
+`roadoi_email` \code{options(roadoi_email = "najko.jahn@gmail.com")}.
 You can open your `.Renviron` file calling `file.edit("~/.Renviron")`.
 Save the file and restart your R session. To stop sharing your email
 when using rcrossref, delete it from your `.Renviron` file.}
@@ -39,13 +42,18 @@ The result is a tibble with each row representing a publication.
  over CiteSeerX). \cr
  \code{oa_locations}     \tab list-column of all the OA locations. \cr
  \code{data_standard}    \tab Indicates the data collection approaches used
- for this resource. \code{1} mostly uses Crossref for hybrid detection. \code{2}
- uses more comprehensive hybrid detection methods. \cr
+ for this resource. \code{1} mostly uses Crossref for hybrid detection.
+ \code{2} uses a more comprehensive hybrid detection methods. \cr
  \code{is_oa}            \tab Is there an OA copy (logical)? \cr
  \code{genre}            \tab Publication type \cr
- \code{oa_status}        \tab Classifies OA resources by location and license terms as one of: gold, hybrid, bronze, green or closed. See here for more information \url{https://support.unpaywall.org/support/solutions/articles/44001777288-what-do-the-types-of-oa-status-green-gold-hybrid-and-bronze-mean-}. \cr
- \code{has_repository_copy} \tab Is a full-text available in a repository? \cr
- \code{journal_is_oa}    \tab Is the article published in a fully OA journal? \cr
+ \code{oa_status}        \tab Classifies OA resources by location
+ and license terms as one of: gold, hybrid, bronze, green or closed.
+ See here for more information
+ \url{https://support.unpaywall.org/support/solutions/articles/44001777288-what-do-the-types-of-oa-status-green-gold-hybrid-and-bronze-mean-}. \cr
+ \code{has_repository_copy} \tab Is a full-text
+ available in a repository? \cr
+ \code{journal_is_oa}    \tab Is the article published in a fully
+ OA journal? \cr
  \code{journal_is_in_doaj} \tab Is the journal listed in
   the Directory of Open Access Journals (DOAJ). \cr
  \code{journal_issns}    \tab ISSNs, i.e. unique numbers to identify
@@ -60,8 +68,9 @@ The result is a tibble with each row representing a publication.
  \code{authors}          \tab Lists author information (if available). \cr
 }
 
-The columns  \code{best_oa_location} and  \code{oa_locations} are list-columns
-that contain useful metadata about the OA sources found by Unpaywall.
+The columns  \code{best_oa_location} and \code{oa_locations}
+are list-columns that contain useful metadata about the OA sources
+found by Unpaywall.
 
 These are:
 
@@ -75,9 +84,9 @@ These are:
  \code{url}             \tab The URL where you can find this OA copy. \cr
  \code{versions}        \tab The content version accessible at this location
   following the DRIVER 2.0 Guidelines
- (\url{https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings}\cr
+ (\url{https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings}
+ \cr
 }
-
 
 To unnest list-columns, you want to use tidyr's unnest function
 \code{\link[tidyr]{unnest}}.
