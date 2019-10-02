@@ -6,6 +6,10 @@ cache: packages
 
 r_packages:
   - covr
+  - lintr
 
+after_script:
+  - R CMD INSTALL $PKG_TARBALL
+  - Rscript -e 'lintr::lint_package()'
 after_success:
-  - Rscript -e 'library(covr); codecov()'
+  - Rscript -e 'covr::coveralls()'

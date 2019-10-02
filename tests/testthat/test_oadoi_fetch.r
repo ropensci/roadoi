@@ -63,10 +63,3 @@ test_that("emails are validated", {
   expect_error(oadoi_fetch("10.1038/ng.3260", email = "FOOL"))
 })
 
-## lintr
-if (requireNamespace("lintr", quietly = TRUE)) {
-  context("lints")
-  test_that("Package Style", {
-    lintr::expect_lint_free()
-  })
-}
