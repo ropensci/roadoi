@@ -62,4 +62,3 @@ test_that("emails are validated", {
   expect_error(oadoi_fetch("10.1038/ng.3260", email = "najko@gnx"))
   expect_error(oadoi_fetch("10.1038/ng.3260", email = "FOOL"))
 })
-
