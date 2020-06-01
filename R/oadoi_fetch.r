@@ -212,6 +212,7 @@ parse_oadoi <- function(req) {
     journal_issn_l = req$journal_issn_l,
     journal_name = req$journal_name,
     publisher = req$publisher,
+    published_date = req$published_date,
     title = req$title,
     year = as.character(req$year),
     updated = req$updated,
