@@ -11,7 +11,8 @@
 #' You are welcome to contribute to this package. Use
 #' GitHub's issue tracker for bug reporting and feature requests.
 #'
-#' More details about the Unpaywall API: \url{https://unpaywall.org/products/api}.
+#' More details about the Unpaywall API:
+#' \url{https://unpaywall.org/products/api}.
 #'
 #' @importFrom httr GET content modify_url user_agent add_headers
 #' status_code timeout RETRY http_type

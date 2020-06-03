@@ -17,6 +17,7 @@ open access status information and full-text links from Unpaywall.
 You are welcome to contribute to this package. Use
 GitHub's issue tracker for bug reporting and feature requests.
 
-More details about the Unpaywall API: \url{https://unpaywall.org/products/api}.
+More details about the Unpaywall API:
+\url{https://unpaywall.org/products/api}.
 }
 \keyword{package}
