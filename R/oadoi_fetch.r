@@ -57,9 +57,9 @@
 #'  \code{journal_issns_l}    \tab Linking ISSN. \cr
 #'  \code{journal_name}     \tab Journal title, not normalized. \cr
 #'  \code{publisher}        \tab Publisher, not normalized. \cr
-#'  \code{title}            \tab Publication title. \cr
+#'  \code{published_date}   \tab Date published \cr
 #'  \code{year}             \tab Year published. \cr
-#'  \code{published_date}   \tab Date published. \cr
+#'  \code{title}            \tab Publication title. \cr
 #'  \code{updated}          \tab Time when the data for this resource was last updated. \cr
 #'  \code{authors}          \tab Lists author information (if available). \cr
 #' }
@@ -212,8 +212,9 @@ parse_oadoi <- function(req) {
     journal_issn_l = req$journal_issn_l,
     journal_name = req$journal_name,
     publisher = req$publisher,
-    title = req$title,
+    published_date = req$published_date,
     year = as.character(req$year),
+    title = req$title,
     updated = req$updated,
     authors = list(req$z_authors)
   )
