@@ -28,8 +28,9 @@ test_that("oadoi_fetch returns", {
   expect_is(h, "tbl_df")
 
   # some character matches
-  expect_match(h$oa_status, "hybrid")
+  expect_match(h$oa_status, "closed")
   expect_match(h$journal_issn_l, "0001-8708")
+  expect_match(a$published_date, "2016-08-09")
 
 
 
@@ -40,7 +41,7 @@ test_that("oadoi_fetch returns", {
   expect_equal(nrow(d), 2)
   expect_equal(nrow(e), 1)
   expect_equal(nrow(g), 1)
-  expect_equal(ncol(e), 18)
+  expect_equal(ncol(e), 19)
 
 
 

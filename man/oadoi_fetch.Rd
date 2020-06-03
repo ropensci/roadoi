@@ -4,8 +4,11 @@
 \alias{oadoi_fetch}
 \title{Fetch open access status information and full-text links using Unpaywall}
 \usage{
-oadoi_fetch(dois = NULL, email = Sys.getenv("roadoi_email"),
-  .progress = "none")
+oadoi_fetch(
+  dois = NULL,
+  email = Sys.getenv("roadoi_email"),
+  .progress = "none"
+)
 }
 \arguments{
 \item{dois}{character vector, search by a single DOI or many DOIs.
@@ -61,9 +64,9 @@ The result is a tibble with each row representing a publication.
  \code{journal_issns_l}    \tab Linking ISSN. \cr
  \code{journal_name}     \tab Journal title, not normalized. \cr
  \code{publisher}        \tab Publisher, not normalized. \cr
- \code{title}            \tab Publication title. \cr
+ \code{published_date}   \tab Date published \cr
  \code{year}             \tab Year published. \cr
- \code{published_date}   \tab Date published. \cr
+ \code{title}            \tab Publication title. \cr
  \code{updated}          \tab Time when the data for this resource was last updated. \cr
  \code{authors}          \tab Lists author information (if available). \cr
 }
