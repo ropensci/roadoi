@@ -15,6 +15,8 @@ test_that("oadoi_fetch returns", {
                            "10.1093/ref:odnb/20344"), email)
   g <- oadoi_fetch(dois = c("10.7717/peerj.2323"), email)
   h <- oadoi_fetch("10.1016/j.aim.2009.06.008", email)
+  # email
+  i <- oadoi_fetch("10.1016/j.aim.2009.06.008", email = "NajkO@GMx.de")
 
 
   # correct classes
@@ -26,6 +28,7 @@ test_that("oadoi_fetch returns", {
   expect_is(f, "tbl_df")
   expect_is(g, "tbl_df")
   expect_is(h, "tbl_df")
+  expect_is(i, "tbl_df")
 
   # some character matches
   expect_match(h$oa_status, "closed")
