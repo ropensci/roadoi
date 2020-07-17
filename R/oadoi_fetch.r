@@ -41,6 +41,9 @@
 #'  for this resource. \code{1} mostly uses Crossref for hybrid detection.
 #'  \code{2} uses a more comprehensive hybrid detection methods. \cr
 #'  \code{is_oa}            \tab Is there an OA copy (logical)? \cr
+#'  \code{is_paratext}      \tab Is the item an ancillary part of a journal,
+#'  like a table of contents? See here for more information
+#'  \url{https://support.unpaywall.org/support/solutions/articles/44001894783}. \cr
 #'  \code{genre}            \tab Publication type \cr
 #'  \code{oa_status}        \tab Classifies OA resources by location
 #'  and license terms as one of: gold, hybrid, bronze, green or closed.
@@ -60,25 +63,33 @@
 #'  \code{published_date}   \tab Date published \cr
 #'  \code{year}             \tab Year published. \cr
 #'  \code{title}            \tab Publication title. \cr
-#'  \code{updated}          \tab Time when the data for this resource was last updated. \cr
-#'  \code{authors}          \tab Lists author information (if available). \cr
+#'  \code{updated_resource} \tab Time when the data for this resource was last updated. \cr
+#'  \code{authors}          \tab Lists author information (\code{family} name, \code{given}
+#'  name and author role \code{sequence}), if available. \cr
 #' }
 #'
 #' The columns  \code{best_oa_location} and \code{oa_locations}
 #' are list-columns that contain useful metadata about the OA sources
-#' found by Unpaywall.
+#' found by Unpaywall. The \code{best_oa_location} only lists non-empty subfields.
 #'
 #' These are:
 #'
 #' \tabular{ll}{
+#'  \code{endpoint_id}     \tab Unique repository identifier. \cr
 #'  \code{evidence}        \tab How the OA location was found and is characterized
 #'   by Unpaywall? \cr
 #'  \code{host_type}       \tab OA full-text provided by \code{publisher} or
 #'   \code{repository}. \cr
+#'  \code{is_best}         \tab Is this location the \code{best_oa_location} for its resource? \cr
 #'  \code{license}         \tab The license under which this copy is published,
 #'   e.g. Creative Commons license. \cr
-#'  \code{url}             \tab The URL where you can find this OA copy. \cr
-#'  \code{versions}        \tab The content version accessible at this location
+#'  \code{pmh_id}          \tab OAI-PMH endpoint where we found this location. \cr
+#'  \code{repository institution} \tab Hosting institution of the repository. \cr
+#'  \code{updated}         \tab Time when the data for this location was last updated. \cr
+#'  \code{url}             \tab The \code{url_for_pdf} if there is one; otherwise landing page URL. \cr
+#'  \code{url_for_landing_page} \tab The URL for a landing page describing this OA copy. \cr
+#'  \code{url_for_pdf}     \tab The URL with a PDF version of this OA copy. \cr
+#'  \code{version}        \tab The content version accessible at this location
 #'   following the DRIVER 2.0 Guidelines
 #'  (\url{https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings}
 #'  \cr
@@ -194,9 +205,10 @@ parse_oadoi <- function(req) {
   tibble::tibble(
     doi = req$doi,
     best_oa_location = list(oa_lct_parser(req$best_oa_location)),
-    oa_locations = list(tibble::as_tibble(req$oa_location)),
+    oa_locations = list(tibble::as_tibble(req$oa_locations)),
     data_standard = req$data_standard,
     is_oa = req$is_oa,
+    is_paratext = req$is_paratext,
     genre = req$genre,
     oa_status = req$oa_status,
     has_repository_copy = req$has_repository_copy,
@@ -215,7 +227,7 @@ parse_oadoi <- function(req) {
     published_date = req$published_date,
     year = as.character(req$year),
     title = req$title,
-    updated = req$updated,
+    updated_resource = req$updated,
     authors = list(req$z_authors)
   )
 }
