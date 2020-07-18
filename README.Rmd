@@ -44,7 +44,7 @@ There are no API restrictions. However, providing an email address is required a
 
 This package also has a RStudio Addin for easily finding free full-texts in RStudio.
 
-![](inst/img/oadoi_addin.gif)
+![](man/figures/oadoi_addin.gif)
 
 ## How do I get it? 
 

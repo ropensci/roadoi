@@ -47,7 +47,7 @@ There are no API restrictions. However, providing an email address is required a
 
 This package also has a RStudio Addin for easily finding free full-texts in RStudio.
 
-![](inst/img/oadoi_addin.gif)
+![](man/figures/oadoi_addin.gif)
 
 ## How do I get it? 
 
@@ -319,8 +319,8 @@ oa_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       31|       0.62|
-|TRUE  |       19|       0.38|
+|FALSE |       36|       0.72|
+|TRUE  |       14|       0.28|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -339,16 +339,15 @@ oa_df %>%
 
 
 
-|evidence                                |genre               | Articles|
-|:---------------------------------------|:-------------------|--------:|
-|oa repository (via OAI-PMH doi match)   |journal-article     |        6|
-|open (via free pdf)                     |journal-article     |        6|
-|oa journal (via publisher name)         |component           |        2|
-|oa repository (semantic scholar lookup) |journal-article     |        1|
-|oa repository (via pmcid lookup)        |journal-article     |        1|
-|open (via free article)                 |journal-article     |        1|
-|open (via free pdf)                     |proceedings-article |        1|
-|open (via page says license)            |journal-article     |        1|
+|evidence                                                 |genre           | Articles|
+|:--------------------------------------------------------|:---------------|--------:|
+|open (via page says license)                             |journal-article |        5|
+|open (via free pdf)                                      |journal-article |        4|
+|oa journal (via doaj)                                    |journal-issue   |        1|
+|oa journal (via publisher name)                          |component       |        1|
+|oa repository (via OAI-PMH doi match)                    |journal-article |        1|
+|oa repository (via OAI-PMH title and first author match) |journal-article |        1|
+|open (via free article)                                  |journal-article |        1|
 
 #### More examples
 
