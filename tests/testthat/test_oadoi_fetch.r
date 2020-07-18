@@ -17,6 +17,8 @@ test_that("oadoi_fetch returns", {
   h <- oadoi_fetch("10.1016/j.aim.2009.06.008", email)
   # email
   i <- oadoi_fetch("10.1016/j.aim.2009.06.008", email = "NajkO@GMx.de")
+  #paratext
+  j <- oadoi_fetch("10.1002/bip.21378", email)
 
 
   # correct classes
@@ -29,11 +31,15 @@ test_that("oadoi_fetch returns", {
   expect_is(g, "tbl_df")
   expect_is(h, "tbl_df")
   expect_is(i, "tbl_df")
+  expect_is(j, "tbl_df")
 
   # some character matches
   expect_match(h$oa_status, "closed")
   expect_match(h$journal_issn_l, "0001-8708")
   expect_match(a$published_date, "2016-08-09")
+
+  # boolean output
+  expect_false(j$is_paratext)
 
 
 
@@ -44,7 +50,7 @@ test_that("oadoi_fetch returns", {
   expect_equal(nrow(d), 2)
   expect_equal(nrow(e), 1)
   expect_equal(nrow(g), 1)
-  expect_equal(ncol(e), 19)
+  expect_equal(ncol(e), 20)
 
 
 
