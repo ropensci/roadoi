@@ -2,7 +2,7 @@
 
 
 
-
+[![R build status](https://github.com/ropensci/roadoi/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/roadoi/actions)
 [![Build Status](https://travis-ci.org/ropensci/roadoi.svg?branch=master)](https://travis-ci.org/ropensci/roadoi)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/ropensci/roadoi?branch=master&svg=true)](https://ci.appveyor.com/project/ropensci/roadoi)
 [![codecov.io](https://codecov.io/github/ropensci/roadoi/coverage.svg?branch=master)](https://codecov.io/github/ropensci/roadoi?branch=master)
@@ -30,15 +30,15 @@ information and full-text links from Unpaywall.
 ```r
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"), 
                     email = "najko.jahn@gmail.com")
-#> # A tibble: 2 x 20
-#>   doi   best_oa_location oa_locations data_standard is_oa is_paratext genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <lgl>       <chr> <chr>    
-#> 1 10.1… <tibble [1 × 11… <tibble [1 …             2 TRUE  FALSE       jour… green    
-#> 2 10.1… <tibble [1 × 9]> <tibble [7 …             2 TRUE  FALSE       jour… gold     
-#> # … with 12 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
+#> # A tibble: 2 x 18
+#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
+#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
+#> 1 10.1… <tibble [1 × 11… <tibble [1 …             2 TRUE  jour… green    
+#> 2 10.1… <tibble [1 × 9]> <tibble [7 …             2 TRUE  jour… gold     
+#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
 #> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, published_date <chr>, year <chr>,
-#> #   title <chr>, updated_resource <chr>, authors <list>
+#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>, updated <chr>,
+#> #   authors <list>
 ```
 
 There are no API restrictions. However, providing an email address is required and a rate limit of 100k is suggested. If you need to access more data, use the [data dump](https://unpaywall.org/products/snapshot) instead.
@@ -95,15 +95,15 @@ library(roadoi)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
                     email = "najko.jahn@gmail.com")
-#> # A tibble: 2 x 20
-#>   doi   best_oa_location oa_locations data_standard is_oa is_paratext genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <lgl>       <chr> <chr>    
-#> 1 10.1… <tibble [1 × 9]> <tibble [6 …             2 TRUE  FALSE       jour… gold     
-#> 2 10.1… <tibble [1 × 9]> <tibble [2 …             2 TRUE  FALSE       jour… hybrid   
-#> # … with 12 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
+#> # A tibble: 2 x 18
+#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
+#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
+#> 1 10.1… <tibble [1 × 9]> <tibble [6 …             2 TRUE  jour… gold     
+#> 2 10.1… <tibble [1 × 9]> <tibble [2 …             2 TRUE  jour… hybrid   
+#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
 #> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, published_date <chr>, year <chr>,
-#> #   title <chr>, updated_resource <chr>, authors <list>
+#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>, updated <chr>,
+#> #   authors <list>
 ```
 
 #### What's returned?
@@ -183,16 +183,10 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
   dplyr::mutate(hostname = gsub("www.", "", hostname)) %>%
   dplyr::group_by(hostname) %>%
   dplyr::summarize(hosts = n())
-#> # A tibble: 7 x 2
-#>   hostname                      hosts
-#>   <chr>                         <int>
-#> 1 arxiv.org                         1
-#> 2 bmcgenomics.biomedcentral.com     1
-#> 3 doi.org                           1
-#> 4 europepmc.org                     1
-#> 5 link.aps.org                      1
-#> 6 ncbi.nlm.nih.gov                  1
-#> 7 pub.uni-bielefeld.de              2
+#> Error: Names must be unique.
+#> [31mx[39m These names are duplicated:
+#>   * "updated" at locations 10 and 28.
+#> [34mℹ[39m Use argument `names_repair` to specify repair strategy.
 ```
 
 
@@ -225,15 +219,15 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                     email = "najko.jahn@gmail.com", 
                     .progress = "text")
 #>   |                                                                                     |                                                                             |   0%  |                                                                                     |======================================                                       |  50%  |                                                                                     |=============================================================================| 100%
-#> # A tibble: 2 x 20
-#>   doi   best_oa_location oa_locations data_standard is_oa is_paratext genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <lgl>       <chr> <chr>    
-#> 1 10.1… <tibble [1 × 9]> <tibble [6 …             2 TRUE  FALSE       jour… gold     
-#> 2 10.1… <tibble [1 × 9]> <tibble [2 …             2 TRUE  FALSE       jour… hybrid   
-#> # … with 12 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
+#> # A tibble: 2 x 18
+#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
+#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
+#> 1 10.1… <tibble [1 × 9]> <tibble [6 …             2 TRUE  jour… gold     
+#> 2 10.1… <tibble [1 × 9]> <tibble [2 …             2 TRUE  jour… hybrid   
+#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
 #> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, published_date <chr>, year <chr>,
-#> #   title <chr>, updated_resource <chr>, authors <list>
+#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>, updated <chr>,
+#> #   authors <list>
 ```
 
 #### Catching errors
@@ -247,14 +241,14 @@ my_data <- purrr::map(random_dois,
               .f = purrr::safely(function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")))
 # return results as data.frame
 purrr::map_df(my_data, "result")
-#> # A tibble: 1 x 20
-#>   doi   best_oa_location oa_locations data_standard is_oa is_paratext genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <lgl>       <chr> <chr>    
-#> 1 10.1… <tibble [1 × 11… <tibble [1 …             2 TRUE  FALSE       jour… green    
-#> # … with 12 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
+#> # A tibble: 1 x 18
+#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
+#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
+#> 1 10.1… <tibble [1 × 11… <tibble [1 …             2 TRUE  jour… green    
+#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
 #> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, published_date <chr>, year <chr>,
-#> #   title <chr>, updated_resource <chr>, authors <list>
+#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>, updated <chr>,
+#> #   authors <list>
 #show errors
 purrr::map(my_data, "error")
 #> [[1]]
@@ -319,8 +313,8 @@ oa_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       36|       0.72|
-|TRUE  |       14|       0.28|
+|FALSE |       33|       0.66|
+|TRUE  |       17|       0.34|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -339,15 +333,14 @@ oa_df %>%
 
 
 
-|evidence                                                 |genre           | Articles|
-|:--------------------------------------------------------|:---------------|--------:|
-|open (via page says license)                             |journal-article |        5|
-|open (via free pdf)                                      |journal-article |        4|
-|oa journal (via doaj)                                    |journal-issue   |        1|
-|oa journal (via publisher name)                          |component       |        1|
-|oa repository (via OAI-PMH doi match)                    |journal-article |        1|
-|oa repository (via OAI-PMH title and first author match) |journal-article |        1|
-|open (via free article)                                  |journal-article |        1|
+|evidence                                |genre           | Articles|
+|:---------------------------------------|:---------------|--------:|
+|open (via page says license)            |journal-article |        8|
+|oa repository (via OAI-PMH doi match)   |journal-article |        3|
+|open (via free pdf)                     |journal-article |        3|
+|oa journal (via observed oa rate)       |journal-article |        1|
+|oa repository (semantic scholar lookup) |journal-article |        1|
+|open (via free pdf)                     |component       |        1|
 
 #### More examples
 
