@@ -44,19 +44,20 @@ The client supports API version 2. According to the [Unpaywall Data Format](http
 `oa_locations`|list-column of all the OA locations. 
 `data_standard`|Indicates the data collection approaches used for this resource. `1` mostly uses Crossref for hybrid detection. `2` uses more comprehensive hybrid detection methods. 
 `is_oa`|Is there an OA copy (logical)? 
+`is_paratext`| Is the item an ancillary part of a journal, like a table of contents? See here for more information <https://support.unpaywall.org/support/solutions/articles/44001894783>. 
 `genre`|Publication type
 `oa_status`|Classifies OA resources by location and license terms as one of: gold, hybrid, bronze, green or closed. See here for more information <https://support.unpaywall.org/support/solutions/articles/44001777288-what-do-the-types-of-oa-status-green-gold-hybrid-and-bronze-mean->.
 `has_repository_copy`|Is a full-text available in a repository?
 `journal_is_oa`|Is the article published in a fully OA journal? Uses the Directory of Open Access Journals (DOAJ) as source. 
 `journal_is_in_doaj`|Is the journal listed in the Directory of Open Access Journals (DOAJ).
 `journal_issns`|ISSNs, i.e. unique code to identify journals.
-`journal_issns_l`|Linking ISSN.
+`journal_issn_l`|Linking ISSN.
 `journal_name`|Journal title
 `publisher`|Publisher
-`title`|Publication title. 
+`published_date`|Date published
 `year`|Year published. 
-`published_date`|Date published.
-`updated`|Time when the data for this resource was last updated. 
+`title`|Publication title. 
+`updated_resource`|Time when the data for this resource was last updated. 
 `authors`|Lists authors (if available)
 
 The columns  `best_oa_location` and  `oa_locations` are list-columns
@@ -97,7 +98,7 @@ library(tidyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
                     email = "najko.jahn@gmail.com") %>%
-  tidyr::unnest(oa_locations, names_repair = "universal") %>% 
+  tidyr::unnest(oa_locations) %>% 
   dplyr::mutate(
     hostname = purrr::map(url, httr::parse_url) %>% 
                   purrr::map_chr(., "hostname", .null = NA_integer_)

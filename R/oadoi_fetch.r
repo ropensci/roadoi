@@ -57,7 +57,7 @@
 #'   the Directory of Open Access Journals (DOAJ). \cr
 #'  \code{journal_issns}    \tab ISSNs, i.e. unique numbers to identify
 #'  journals. \cr
-#'  \code{journal_issns_l}    \tab Linking ISSN. \cr
+#'  \code{journal_issn_l}    \tab Linking ISSN. \cr
 #'  \code{journal_name}     \tab Journal title, not normalized. \cr
 #'  \code{publisher}        \tab Publisher, not normalized. \cr
 #'  \code{published_date}   \tab Date published \cr
