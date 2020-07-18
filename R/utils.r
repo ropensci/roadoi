@@ -36,4 +36,6 @@ val_email <- function(email) {
 #' @noRd
 email_regex <-
   function()
+    # nolint start
     "^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{2,4})$"
+    # nolint end
