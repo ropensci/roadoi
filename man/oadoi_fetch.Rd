@@ -7,7 +7,8 @@
 oadoi_fetch(
   dois = NULL,
   email = Sys.getenv("roadoi_email"),
-  .progress = "none"
+  .progress = "none",
+  .flatten = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,13 @@ when using rcrossref, delete it from your `.Renviron` file.}
 Options are "none", "text", "tk", "win", and "time".
 See \code{\link[plyr]{create_progress_bar}} for details
 of each. By default, no progress bar is displayed.}
+
+\item{.flatten}{Simplify open access evidence output. If `TRUE` it
+transforms the nested column oa_locations so that each open access
+evidence variable has its own column and each row represents a
+single full-text.
+Following these basic principles of "Tidy Data" makes data analysis
+and export as a spreadsheet more straightforward.}
 }
 \value{
 The result is a tibble with each row representing a publication.
@@ -78,6 +86,9 @@ The result is a tibble with each row representing a publication.
 The columns  \code{best_oa_location} and \code{oa_locations}
 are list-columns that contain useful metadata about the OA sources
 found by Unpaywall. The \code{best_oa_location} only lists non-empty subfields.
+If \code{.flatten = TRUE} the list-column  \code{oa_locations} will be
+restructured in a long format where each OA fulltext is represented by
+one row.
 
 These are:
 
@@ -101,9 +112,6 @@ These are:
  (\url{https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings}
  \cr
 }
-
-To unnest list-columns, you want to use tidyr's unnest function
-\code{\link[tidyr]{unnest}}.
 
 Note that Unpaywall schema is only informally described.
 Check also \url{https://unpaywall.org/data-format}.

@@ -19,6 +19,12 @@
 #'   You can open your `.Renviron` file calling `file.edit("~/.Renviron")`.
 #'   Save the file and restart your R session. To stop sharing your email
 #'   when using rcrossref, delete it from your `.Renviron` file.
+#' @param .flatten Simplify open access evidence output. If `TRUE` it
+#'   transforms the nested column oa_locations so that each open access
+#'   evidence variable has its own column and each row represents a
+#'   single full-text.
+#'   Following these basic principles of "Tidy Data" makes data analysis
+#'   and export as a spreadsheet more straightforward.
 #' @param .progress Shows the \code{plyr}-style progress bar.
 #'   Options are "none", "text", "tk", "win", and "time".
 #'   See \code{\link[plyr]{create_progress_bar}} for details
@@ -71,6 +77,9 @@
 #' The columns  \code{best_oa_location} and \code{oa_locations}
 #' are list-columns that contain useful metadata about the OA sources
 #' found by Unpaywall. The \code{best_oa_location} only lists non-empty subfields.
+#' If \code{.flatten = TRUE} the list-column  \code{oa_locations} will be
+#' restructured in a long format where each OA fulltext is represented by
+#' one row.
 #'
 #' These are:
 #'
@@ -95,10 +104,6 @@
 #'  \cr
 #' }
 #'
-# nolint end
-#' To unnest list-columns, you want to use tidyr's unnest function
-#' \code{\link[tidyr]{unnest}}.
-#'
 #' Note that Unpaywall schema is only informally described.
 #' Check also \url{https://unpaywall.org/data-format}.
 
@@ -112,7 +117,8 @@
 oadoi_fetch <-
   function(dois = NULL,
            email = Sys.getenv("roadoi_email"),
-           .progress = "none") {
+           .progress = "none",
+           .flatten = FALSE) {
     # input validation
     stopifnot(!is.null(dois))
     # remove empty characters
@@ -129,8 +135,16 @@ oadoi_fetch <-
         .call = FALSE
       )
     # Call API for every DOI, and return results as tbl_df
-    plyr::llply(dois, oadoi_fetch_, email, .progress = .progress) %>%
+    req <- plyr::llply(dois, oadoi_fetch_, email, .progress = .progress) %>%
       dplyr::bind_rows()
+    if(.flatten == TRUE){
+      out <- req %>%
+        dplyr::select(-best_oa_location, -authors) %>%
+        tidyr::unnest(oa_locations, keep_empty = TRUE)
+    } else {
+      out <- req
+    }
+    return(out)
   }
 
 #' Get open access status information.
