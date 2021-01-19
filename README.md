@@ -12,13 +12,13 @@
 
 
 
-roadoi interacts with the [Unpaywall API](http://unpaywall.org/products/api), 
+roadoi interacts with the [Unpaywall API](https://unpaywall.org/products/api), 
 a simple web-interface which links DOIs and open access versions of scholarly works. 
-The API powers [Unpaywall](http://unpaywall.org/).
+The API powers [Unpaywall](https://unpaywall.org/).
 
 This client supports the most recent API Version 2.
 
-API Documentation: <http://unpaywall.org/products/api>
+API Documentation: <https://unpaywall.org/products/api>
 
 ## How do I use it? 
 
@@ -30,14 +30,15 @@ information and full-text links from Unpaywall.
 ```r
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"), 
                     email = "najko.jahn@gmail.com")
-#> # A tibble: 2 x 18
-#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
-#> 1 10.1… <tibble [1 × 11… <tibble [1 …             2 TRUE  jour… green    
-#> 2 10.1… <tibble [1 × 9]> <tibble [7 …             2 TRUE  jour… gold     
-#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
-#> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>, updated <chr>,
+#> # A tibble: 2 x 20
+#>   doi   best_oa_location oa_locations data_standard is_oa is_paratext genre
+#>   <chr> <list>           <list>               <int> <lgl> <lgl>       <chr>
+#> 1 10.1… <tibble [1 × 11… <tibble [1 …             2 TRUE  FALSE       jour…
+#> 2 10.1… <tibble [1 × 10… <tibble [7 …             2 TRUE  FALSE       jour…
+#> # … with 13 more variables: oa_status <chr>, has_repository_copy <lgl>,
+#> #   journal_is_oa <lgl>, journal_is_in_doaj <lgl>, journal_issns <chr>,
+#> #   journal_issn_l <chr>, journal_name <chr>, publisher <chr>,
+#> #   published_date <chr>, year <chr>, title <chr>, updated_resource <chr>,
 #> #   authors <list>
 ```
 
@@ -71,11 +72,11 @@ library(roadoi)
 
 
 
-Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [Unpaywall](https://unpaywall.org/) service where DOIs are matched with freely available full-texts available from open access journals and archives.
+Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [ourresearch](https://ourresearch.org//) service where DOIs are matched with freely available full-texts available from open access journals and archives.
 
 ### About Unpaywall
 
-[Unpaywall](https://unpaywall.org/), developed and maintained by the [team of Impactstory](https://profiles.impactstory.org/about), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
+[Unpaywall](https://unpaywall.org/), developed and maintained by the [team of ourresearch](https://ourresearch.org/team/about), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
 
 Unpaywall uses different data sources to find open access full-texts including:
 
@@ -95,14 +96,15 @@ library(roadoi)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
                     email = "najko.jahn@gmail.com")
-#> # A tibble: 2 x 18
-#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
-#> 1 10.1… <tibble [1 × 9]> <tibble [6 …             2 TRUE  jour… gold     
-#> 2 10.1… <tibble [1 × 9]> <tibble [2 …             2 TRUE  jour… hybrid   
-#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
-#> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>, updated <chr>,
+#> # A tibble: 2 x 20
+#>   doi   best_oa_location oa_locations data_standard is_oa is_paratext genre
+#>   <chr> <list>           <list>               <int> <lgl> <lgl>       <chr>
+#> 1 10.1… <tibble [1 × 10… <tibble [6 …             2 TRUE  FALSE       jour…
+#> 2 10.1… <tibble [1 × 10… <tibble [2 …             2 TRUE  FALSE       jour…
+#> # … with 13 more variables: oa_status <chr>, has_repository_copy <lgl>,
+#> #   journal_is_oa <lgl>, journal_is_in_doaj <lgl>, journal_issns <chr>,
+#> #   journal_issn_l <chr>, journal_name <chr>, publisher <chr>,
+#> #   published_date <chr>, year <chr>, title <chr>, updated_resource <chr>,
 #> #   authors <list>
 ```
 
@@ -144,53 +146,33 @@ that contain useful metadata about the OA sources found by Unpaywall These are
 `url`|The URL where you can find this OA copy.
 `versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines  (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
 
-Note that Unpaywall schema is only informally described. Check also with <https://unpaywall.org/data-format>.
+The Unpaywall schema is also described here: <https://unpaywall.org/data-format>.
 
-There at least [two ways to simplify these list-columns](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
-
-To get the full-text links from the list-column `best_oa_location`, you may want to use `purrr::map_chr()`.
+<!-- The parameter `.flatten = TRUE` simplifies how OA evidence is represented by transforming the nested data into a single tidy data frame where each row represents one OA full-text. It enables straightforward data summaries like an overview of evidence types, and its ranking. -->
 
 
 ```r
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1103/physreve.88.012814"), 
-                    email = "najko.jahn@gmail.com") %>%
-  dplyr::mutate(
-    urls = purrr::map(best_oa_location, "url") %>% 
-                  purrr::map_if(purrr::is_empty, ~ NA_character_) %>% 
-                  purrr::flatten_chr()
-                ) %>%
-  .$urls
-#> [1] "https://bmcgenomics.biomedcentral.com/track/pdf/10.1186/s12864-016-2566-9"
-#> [2] "https://link.aps.org/accepted/10.1103/PhysRevE.88.012814"
+                             "10.1103/physreve.88.012814",
+                             "10.1093/reseval/rvaa038",
+                             "10.1101/2020.05.22.111294",
+                             "10.1093/bioinformatics/btw541"), 
+                    email = "najko.jahn@gmail.com", .flatten = TRUE) %>%
+  dplyr::count(is_oa, evidence, is_best) 
+#> # A tibble: 8 x 4
+#>   is_oa evidence                                       is_best     n
+#>   <lgl> <chr>                                          <lgl>   <int>
+#> 1 FALSE <NA>                                           NA          1
+#> 2 TRUE  oa journal (via doaj)                          FALSE       1
+#> 3 TRUE  oa repository (semantic scholar lookup)        FALSE       1
+#> 4 TRUE  oa repository (via OAI-PMH doi match)          FALSE       7
+#> 5 TRUE  oa repository (via page says license)          TRUE        1
+#> 6 TRUE  oa repository (via pmcid lookup)               FALSE       2
+#> 7 TRUE  open (via crossref license, author manuscript) TRUE        1
+#> 8 TRUE  open (via page says license)                   TRUE        2
 ```
 
-If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`. Note the  column `updated`, which belongs to the main data.frame and the nested list-column. It will cause an error when flatting into regular columns. Either de-select `updated` or change the argument `names_repair`.
-
-
-```r
-library(dplyr)
-library(tidyr)
-roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1103/physreve.88.012814"), 
-                    email = "najko.jahn@gmail.com") %>%
-  tidyr::unnest(oa_locations) %>% 
-  dplyr::mutate(
-    hostname = purrr::map(url, httr::parse_url) %>% 
-                  purrr::map_chr(., "hostname", .null = NA_integer_)
-                ) %>% 
-  dplyr::mutate(hostname = gsub("www.", "", hostname)) %>%
-  dplyr::group_by(hostname) %>%
-  dplyr::summarize(hosts = n())
-#> Error: Names must be unique.
-#> [31mx[39m These names are duplicated:
-#>   * "updated" at locations 10 and 28.
-#> [34mℹ[39m Use argument `names_repair` to specify repair strategy.
-```
-
-
-Note that fields to be returned might change according to the [Unpaywall API specs](http://unpaywall.org/products/api)
 
 #### Any API restrictions?
 
@@ -218,50 +200,20 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
                     email = "najko.jahn@gmail.com", 
                     .progress = "text")
-#>   |                                                                                     |                                                                             |   0%  |                                                                                     |======================================                                       |  50%  |                                                                                     |=============================================================================| 100%
-#> # A tibble: 2 x 18
-#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
-#> 1 10.1… <tibble [1 × 9]> <tibble [6 …             2 TRUE  jour… gold     
-#> 2 10.1… <tibble [1 × 9]> <tibble [2 …             2 TRUE  jour… hybrid   
-#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
-#> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>, updated <chr>,
+#>   |                                                                          |                                                                  |   0%  |                                                                          |=================================                                 |  50%  |                                                                          |==================================================================| 100%
+#> # A tibble: 2 x 20
+#>   doi   best_oa_location oa_locations data_standard is_oa is_paratext genre
+#>   <chr> <list>           <list>               <int> <lgl> <lgl>       <chr>
+#> 1 10.1… <tibble [1 × 10… <tibble [6 …             2 TRUE  FALSE       jour…
+#> 2 10.1… <tibble [1 × 10… <tibble [2 …             2 TRUE  FALSE       jour…
+#> # … with 13 more variables: oa_status <chr>, has_repository_copy <lgl>,
+#> #   journal_is_oa <lgl>, journal_is_in_doaj <lgl>, journal_issns <chr>,
+#> #   journal_issn_l <chr>, journal_name <chr>, publisher <chr>,
+#> #   published_date <chr>, year <chr>, title <chr>, updated_resource <chr>,
 #> #   authors <list>
 ```
 
-#### Catching errors
 
-Unpaywall is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [purrr's `safely()`](https://purrr.tidyverse.org/reference/safely.html) function
-
-
-```r
-random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
-my_data <- purrr::map(random_dois, 
-              .f = purrr::safely(function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")))
-# return results as data.frame
-purrr::map_df(my_data, "result")
-#> # A tibble: 1 x 18
-#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
-#> 1 10.1… <tibble [1 × 11… <tibble [1 …             2 TRUE  jour… green    
-#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
-#> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>, updated <chr>,
-#> #   authors <list>
-#show errors
-purrr::map(my_data, "error")
-#> [[1]]
-#> <simpleError: Unpaywall request failed [404]
-#> 'ldld' isn't in Unpaywall. See https://support.unpaywall.org/a/solutions/articles/44001900286>
-#> 
-#> [[2]]
-#> NULL
-#> 
-#> [[3]]
-#> <simpleError: Unpaywall request failed [404]
-#> '§dldl' isn't in Unpaywall. See https://support.unpaywall.org/a/solutions/articles/44001900286>
-```
 
 ### Use Case: Studying the compliance with open access policies
 
@@ -281,16 +233,13 @@ random_dois <- rcrossref::cr_r(sample = 50)
 
 #### Calling Unpaywall
 
-Now let's call Unpaywall. We are capturing possible errors.
+Now let's call Unpaywall:
 
 
 ```r
-oa_df <- purrr::map(random_dois, .f = purrr::safely(
-  function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")
-  )) %>%
-  purrr::map_df("result")
+oa_df <- roadoi::oadoi_fetch(random_dois, 
+                             email = "najko.jahn@gmail.com")
 ```
-
 
 #### Reporting
 
@@ -300,7 +249,6 @@ To display how many full-text links were found and which sources were used in a 
 
 
 ```r
-if(!is.null(oa_df))
 oa_df %>%
   group_by(is_oa) %>%
   summarise(Articles = n()) %>%
@@ -313,8 +261,8 @@ oa_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       33|       0.66|
-|TRUE  |       17|       0.34|
+|FALSE |       31|       0.62|
+|TRUE  |       19|       0.38|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -323,9 +271,9 @@ How did Unpaywall find those Open Access full-texts, which were characterized as
 if(!is.null(oa_df))
 oa_df %>%
   filter(is_oa == TRUE) %>%
-  select(best_oa_location, genre) %>%
+  select(best_oa_location, oa_status, genre) %>%
   tidyr::unnest(best_oa_location) %>% 
-  group_by(evidence, genre) %>%
+  group_by(oa_status, evidence, genre) %>%
   summarise(Articles = n()) %>%
   arrange(desc(Articles)) %>%
   knitr::kable()
@@ -333,18 +281,27 @@ oa_df %>%
 
 
 
-|evidence                                |genre           | Articles|
-|:---------------------------------------|:---------------|--------:|
-|open (via page says license)            |journal-article |        8|
-|oa repository (via OAI-PMH doi match)   |journal-article |        3|
-|open (via free pdf)                     |journal-article |        3|
-|oa journal (via observed oa rate)       |journal-article |        1|
-|oa repository (semantic scholar lookup) |journal-article |        1|
-|open (via free pdf)                     |component       |        1|
+|oa_status |evidence                                                 |genre               | Articles|
+|:---------|:--------------------------------------------------------|:-------------------|--------:|
+|gold      |open (via page says license)                             |journal-article     |        4|
+|bronze    |open (via free pdf)                                      |journal-article     |        2|
+|bronze    |open (via free pdf)                                      |dissertation        |        1|
+|bronze    |open (via free pdf)                                      |proceedings-article |        1|
+|bronze    |open (via free pdf)                                      |reference-entry     |        1|
+|gold      |oa journal (via doaj)                                    |journal-article     |        1|
+|gold      |oa journal (via observed oa rate)                        |journal-article     |        1|
+|green     |oa repository (semantic scholar lookup)                  |proceedings-article |        1|
+|green     |oa repository (via OAI-PMH doi match)                    |book                |        1|
+|green     |oa repository (via OAI-PMH doi match)                    |journal-article     |        1|
+|green     |oa repository (via OAI-PMH title and first author match) |journal-article     |        1|
+|green     |oa repository (via OAI-PMH title match)                  |journal-article     |        1|
+|green     |oa repository (via page says license)                    |posted-content      |        1|
+|hybrid    |open (via crossref license)                              |journal-article     |        1|
+|hybrid    |open (via page says license)                             |book-chapter        |        1|
 
 #### More examples
 
-For more  examples, see Piwowar et al. 2018. Together with the article, the authors shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
+For more  examples, see Piwowar et al. 2018. Together with the article, the authors shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/ourresearch/oadoi-paper1).
 
 This blog post describes how to analyze the Unpaywall data dump with R: <https://subugoe.github.io/scholcomm_analytics/posts/unpaywall_evidence/>
 

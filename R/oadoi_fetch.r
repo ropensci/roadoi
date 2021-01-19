@@ -111,6 +111,12 @@
 #' oadoi_fetch("10.1038/nature12373", email = "name@example.com")
 #' oadoi_fetch(dois = c("10.1016/j.jbiotec.2010.07.030",
 #' "10.1186/1471-2164-11-245"), email = "name@example.com")
+#' # flatten OA evidence
+#' roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+#'                             "10.1103/physreve.88.012814",
+#'                             "10.1093/reseval/rvaa038"),
+#'                    email = "najko.jahn@gmail.com", .flatten = TRUE)
+#'
 #' }
 #'
 #' @export

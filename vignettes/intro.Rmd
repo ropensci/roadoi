@@ -8,11 +8,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [Unpaywall](https://unpaywall.org/) service where DOIs are matched with freely available full-texts available from open access journals and archives.
+Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [ourresearch](https://ourresearch.org//) service where DOIs are matched with freely available full-texts available from open access journals and archives.
 
 ### About Unpaywall
 
-[Unpaywall](https://unpaywall.org/), developed and maintained by the [team of Impactstory](https://profiles.impactstory.org/about), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
+[Unpaywall](https://unpaywall.org/), developed and maintained by the [team of ourresearch](https://ourresearch.org/team/about), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
 
 Unpaywall uses different data sources to find open access full-texts including:
 
@@ -71,45 +71,21 @@ that contain useful metadata about the OA sources found by Unpaywall These are
 `url`|The URL where you can find this OA copy.
 `versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines  (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
 
-Note that Unpaywall schema is only informally described. Check also with <https://unpaywall.org/data-format>.
+The Unpaywall schema is also described here: <https://unpaywall.org/data-format>.
 
-There at least [two ways to simplify these list-columns](http://r4ds.had.co.nz/many-models.html#simplifying-list-columns).
-
-To get the full-text links from the list-column `best_oa_location`, you may want to use `purrr::map_chr()`.
+<!-- The parameter `.flatten = TRUE` simplifies how OA evidence is represented by transforming the nested data into a single tidy data frame where each row represents one OA full-text. It enables straightforward data summaries like an overview of evidence types, and its ranking. -->
 
 ```{r}
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1103/physreve.88.012814"), 
-                    email = "najko.jahn@gmail.com") %>%
-  dplyr::mutate(
-    urls = purrr::map(best_oa_location, "url") %>% 
-                  purrr::map_if(purrr::is_empty, ~ NA_character_) %>% 
-                  purrr::flatten_chr()
-                ) %>%
-  .$urls
+                             "10.1103/physreve.88.012814",
+                             "10.1093/reseval/rvaa038",
+                             "10.1101/2020.05.22.111294",
+                             "10.1093/bioinformatics/btw541"), 
+                    email = "najko.jahn@gmail.com", .flatten = TRUE) %>%
+  dplyr::count(is_oa, evidence, is_best) 
 ```
 
-If you want to gather all full-text links and to explore where these links are hosted, simplify the list-column `oa_locations` with `tidyr::unnest()`. Note the  column `updated`, which belongs to the main data.frame and the nested list-column. It will cause an error when flatting into regular columns. Either de-select `updated` or change the argument `names_repair`.
-
-```{r}
-library(dplyr)
-library(tidyr)
-roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
-                             "10.1103/physreve.88.012814"), 
-                    email = "najko.jahn@gmail.com") %>%
-  tidyr::unnest(oa_locations) %>% 
-  dplyr::mutate(
-    hostname = purrr::map(url, httr::parse_url) %>% 
-                  purrr::map_chr(., "hostname", .null = NA_integer_)
-                ) %>% 
-  dplyr::mutate(hostname = gsub("www.", "", hostname)) %>%
-  dplyr::group_by(hostname) %>%
-  dplyr::summarize(hosts = n())
-```
-
-
-Note that fields to be returned might change according to the [Unpaywall API specs](http://unpaywall.org/products/api)
 
 #### Any API restrictions?
 
@@ -157,13 +133,12 @@ random_dois <- rcrossref::cr_r(sample = 50)
 
 #### Calling Unpaywall
 
-Now let's call Unpaywall. We are capturing possible errors.
+Now let's call Unpaywall:
 
 ```{r}
 oa_df <- roadoi::oadoi_fetch(random_dois, 
                              email = "najko.jahn@gmail.com")
 ```
-
 
 #### Reporting
 
@@ -186,9 +161,9 @@ How did Unpaywall find those Open Access full-texts, which were characterized as
 if(!is.null(oa_df))
 oa_df %>%
   filter(is_oa == TRUE) %>%
-  select(best_oa_location, genre) %>%
+  select(best_oa_location, oa_status, genre) %>%
   tidyr::unnest(best_oa_location) %>% 
-  group_by(evidence, genre) %>%
+  group_by(oa_status, evidence, genre) %>%
   summarise(Articles = n()) %>%
   arrange(desc(Articles)) %>%
   knitr::kable()
@@ -196,7 +171,7 @@ oa_df %>%
 
 #### More examples
 
-For more  examples, see Piwowar et al. 2018. Together with the article, the authors shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/Impactstory/oadoi-paper1/).
+For more  examples, see Piwowar et al. 2018. Together with the article, the authors shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/ourresearch/oadoi-paper1).
 
 This blog post describes how to analyze the Unpaywall data dump with R: <https://subugoe.github.io/scholcomm_analytics/posts/unpaywall_evidence/>
 
