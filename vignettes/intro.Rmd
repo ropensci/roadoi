@@ -138,19 +138,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                     .progress = "text")
 ```
 
-#### Catching errors
 
-Unpaywall is a reliable API. However, this client follows [Hadley Wickham's Best practices for writing an API package](https://CRAN.R-project.org/package=httr/vignettes/api-packages.html) and throws an error when the API does not return valid JSON or is not available. To catch these errors, you may want to use [purrr's `safely()`](https://purrr.tidyverse.org/reference/safely.html) function
-
-```{r}
-random_dois <-  c("ldld", "10.1038/ng.3260", "§dldl  ")
-my_data <- purrr::map(random_dois, 
-              .f = purrr::safely(function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")))
-# return results as data.frame
-purrr::map_df(my_data, "result")
-#show errors
-purrr::map(my_data, "error")
-```
 
 ### Use Case: Studying the compliance with open access policies
 
@@ -172,10 +160,8 @@ random_dois <- rcrossref::cr_r(sample = 50)
 Now let's call Unpaywall. We are capturing possible errors.
 
 ```{r}
-oa_df <- purrr::map(random_dois, .f = purrr::safely(
-  function(x) roadoi::oadoi_fetch(x, email = "najko.jahn@gmail.com")
-  )) %>%
-  purrr::map_df("result")
+oa_df <- roadoi::oadoi_fetch(random_dois, 
+                             email = "najko.jahn@gmail.com")
 ```
 
 
@@ -186,7 +172,6 @@ After obtaining the data, reporting with R is straightforward. You can even gene
 To display how many full-text links were found and which sources were used in a nicely formatted markdown-table using the [`knitr`](https://yihui.name/knitr/)-package:
 
 ```{r, results='asis'}
-if(!is.null(oa_df))
 oa_df %>%
   group_by(is_oa) %>%
   summarise(Articles = n()) %>%

@@ -178,7 +178,7 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
 
   # error if nothing could be found and return meaningful message
   if (httr::status_code(resp) != 200) {
-    stop(
+    warning(
       sprintf(
         "Unpaywall request failed [%s]\n%s",
         httr::status_code(resp),

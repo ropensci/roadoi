@@ -55,7 +55,7 @@ test_that("oadoi_fetch returns", {
 
 
   # wrong DOI
-  expect_error(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260"), email))
+  expect_warning(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260"), email))
   # wrong .progress value
   expect_warning(oadoi_fetch("10.1038/ng.3260", email, .progress = "TEXT"))
   # empty character
