@@ -9,7 +9,9 @@ Authors@R: c(
     see https://github.com/ropensci/onboarding/issues/115", ORCID = "0000-0002-6892-9305")),
     person("Ross Mounce", role = c("rev"), comment = c("Ross Mounce
     reviewed the package for rOpenSci, 
-    see https://github.com/ropensci/onboarding/issues/115", ORCID =  "0000-0002-3520-2046"))
+    see https://github.com/ropensci/onboarding/issues/115", ORCID =  "0000-0002-3520-2046")),
+    person("Anne", "Hobert", role = c("ctb"),  comment = c(ORCID = "0000-0003-2429-2995")),
+    person("Delwen", "Franzen", role = c("rev"))
     )
 Description: This web client interfaces Unpaywall <https://unpaywall.org/products/api>, formerly
     oaDOI, a service finding free full-texts of academic papers by linking DOIs with 
