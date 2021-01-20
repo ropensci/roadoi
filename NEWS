@@ -1,3 +1,16 @@
+## roadoi 0.7
+
+New features:
+
+- Supports most current Unpaywall data schema (from 20 Jan 2021), including improved detection of delayed OA | thanks @delwen and @Ahobert
+- User-friendly interface to access all OA locations in a regular data frame.
+
+Minor fixes:
+
+- bug fix: emails with capital letter were rejected #28 | thanks @rkrug
+- CI with GitHub actions
+- improved docs
+
 ## roadoi 0.6
 
 New features:
