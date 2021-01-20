@@ -190,7 +190,7 @@ There are no API restrictions. However, Unpaywall requires an email address when
 
 ```
 roadoi_email = "najko.jahn@gmail.com"
-```.
+```
 
 You can open your `.Renviron` file calling 
 
@@ -271,8 +271,8 @@ oa_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       40|        0.8|
-|TRUE  |       10|        0.2|
+|FALSE |       29|       0.58|
+|TRUE  |       21|       0.42|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -291,16 +291,19 @@ oa_df %>%
 
 
 
-|oa_status |evidence                                                 |genre           | Articles|
-|:---------|:--------------------------------------------------------|:---------------|--------:|
-|gold      |oa journal (via publisher name)                          |component       |        2|
-|gold      |open (via page says license)                             |journal-article |        2|
-|bronze    |open (via free pdf)                                      |journal-article |        1|
-|gold      |oa journal (via doaj)                                    |journal-article |        1|
-|gold      |open (via free pdf)                                      |journal-article |        1|
-|green     |oa repository (via OAI-PMH title and first author match) |journal-article |        1|
-|green     |oa repository (via OAI-PMH title match)                  |posted-content  |        1|
-|hybrid    |open (via page says license)                             |journal-article |        1|
+|oa_status |evidence                                                 |genre               | Articles|
+|:---------|:--------------------------------------------------------|:-------------------|--------:|
+|bronze    |open (via free pdf)                                      |journal-article     |        7|
+|gold      |open (via free pdf)                                      |journal-article     |        4|
+|gold      |oa journal (via publisher name)                          |component           |        2|
+|bronze    |open (via free pdf)                                      |book-chapter        |        1|
+|bronze    |open (via free pdf)                                      |proceedings-article |        1|
+|gold      |oa journal (via doaj)                                    |journal-article     |        1|
+|green     |oa repository (semantic scholar lookup)                  |book-chapter        |        1|
+|green     |oa repository (via free pdf)                             |posted-content      |        1|
+|green     |oa repository (via OAI-PMH doi match)                    |journal-article     |        1|
+|green     |oa repository (via OAI-PMH title and first author match) |journal-article     |        1|
+|hybrid    |open (via page says license)                             |book-chapter        |        1|
 
 #### More examples
 

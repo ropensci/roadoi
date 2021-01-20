@@ -103,7 +103,7 @@ There are no API restrictions. However, Unpaywall requires an email address when
 
 ```
 roadoi_email = "najko.jahn@gmail.com"
-```.
+```
 
 You can open your `.Renviron` file calling 
 
