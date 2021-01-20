@@ -37,6 +37,10 @@
 #'  over AcceptedVersion), then more authoritative  repositories (PubMed Central
 #'  over CiteSeerX). \cr
 #'  \code{oa_locations}     \tab list-column of all the OA locations. \cr
+#'  \code{oa_locations_embargoed}  \tab list-column of
+#'  locations expected to be available in the future based on
+#'   information like license metadata and journals'
+#'   delayed OA policies
 #'  \code{data_standard}    \tab Indicates the data collection approaches used
 #'  for this resource. \code{1} mostly uses Crossref for hybrid detection.
 #'  \code{2} uses a more comprehensive hybrid detection methods. \cr
@@ -206,6 +210,7 @@ parse_oadoi <- function(req) {
     doi = req$doi,
     best_oa_location = list(oa_lct_parser(req$best_oa_location)),
     oa_locations = list(tibble::as_tibble(req$oa_locations)),
+    oa_locations_embargoed = list(tibble::as_tibble(req$oa_locations_embargoed)),
     data_standard = req$data_standard,
     is_oa = req$is_oa,
     is_paratext = req$is_paratext,

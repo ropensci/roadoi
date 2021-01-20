@@ -184,9 +184,9 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
   dplyr::group_by(hostname) %>%
   dplyr::summarize(hosts = n())
 #> Error: Names must be unique.
-#> [31mx[39m These names are duplicated:
+#> [31mx[39m These names are duplicated:
 #>   * "updated" at locations 10 and 28.
-#> [34mℹ[39m Use argument `names_repair` to specify repair strategy.
+#> [34mℹ[39m Use argument `names_repair` to specify repair strategy.
 ```
 
 
@@ -218,7 +218,13 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
                     email = "najko.jahn@gmail.com", 
                     .progress = "text")
-#>   |                                                                                     |                                                                             |   0%  |                                                                                     |======================================                                       |  50%  |                                                                                     |=============================================================================| 100%
+#> 
+  |                                                                                   
+  |                                                                             |   0%
+  |                                                                                   
+  |======================================                                       |  50%
+  |                                                                                   
+  |=============================================================================| 100%
 #> # A tibble: 2 x 18
 #>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
 #>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
