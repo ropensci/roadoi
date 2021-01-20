@@ -231,14 +231,16 @@ An increasing number of universities, research organisations and funders have la
 
 #### Gathering DOIs representing scholarly publications
 
-DOIs have become essential for referencing scholarly publications, and thus many digital libraries and institutional databases keep track of these persistent identifiers. For the sake of this vignette, instead of starting with a pre-defined set of publications originating from these sources, we simply generate a random sample of 50 DOIs registered with Crossref by using the [rcrossref package](https://github.com/ropensci/rcrossref).
+DOIs have become essential for referencing scholarly publications, and thus many digital libraries and institutional databases keep track of these persistent identifiers. For the sake of this vignette, instead of starting with a pre-defined set of publications originating from these sources, we simply generate a random sample of 50 articles published in the Journal of the Association for Information Science and Technology from Crossref with the [rcrossref package](https://github.com/ropensci/rcrossref).
 
 
 ```r
 library(dplyr)
 library(rcrossref)
 # get a random sample of DOIs and metadata describing these works
-random_dois <- rcrossref::cr_r(sample = 50)
+random_dois <- rcrossref::cr_r(filter = list(
+  issn = "2330-1643", type = "journal-article"
+  ), sample = 50)
 ```
 
 #### Calling Unpaywall
@@ -262,15 +264,15 @@ oa_df
 #>    doi   best_oa_location oa_locations oa_locations_em… data_standard is_oa
 #>    <chr> <list>           <list>       <list>                   <int> <lgl>
 #>  1 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
-#>  2 10.1… <tibble [1 × 8]> <tibble [1 … <tibble [0 × 0]>             2 TRUE 
+#>  2 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
 #>  3 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
 #>  4 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
-#>  5 10.7… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  5 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
 #>  6 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
 #>  7 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
-#>  8 10.1… <tibble [1 × 8]> <tibble [1 … <tibble [0 × 0]>             2 TRUE 
-#>  9 10.1… <tibble [1 × 9]> <tibble [1 … <tibble [0 × 0]>             2 TRUE 
-#> 10 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  8 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  9 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#> 10 10.1… <tibble [1 × 8]> <tibble [1 … <tibble [0 × 0]>             2 TRUE 
 #> # … with 40 more rows, and 15 more variables: is_paratext <lgl>, genre <chr>,
 #> #   oa_status <chr>, has_repository_copy <lgl>, journal_is_oa <lgl>,
 #> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
@@ -290,31 +292,33 @@ oa_df %>%
 #> # A tibble: 2 x 3
 #>   is_oa Articles Proportion
 #>   <lgl>    <int>      <dbl>
-#> 1 FALSE       38       0.76
-#> 2 TRUE        12       0.24
+#> 1 FALSE       30        0.6
+#> 2 TRUE        20        0.4
 ```
 
-How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
+How did Unpaywall find those Open Access full-texts, and which were characterized as best matches?
 
 
 ```r
 oa_df %>%
   filter(is_oa == TRUE) %>%
-  select(best_oa_location, oa_status, genre) %>%
-  tidyr::unnest(best_oa_location) %>% 
-  group_by(oa_status, evidence, genre) %>%
+  tidyr::unnest(oa_locations) %>% 
+  group_by(oa_status, evidence, is_best) %>%
   summarise(Articles = n()) %>%
   arrange(desc(Articles))
-#> # A tibble: 6 x 4
-#> # Groups:   oa_status, evidence [5]
-#>   oa_status evidence                                genre           Articles
-#>   <chr>     <chr>                                   <chr>              <int>
-#> 1 bronze    open (via free pdf)                     journal-article        6
-#> 2 gold      open (via page says license)            journal-article        2
-#> 3 gold      oa journal (via publisher name)         component              1
-#> 4 green     oa repository (semantic scholar lookup) journal-article        1
-#> 5 green     oa repository (semantic scholar lookup) monograph              1
-#> 6 hybrid    open (via page says license)            journal-article        1
+#> # A tibble: 9 x 4
+#> # Groups:   oa_status, evidence [8]
+#>   oa_status evidence                                            is_best Articles
+#>   <chr>     <chr>                                               <lgl>      <int>
+#> 1 bronze    open (via free article)                             TRUE          11
+#> 2 green     oa repository (via OAI-PMH title and first author … TRUE           4
+#> 3 green     oa repository (via OAI-PMH doi match)               TRUE           2
+#> 4 hybrid    open (via crossref license)                         FALSE          2
+#> 5 hybrid    open (via page says license)                        TRUE           2
+#> 6 green     oa repository (via OAI-PMH doi match)               FALSE          1
+#> 7 hybrid    oa repository (via OAI-PMH doi match)               FALSE          1
+#> 8 hybrid    oa repository (via OAI-PMH title and first author … FALSE          1
+#> 9 hybrid    open (via crossref license, author manuscript)      TRUE           1
 ```
 
 #### More examples

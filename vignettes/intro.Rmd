@@ -132,13 +132,15 @@ An increasing number of universities, research organisations and funders have la
 
 #### Gathering DOIs representing scholarly publications
 
-DOIs have become essential for referencing scholarly publications, and thus many digital libraries and institutional databases keep track of these persistent identifiers. For the sake of this vignette, instead of starting with a pre-defined set of publications originating from these sources, we simply generate a random sample of 50 DOIs registered with Crossref by using the [rcrossref package](https://github.com/ropensci/rcrossref).
+DOIs have become essential for referencing scholarly publications, and thus many digital libraries and institutional databases keep track of these persistent identifiers. For the sake of this vignette, instead of starting with a pre-defined set of publications originating from these sources, we simply generate a random sample of 50 articles published in the Journal of the Association for Information Science and Technology from Crossref with the [rcrossref package](https://github.com/ropensci/rcrossref).
 
 ```{r, message=FALSE}
 library(dplyr)
 library(rcrossref)
 # get a random sample of DOIs and metadata describing these works
-random_dois <- rcrossref::cr_r(sample = 50)
+random_dois <- rcrossref::cr_r(filter = list(
+  issn = "2330-1643", type = "journal-article"
+  ), sample = 50)
 ```
 
 #### Calling Unpaywall
@@ -168,14 +170,13 @@ oa_df %>%
   arrange(desc(Articles))
 ```
 
-How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
+How did Unpaywall find those Open Access full-texts, and which were characterized as best matches?
 
 ```{r}
 oa_df %>%
   filter(is_oa == TRUE) %>%
-  select(best_oa_location, oa_status, genre) %>%
-  tidyr::unnest(best_oa_location) %>% 
-  group_by(oa_status, evidence, genre) %>%
+  tidyr::unnest(oa_locations) %>% 
+  group_by(oa_status, evidence, is_best) %>%
   summarise(Articles = n()) %>%
   arrange(desc(Articles))
 ```
