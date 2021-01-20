@@ -30,15 +30,16 @@ information and full-text links from Unpaywall.
 ```r
 roadoi::oadoi_fetch(dois = c("10.1038/ng.3260", "10.1093/nar/gkr1047"), 
                     email = "najko.jahn@gmail.com")
-#> # A tibble: 2 x 18
-#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
-#> 1 10.1… <tibble [1 × 11… <tibble [0 …             2 TRUE  jour… green    
-#> 2 10.1… <tibble [1 × 10… <tibble [0 …             2 TRUE  jour… gold     
-#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
-#> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>,
-#> #   updated <chr>, authors <list>
+#> # A tibble: 2 x 21
+#>   doi   best_oa_location oa_locations oa_locations_em… data_standard is_oa
+#>   <chr> <list>           <list>       <list>                   <int> <lgl>
+#> 1 10.1… <tibble [1 × 11… <tibble [1 … <tibble [0 × 0]>             2 TRUE 
+#> 2 10.1… <tibble [1 × 10… <tibble [7 … <tibble [0 × 0]>             2 TRUE 
+#> # … with 15 more variables: is_paratext <lgl>, genre <chr>, oa_status <chr>,
+#> #   has_repository_copy <lgl>, journal_is_oa <lgl>, journal_is_in_doaj <lgl>,
+#> #   journal_issns <chr>, journal_issn_l <chr>, journal_name <chr>,
+#> #   publisher <chr>, published_date <chr>, year <chr>, title <chr>,
+#> #   updated_resource <chr>, authors <list>
 ```
 
 There are no API restrictions. However, providing an email address is required and a rate limit of 100k is suggested. If you need to access more data, use the [data dump](https://unpaywall.org/products/snapshot) instead.
@@ -95,15 +96,16 @@ library(roadoi)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"), 
                     email = "najko.jahn@gmail.com")
-#> # A tibble: 2 x 18
-#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
-#> 1 10.1… <tibble [1 × 10… <tibble [0 …             2 TRUE  jour… gold     
-#> 2 10.1… <tibble [1 × 10… <tibble [0 …             2 TRUE  jour… hybrid   
-#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
-#> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>,
-#> #   updated <chr>, authors <list>
+#> # A tibble: 2 x 21
+#>   doi   best_oa_location oa_locations oa_locations_em… data_standard is_oa
+#>   <chr> <list>           <list>       <list>                   <int> <lgl>
+#> 1 10.1… <tibble [1 × 10… <tibble [6 … <tibble [0 × 0]>             2 TRUE 
+#> 2 10.1… <tibble [1 × 10… <tibble [2 … <tibble [0 × 0]>             2 TRUE 
+#> # … with 15 more variables: is_paratext <lgl>, genre <chr>, oa_status <chr>,
+#> #   has_repository_copy <lgl>, journal_is_oa <lgl>, journal_is_in_doaj <lgl>,
+#> #   journal_issns <chr>, journal_issn_l <chr>, journal_name <chr>,
+#> #   publisher <chr>, published_date <chr>, year <chr>, title <chr>,
+#> #   updated_resource <chr>, authors <list>
 ```
 
 #### What's returned?
@@ -152,22 +154,6 @@ The columns  `best_oa_location` and  `oa_locations` are list-columns that contai
 `url_for_pdf`|The URL with a PDF version of this OA copy.
 `versions`|The content version accessible at this location following the DRIVER 2.0 Guidelines  (<https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings>)
 
-
-
-#'  \code{is_best}         \tab Is this location the \code{best_oa_location} for its resource? \cr
-#'  \code{license}         \tab The license under which this copy is published,
-#'   e.g. Creative Commons license. \cr
-#'  \code{pmh_id}          \tab OAI-PMH endpoint where we found this location. \cr
-#'  \code{repository institution} \tab Hosting institution of the repository. \cr
-#'  \code{updated}         \tab Time when the data for this location was last updated. \cr
-#'  \code{url}             \tab The \code{url_for_pdf} if there is one; otherwise landing page URL. \cr
-#'  \code{url_for_landing_page} \tab The URL for a landing page describing this OA copy. \cr
-#'  \code{url_for_pdf}     \tab The URL with a PDF version of this OA copy. \cr
-#'  \code{version}        \tab The content version accessible at this location
-#'   following the DRIVER 2.0 Guidelines
-#'  (\url{https://wiki.surfnet.nl/display/DRIVERguidelines/DRIVER-VERSION+Mappings}
-#'  \cr
-
 The Unpaywall schema is also described here: <https://unpaywall.org/data-format>.
 
 The columns  `best_oa_location`. `oa_locations` and `oa_locations_embargoed` are list-columns that contain useful metadata about the OA sources found by Unpaywall. 
@@ -184,7 +170,17 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1093/bioinformatics/btw541"), 
                     email = "najko.jahn@gmail.com", .flatten = TRUE) %>%
   dplyr::count(is_oa, evidence, is_best) 
-#> Error in roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9", "10.1103/physreve.88.012814", : unbenutztes Argument (.flatten = TRUE)
+#> # A tibble: 8 x 4
+#>   is_oa evidence                                       is_best     n
+#>   <lgl> <chr>                                          <lgl>   <int>
+#> 1 FALSE <NA>                                           NA          1
+#> 2 TRUE  oa journal (via doaj)                          FALSE       1
+#> 3 TRUE  oa repository (semantic scholar lookup)        FALSE       1
+#> 4 TRUE  oa repository (via OAI-PMH doi match)          FALSE       7
+#> 5 TRUE  oa repository (via page says license)          TRUE        1
+#> 6 TRUE  oa repository (via pmcid lookup)               FALSE       2
+#> 7 TRUE  open (via crossref license, author manuscript) TRUE        1
+#> 8 TRUE  open (via page says license)                   TRUE        2
 ```
 
 
@@ -215,15 +211,16 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                     email = "najko.jahn@gmail.com", 
                     .progress = "text")
 #>   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%
-#> # A tibble: 2 x 18
-#>   doi   best_oa_location oa_locations data_standard is_oa genre oa_status
-#>   <chr> <list>           <list>               <int> <lgl> <chr> <chr>    
-#> 1 10.1… <tibble [1 × 10… <tibble [0 …             2 TRUE  jour… gold     
-#> 2 10.1… <tibble [1 × 10… <tibble [0 …             2 TRUE  jour… hybrid   
-#> # … with 11 more variables: has_repository_copy <lgl>, journal_is_oa <lgl>,
-#> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
-#> #   journal_name <chr>, publisher <chr>, title <chr>, year <chr>,
-#> #   updated <chr>, authors <list>
+#> # A tibble: 2 x 21
+#>   doi   best_oa_location oa_locations oa_locations_em… data_standard is_oa
+#>   <chr> <list>           <list>       <list>                   <int> <lgl>
+#> 1 10.1… <tibble [1 × 10… <tibble [6 … <tibble [0 × 0]>             2 TRUE 
+#> 2 10.1… <tibble [1 × 10… <tibble [2 … <tibble [0 × 0]>             2 TRUE 
+#> # … with 15 more variables: is_paratext <lgl>, genre <chr>, oa_status <chr>,
+#> #   has_repository_copy <lgl>, journal_is_oa <lgl>, journal_is_in_doaj <lgl>,
+#> #   journal_issns <chr>, journal_issn_l <chr>, journal_name <chr>,
+#> #   publisher <chr>, published_date <chr>, year <chr>, title <chr>,
+#> #   updated_resource <chr>, authors <list>
 ```
 
 
@@ -274,8 +271,8 @@ oa_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       36|       0.72|
-|TRUE  |       14|       0.28|
+|FALSE |       35|        0.7|
+|TRUE  |       15|        0.3|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -294,19 +291,17 @@ oa_df %>%
 
 
 
-|oa_status |evidence                                |genre               | Articles|
-|:---------|:---------------------------------------|:-------------------|--------:|
-|gold      |open (via page says license)            |journal-article     |        3|
-|green     |oa repository (via OAI-PMH doi match)   |journal-article     |        2|
-|bronze    |open (via free article)                 |journal-article     |        1|
-|bronze    |open (via free pdf)                     |journal-article     |        1|
-|bronze    |open (via free pdf)                     |proceedings-article |        1|
-|gold      |oa journal (via doaj)                   |journal-article     |        1|
-|gold      |oa journal (via observed oa rate)       |journal-article     |        1|
-|gold      |open (via free pdf)                     |journal-article     |        1|
-|green     |oa repository (semantic scholar lookup) |journal-article     |        1|
-|green     |oa repository (via OAI-PMH doi match)   |report              |        1|
-|green     |oa repository (via OAI-PMH title match) |book                |        1|
+|oa_status |evidence                              |genre               | Articles|
+|:---------|:-------------------------------------|:-------------------|--------:|
+|bronze    |open (via free pdf)                   |journal-article     |        4|
+|green     |oa repository (via OAI-PMH doi match) |journal-article     |        3|
+|gold      |oa journal (via publisher name)       |component           |        2|
+|bronze    |open (via free pdf)                   |component           |        1|
+|gold      |oa journal (via doaj)                 |journal-article     |        1|
+|gold      |open (via free pdf)                   |journal-article     |        1|
+|gold      |open (via page says license)          |journal-article     |        1|
+|hybrid    |open (via page says license)          |component           |        1|
+|hybrid    |open (via page says license)          |proceedings-article |        1|
 
 #### More examples
 
