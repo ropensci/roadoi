@@ -7,8 +7,8 @@
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/ropensci/roadoi?branch=master&svg=true)](https://ci.appveyor.com/project/ropensci/roadoi)
 [![codecov.io](https://codecov.io/github/ropensci/roadoi/coverage.svg?branch=master)](https://codecov.io/github/ropensci/roadoi?branch=master)
 [![cran version](http://www.r-pkg.org/badges/version/roadoi)](https://cran.r-project.org/package=roadoi)
-[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/roadoi)](https://github.com/metacran/cranlogs.app)
-[![review](https://badges.ropensci.org/115_status.svg)](https://github.com/ropensci/onboarding/issues/115)
+[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/roadoi)](https://github.com/r-hub/cranlogs.app)
+[![review](https://badges.ropensci.org/115_status.svg)](https://github.com/ropensci/software-review/issues/115)
 
 
 
@@ -80,7 +80,7 @@ Open access copies of scholarly publications are sometimes hard to find. Some ar
 
 Unpaywall uses different data sources to find open access full-texts including:
 
-- [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
+- [Crossref](https://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
 - Various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories such as arXiv and PubMed Central.
 
@@ -271,8 +271,8 @@ oa_df %>%
 
 |is_oa | Articles| Proportion|
 |:-----|--------:|----------:|
-|FALSE |       29|       0.58|
-|TRUE  |       21|       0.42|
+|FALSE |       31|       0.62|
+|TRUE  |       19|       0.38|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
@@ -293,17 +293,15 @@ oa_df %>%
 
 |oa_status |evidence                                                 |genre               | Articles|
 |:---------|:--------------------------------------------------------|:-------------------|--------:|
-|bronze    |open (via free pdf)                                      |journal-article     |        7|
-|gold      |open (via free pdf)                                      |journal-article     |        4|
+|bronze    |open (via free pdf)                                      |journal-article     |        5|
 |gold      |oa journal (via publisher name)                          |component           |        2|
-|bronze    |open (via free pdf)                                      |book-chapter        |        1|
-|bronze    |open (via free pdf)                                      |proceedings-article |        1|
-|gold      |oa journal (via doaj)                                    |journal-article     |        1|
-|green     |oa repository (semantic scholar lookup)                  |book-chapter        |        1|
-|green     |oa repository (via free pdf)                             |posted-content      |        1|
-|green     |oa repository (via OAI-PMH doi match)                    |journal-article     |        1|
-|green     |oa repository (via OAI-PMH title and first author match) |journal-article     |        1|
-|hybrid    |open (via page says license)                             |book-chapter        |        1|
+|gold      |open (via page says license)                             |journal-article     |        2|
+|green     |oa repository (via OAI-PMH doi match)                    |journal-article     |        2|
+|green     |oa repository (via OAI-PMH title and first author match) |journal-article     |        2|
+|hybrid    |open (via free pdf)                                      |journal-article     |        2|
+|hybrid    |open (via page says license)                             |journal-article     |        2|
+|green     |oa repository (semantic scholar lookup)                  |journal-article     |        1|
+|green     |oa repository (semantic scholar lookup)                  |proceedings-article |        1|
 
 #### More examples
 

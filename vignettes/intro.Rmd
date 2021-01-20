@@ -16,7 +16,7 @@ Open access copies of scholarly publications are sometimes hard to find. Some ar
 
 Unpaywall uses different data sources to find open access full-texts including:
 
-- [Crossref](http://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
+- [Crossref](https://www.crossref.org/): a DOI registration agency serving major scholarly publishers.
 - [Directory of Open Access Journals (DOAJ)](https://doaj.org/): a registry of open access journals
 - Various OAI-PMH metadata sources. OAI-PMH is a protocol often used by open access journals and repositories such as arXiv and PubMed Central.
 
