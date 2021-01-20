@@ -23,6 +23,9 @@ test_that("oadoi_fetch returns", {
   k <- oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                             "10.1103/physreve.88.012814",
                             "10.1093/reseval/rvaa038"), email, .flatten = TRUE)
+  # embargoed
+  i <- oadoi_fetch("10.1016/j.cell.2020.12.033", email)
+
 
 
   # correct classes
@@ -39,6 +42,8 @@ test_that("oadoi_fetch returns", {
   expect_is(j, "tbl_df")
   expect_type(k$is_oa, "logical")
   expect_type(k$is_best, "logical")
+  expect_is(i$oa_locations_embargoed, "list")
+
 
 
   # some character matches
@@ -58,7 +63,7 @@ test_that("oadoi_fetch returns", {
   expect_equal(nrow(d), 2)
   expect_equal(nrow(e), 1)
   expect_equal(nrow(g), 1)
-  expect_equal(ncol(e), 20)
+  expect_equal(ncol(e), 21)
   expect_equal(ncol(k), 30)
 
 

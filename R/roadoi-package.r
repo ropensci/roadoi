@@ -26,6 +26,7 @@
 #' @importFrom purrr map map_if compact
 #' @importFrom tibble tibble as_tibble
 #' @importFrom tidyr unnest
+#' @importFrom rlang .data
 #' @name roadoi-package
 #' @aliases roadoi
 #' @docType package
