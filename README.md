@@ -253,7 +253,6 @@ oa_df <- roadoi::oadoi_fetch(random_dois,
 
 #### Analysis
 
-<<<<<<< HEAD
 roadoi returns the data in a consistent structure improved for further analysis in R. 
 
 
@@ -263,14 +262,14 @@ oa_df
 #>    doi   best_oa_location oa_locations oa_locations_em… data_standard is_oa
 #>    <chr> <list>           <list>       <list>                   <int> <lgl>
 #>  1 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
-#>  2 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
-#>  3 10.1… <tibble [1 × 9]> <tibble [2 … <tibble [0 × 0]>             2 TRUE 
+#>  2 10.1… <tibble [1 × 8]> <tibble [1 … <tibble [0 × 0]>             2 TRUE 
+#>  3 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
 #>  4 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
-#>  5 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  5 10.7… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
 #>  6 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
 #>  7 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
-#>  8 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
-#>  9 10.3… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  8 10.1… <tibble [1 × 8]> <tibble [1 … <tibble [0 × 0]>             2 TRUE 
+#>  9 10.1… <tibble [1 × 9]> <tibble [1 … <tibble [0 × 0]>             2 TRUE 
 #> 10 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
 #> # … with 40 more rows, and 15 more variables: is_paratext <lgl>, genre <chr>,
 #> #   oa_status <chr>, has_repository_copy <lgl>, journal_is_oa <lgl>,
@@ -283,23 +282,16 @@ For example, to determine how many full-text links were found and which sources 
 
 
 ```r
-=======
-roadoi returns the data in a consistent structure improved for further analysis in R. For example, to determine how many full-text links were found and which sources were used:
-#> Error: <text>:1:1: Unerwartete(s) '=='
-#> 1: ==
-#>     ^
-```
-
-```r
->>>>>>> 70e7915333d1bc2b210427025ce2d0709f7fd739
 oa_df %>%
   group_by(is_oa) %>%
   summarise(Articles = n()) %>%
   mutate(Proportion = Articles / sum(Articles)) %>%
   arrange(desc(Articles))
-#> Error: <text>:1:1: Unerwartete(s) '>'
-#> 1: >
-#>     ^
+#> # A tibble: 2 x 3
+#>   is_oa Articles Proportion
+#>   <lgl>    <int>      <dbl>
+#> 1 FALSE       38       0.76
+#> 2 TRUE        12       0.24
 ```
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
@@ -313,19 +305,16 @@ oa_df %>%
   group_by(oa_status, evidence, genre) %>%
   summarise(Articles = n()) %>%
   arrange(desc(Articles))
-#> # A tibble: 9 x 4
-#> # Groups:   oa_status, evidence [9]
+#> # A tibble: 6 x 4
+#> # Groups:   oa_status, evidence [5]
 #>   oa_status evidence                                genre           Articles
 #>   <chr>     <chr>                                   <chr>              <int>
-#> 1 gold      open (via page says license)            journal-article        4
-#> 2 bronze    open (via free pdf)                     journal-article        2
-#> 3 green     oa repository (via OAI-PMH doi match)   journal-article        2
-#> 4 hybrid    open (via crossref license)             journal-article        2
-#> 5 gold      oa journal (via observed oa rate)       journal-article        1
-#> 6 gold      oa journal (via publisher name)         component              1
-#> 7 gold      open (via free pdf)                     journal-article        1
-#> 8 green     oa repository (semantic scholar lookup) book                   1
-#> 9 hybrid    open (via page says license)            journal-article        1
+#> 1 bronze    open (via free pdf)                     journal-article        6
+#> 2 gold      open (via page says license)            journal-article        2
+#> 3 gold      oa journal (via publisher name)         component              1
+#> 4 green     oa repository (semantic scholar lookup) journal-article        1
+#> 5 green     oa repository (semantic scholar lookup) monograph              1
+#> 6 hybrid    open (via page says license)            journal-article        1
 ```
 
 #### More examples

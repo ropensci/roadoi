@@ -152,7 +152,6 @@ oa_df <- roadoi::oadoi_fetch(random_dois,
 
 #### Analysis
 
-<<<<<<< HEAD
 roadoi returns the data in a consistent structure improved for further analysis in R. 
 
 ```{r}
@@ -162,11 +161,6 @@ oa_df
 For example, to determine how many full-text links were found and which sources were used:
 
 ```{r}
-=======
-roadoi returns the data in a consistent structure improved for further analysis in R. For example, to determine how many full-text links were found and which sources were used:
-
-```{r}
->>>>>>> 70e7915333d1bc2b210427025ce2d0709f7fd739
 oa_df %>%
   group_by(is_oa) %>%
   summarise(Articles = n()) %>%
