@@ -19,13 +19,13 @@ knitr::opts_chunk$set(
 
 
 
-roadoi interacts with the [Unpaywall API](http://unpaywall.org/products/api), 
+roadoi interacts with the [Unpaywall API](https://unpaywall.org/products/api), 
 a simple web-interface which links DOIs and open access versions of scholarly works. 
-The API powers [Unpaywall](http://unpaywall.org/).
+The API powers [Unpaywall](https://unpaywall.org/).
 
 This client supports the most recent API Version 2.
 
-API Documentation: <http://unpaywall.org/products/api>
+API Documentation: <https://unpaywall.org/products/api>
 
 ## How do I use it? 
 

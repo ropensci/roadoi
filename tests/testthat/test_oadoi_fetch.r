@@ -19,6 +19,13 @@ test_that("oadoi_fetch returns", {
   i <- oadoi_fetch("10.1016/j.aim.2009.06.008", email = "NajkO@GMx.de")
   #paratext
   j <- oadoi_fetch("10.1002/bip.21378", email)
+  # flatten
+  k <- oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                            "10.1103/physreve.88.012814",
+                            "10.1093/reseval/rvaa038"), email, .flatten = TRUE)
+  # embargoed
+  i <- oadoi_fetch("10.1016/j.cell.2020.12.033", email)
+
 
 
   # correct classes
@@ -32,6 +39,12 @@ test_that("oadoi_fetch returns", {
   expect_is(h, "tbl_df")
   expect_is(i, "tbl_df")
   expect_is(j, "tbl_df")
+  expect_is(j, "tbl_df")
+  expect_type(k$is_oa, "logical")
+  expect_type(k$is_best, "logical")
+  expect_is(i$oa_locations_embargoed, "list")
+
+
 
   # some character matches
   expect_match(h$oa_status, "closed")
@@ -50,12 +63,13 @@ test_that("oadoi_fetch returns", {
   expect_equal(nrow(d), 2)
   expect_equal(nrow(e), 1)
   expect_equal(nrow(g), 1)
-  expect_equal(ncol(e), 20)
+  expect_equal(ncol(e), 21)
+  expect_equal(ncol(k), 30)
 
 
 
   # wrong DOI
-  expect_error(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260"), email))
+  expect_warning(oadoi_fetch(dois = c("ldld", "10.1038/ng.3260"), email))
   # wrong .progress value
   expect_warning(oadoi_fetch("10.1038/ng.3260", email, .progress = "TEXT"))
   # empty character

@@ -7,7 +7,8 @@
 oadoi_fetch(
   dois = NULL,
   email = Sys.getenv("roadoi_email"),
-  .progress = "none"
+  .progress = "none",
+  .flatten = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,13 @@ when using rcrossref, delete it from your `.Renviron` file.}
 Options are "none", "text", "tk", "win", and "time".
 See \code{\link[plyr]{create_progress_bar}} for details
 of each. By default, no progress bar is displayed.}
+
+\item{.flatten}{Simplify open access evidence output. If `TRUE` it
+transforms the nested column oa_locations so that each open access
+evidence variable has its own column and each row represents a
+single full-text.
+Following these basic principles of "Tidy Data" makes data analysis
+and export as a spreadsheet more straightforward.}
 }
 \value{
 The result is a tibble with each row representing a publication.
@@ -44,6 +52,10 @@ The result is a tibble with each row representing a publication.
  over AcceptedVersion), then more authoritative  repositories (PubMed Central
  over CiteSeerX). \cr
  \code{oa_locations}     \tab list-column of all the OA locations. \cr
+ \code{oa_locations_embargoed}  \tab list-column of
+ locations expected to be available in the future based on
+  information like license metadata and journals'
+  delayed OA policies \cr
  \code{data_standard}    \tab Indicates the data collection approaches used
  for this resource. \code{1} mostly uses Crossref for hybrid detection.
  \code{2} uses a more comprehensive hybrid detection methods. \cr
@@ -75,9 +87,13 @@ The result is a tibble with each row representing a publication.
  name and author role \code{sequence}), if available. \cr
 }
 
-The columns  \code{best_oa_location} and \code{oa_locations}
-are list-columns that contain useful metadata about the OA sources
-found by Unpaywall. The \code{best_oa_location} only lists non-empty subfields.
+The columns  \code{best_oa_location}. \code{oa_locations} and 
+\code{oa_locations_embargoed} are list-columns that contain 
+useful metadata about the OA sources found by Unpaywall. 
+
+If \code{.flatten = TRUE} the list-column \code{oa_locations} will be
+restructured in a long format where each OA fulltext is represented by
+one row.
 
 These are:
 
@@ -102,9 +118,6 @@ These are:
  \cr
 }
 
-To unnest list-columns, you want to use tidyr's unnest function
-\code{\link[tidyr]{unnest}}.
-
 Note that Unpaywall schema is only informally described.
 Check also \url{https://unpaywall.org/data-format}.
 }
@@ -120,6 +133,12 @@ For more info see \url{https://unpaywall.org/products/snapshot}.
 oadoi_fetch("10.1038/nature12373", email = "name@example.com")
 oadoi_fetch(dois = c("10.1016/j.jbiotec.2010.07.030",
 "10.1186/1471-2164-11-245"), email = "name@example.com")
+# flatten OA evidence
+roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
+                            "10.1103/physreve.88.012814",
+                            "10.1093/reseval/rvaa038"),
+                   email = "najko.jahn@gmail.com", .flatten = TRUE)
+
 }
 
 }

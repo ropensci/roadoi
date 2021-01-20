@@ -1,7 +1,7 @@
 Package: roadoi
 Type: Package
 Title: Find Free Versions of Scholarly Publications via Unpaywall
-Version: 0.6.09
+Version: 0.7
 Authors@R: c(
     person("Najko", "Jahn", role = c("aut", "cre"), email = "najko.jahn@gmail.com"),
     person("Tuija", "Sonkkila", role = c("rev"), comment = c("Tuija Sonkkila 
@@ -9,7 +9,9 @@ Authors@R: c(
     see https://github.com/ropensci/onboarding/issues/115", ORCID = "0000-0002-6892-9305")),
     person("Ross Mounce", role = c("rev"), comment = c("Ross Mounce
     reviewed the package for rOpenSci, 
-    see https://github.com/ropensci/onboarding/issues/115", ORCID =  "0000-0002-3520-2046"))
+    see https://github.com/ropensci/onboarding/issues/115", ORCID =  "0000-0002-3520-2046")),
+    person("Anne", "Hobert", role = c("ctb"),  comment = c(ORCID = "0000-0003-2429-2995")),
+    person("Delwen", "Franzen", role = c("ctb"))
     )
 Description: This web client interfaces Unpaywall <https://unpaywall.org/products/api>, formerly
     oaDOI, a service finding free full-texts of academic papers by linking DOIs with 
@@ -29,7 +31,8 @@ Imports:
     tibble,
     miniUI,
     shiny (>= 1.0.3),
-    tidyr
+    tidyr,
+    rlang
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,
@@ -38,5 +41,5 @@ Suggests:
     rmarkdown,
     rcrossref,
     lintr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
