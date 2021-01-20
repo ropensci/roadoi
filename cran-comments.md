@@ -1,15 +1,16 @@
 
 ## Test environments
 
-* local OS X Mojave install, R version 3.6.1 
-* on travis Ubuntu Ubuntu 16.04.6 LTS, R version 3.6.1 
-* win-builder (R-release, R-oldrelease)
+- local Mac OS Catalina install (10.15.7), R version 4.0.2 (2020-06-22)
+- GitHub Actions: windows-latest (release), macOS-latest (release), ubuntu-20.04 (release), ubuntu-20-04 (devel)
+- Travis CI: Ubuntu 16.04.6 LTS
+- CRAN Win Builder
 
 ## R CMD check results
 
-On local machine (OS X): OK
+On local machine (Mac OS): OK
 
-win-builder (R-release, R-oldrelease): OK
+win-builder (R-release, R-oldrelease, R-devel): OK
 
 ## Reverse dependencies
 
@@ -20,7 +21,7 @@ I have run R CMD check on downstream dependencies using revdepcheck::revdep_chec
 Dear CRAN maintainers, 
 
 This submission fixes the problems shown on
-<https://cran.r-project.org/web/checks/check_results_roadoi.html>, and problems encountered in the last submission.
+<https://cran.r-project.org/web/checks/check_results_roadoi.html>, and adds new functionality.
 
 Thanks for alerting me!
 

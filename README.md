@@ -110,7 +110,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 #### What's returned?
 
-The client supports API version 2. According to the [Unpaywall Data Format](http://unpaywall.org/data-format), the following variables with the following definitions are returned:
+The client supports API version 2. According to the [Unpaywall Data Format](https://unpaywall.org/data-format), the following variables with the following definitions are returned:
 
 **Column**|**Description**
 |:------------|:----------------------------------------------
@@ -227,7 +227,7 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
 
 ### Use Case: Studying the compliance with open access policies
 
-An increasing number of universities, research organisations and funders have launched open access policies in recent years. Using roadoi together with other R-packages makes it easy to examine how and to what extent researchers comply with these policies in a reproducible and transparent manner. In particular, the [rcrossref package](https://github.com/ropensci/rcrossref), maintained by rOpenSci, provides many helpful functions for this task.
+An increasing number of universities, research organisations and funders have launched open access policies in recent years. Using roadoi together with other R-packages allows to examine how and to what extent researchers comply with these policies in a reproducible and transparent manner. In particular, the [rcrossref package](https://github.com/ropensci/rcrossref), maintained by rOpenSci, provides many helpful functions for this task.
 
 #### Gathering DOIs representing scholarly publications
 
@@ -243,7 +243,7 @@ random_dois <- rcrossref::cr_r(sample = 50)
 
 #### Calling Unpaywall
 
-Now let's call Unpaywall:
+Now let's call Unpaywall and store the results in `oa_df`:
 
 
 ```r
@@ -251,11 +251,34 @@ oa_df <- roadoi::oadoi_fetch(random_dois,
                              email = "najko.jahn@gmail.com")
 ```
 
-#### Reporting
+#### Analysis
 
-After obtaining the data, reporting with R is straightforward. You can even generate dynamic reports using [R Markdown](http://rmarkdown.rstudio.com/) and related packages, thus making your study reproducible and transparent.
+roadoi returns the data in a consistent structure improved for further analysis in R. 
 
-To display how many full-text links were found and which sources were used in a nicely formatted markdown-table using the [`knitr`](https://yihui.name/knitr/)-package:
+
+```r
+oa_df
+#> # A tibble: 50 x 21
+#>    doi   best_oa_location oa_locations oa_locations_em… data_standard is_oa
+#>    <chr> <list>           <list>       <list>                   <int> <lgl>
+#>  1 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  2 10.3… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  3 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  4 10.1… <tibble [1 × 11… <tibble [1 … <tibble [0 × 0]>             2 TRUE 
+#>  5 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  6 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  7 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#>  8 10.1… <tibble [1 × 10… <tibble [2 … <tibble [0 × 0]>             2 TRUE 
+#>  9 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#> 10 10.1… <tibble [0 × 0]> <tibble [0 … <tibble [0 × 0]>             2 FALSE
+#> # … with 40 more rows, and 15 more variables: is_paratext <lgl>, genre <chr>,
+#> #   oa_status <chr>, has_repository_copy <lgl>, journal_is_oa <lgl>,
+#> #   journal_is_in_doaj <lgl>, journal_issns <chr>, journal_issn_l <chr>,
+#> #   journal_name <chr>, publisher <chr>, published_date <chr>, year <chr>,
+#> #   title <chr>, updated_resource <chr>, authors <list>
+```
+
+For example, to determine how many full-text links were found and which sources were used:
 
 
 ```r
@@ -263,45 +286,39 @@ oa_df %>%
   group_by(is_oa) %>%
   summarise(Articles = n()) %>%
   mutate(Proportion = Articles / sum(Articles)) %>%
-  arrange(desc(Articles)) %>%
-  knitr::kable()
+  arrange(desc(Articles))
+#> # A tibble: 2 x 3
+#>   is_oa Articles Proportion
+#>   <lgl>    <int>      <dbl>
+#> 1 FALSE       37       0.74
+#> 2 TRUE        13       0.26
 ```
-
-
-
-|is_oa | Articles| Proportion|
-|:-----|--------:|----------:|
-|FALSE |       31|       0.62|
-|TRUE  |       19|       0.38|
 
 How did Unpaywall find those Open Access full-texts, which were characterized as best matches, and how are these OA types distributed over publication types?
 
 
 ```r
-if(!is.null(oa_df))
 oa_df %>%
   filter(is_oa == TRUE) %>%
   select(best_oa_location, oa_status, genre) %>%
   tidyr::unnest(best_oa_location) %>% 
   group_by(oa_status, evidence, genre) %>%
   summarise(Articles = n()) %>%
-  arrange(desc(Articles)) %>%
-  knitr::kable()
+  arrange(desc(Articles))
+#> # A tibble: 9 x 4
+#> # Groups:   oa_status, evidence [7]
+#>   oa_status evidence                                       genre        Articles
+#>   <chr>     <chr>                                          <chr>           <int>
+#> 1 green     oa repository (via OAI-PMH doi match)          journal-art…        3
+#> 2 bronze    open (via free pdf)                            journal-art…        2
+#> 3 gold      open (via page says license)                   journal-art…        2
+#> 4 gold      oa journal (via doaj)                          journal-art…        1
+#> 5 gold      oa journal (via publisher name)                component           1
+#> 6 gold      open (via free pdf)                            journal-art…        1
+#> 7 green     oa repository (via OAI-PMH doi match)          report              1
+#> 8 green     oa repository (via OAI-PMH title and first au… journal-art…        1
+#> 9 green     oa repository (via OAI-PMH title and first au… other               1
 ```
-
-
-
-|oa_status |evidence                                                 |genre               | Articles|
-|:---------|:--------------------------------------------------------|:-------------------|--------:|
-|bronze    |open (via free pdf)                                      |journal-article     |        5|
-|gold      |oa journal (via publisher name)                          |component           |        2|
-|gold      |open (via page says license)                             |journal-article     |        2|
-|green     |oa repository (via OAI-PMH doi match)                    |journal-article     |        2|
-|green     |oa repository (via OAI-PMH title and first author match) |journal-article     |        2|
-|hybrid    |open (via free pdf)                                      |journal-article     |        2|
-|hybrid    |open (via page says license)                             |journal-article     |        2|
-|green     |oa repository (semantic scholar lookup)                  |journal-article     |        1|
-|green     |oa repository (semantic scholar lookup)                  |proceedings-article |        1|
 
 #### More examples
 
