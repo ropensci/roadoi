@@ -19,8 +19,8 @@ Description: This web client interfaces Unpaywall <https://unpaywall.org/product
     for open access full-text links including Crossref and the Directory of Open Access 
     Journals (DOAJ). API usage is free and no registration is required.
 License: MIT + file LICENSE
-URL: https://docs.ropensci.org/roadoi, https://github.com/ropensci/roadoi
-BugReports: https://github.com/ropensci/roadoi/issues
+URL: https://docs.ropensci.org/roadoi/, https://github.com/ropensci/roadoi/
+BugReports: https://github.com/ropensci/roadoi/issues/
 LazyData: TRUE
 Imports:
     httr,
