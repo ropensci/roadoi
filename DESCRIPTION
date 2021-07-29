@@ -39,7 +39,6 @@ Suggests:
     knitr,
     covr,
     rmarkdown,
-    rcrossref,
     lintr
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
