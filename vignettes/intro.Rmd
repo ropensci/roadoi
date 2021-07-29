@@ -1,18 +1,16 @@
 ---
-title: "Introduction to roadoi"
+title: "Introduction"
 author: "Najko Jahn"
 date: "`r Sys.Date()`"
 vignette: >
-  %\VignetteIndexEntry{Introduction to roadoi}
+  %\VignetteIndexEntry{Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-Open access copies of scholarly publications are sometimes hard to find. Some are published in open access journals. Others are made freely available as preprints before publication, and others are deposited in institutional repositories, digital archives maintained by universities and research institutions. This document guides you to roadoi, a R client that makes it easy to search for these open access copies by interfacing the [ourresearch](https://ourresearch.org//) service where DOIs are matched with freely available full-texts available from open access journals and archives.
-
 ### About Unpaywall
 
-[Unpaywall](https://unpaywall.org/), developed and maintained by the [team of ourresearch](https://ourresearch.org/team/about), is a non-profit service that finds open access copies of scholarly literature simply by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
+[Unpaywall](https://unpaywall.org/), developed and maintained by the [team of OurResearch](https://ourresearch.org/team/about), is a non-profit service that finds open access copies of scholarly literature by looking up a DOI (Digital Object Identifier). It not only returns open access full-text links, but also helpful metadata about the open access status of a publication such as licensing or provenance information.
 
 Unpaywall uses different data sources to find open access full-texts including:
 
@@ -124,68 +122,6 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                     .progress = "text")
 ```
 
-
-
-### Use Case: Studying the compliance with open access policies
-
-An increasing number of universities, research organisations and funders have launched open access policies in recent years. Using roadoi together with other R-packages allows to examine how and to what extent researchers comply with these policies in a reproducible and transparent manner. In particular, the [rcrossref package](https://github.com/ropensci/rcrossref), maintained by rOpenSci, provides many helpful functions for this task.
-
-#### Gathering DOIs representing scholarly publications
-
-DOIs have become essential for referencing scholarly publications, and thus many digital libraries and institutional databases keep track of these persistent identifiers. For the sake of this vignette, instead of starting with a pre-defined set of publications originating from these sources, we simply generate a random sample of 50 articles published in the Journal of the Association for Information Science and Technology from Crossref with the [rcrossref package](https://github.com/ropensci/rcrossref).
-
-```{r, message=FALSE}
-library(dplyr)
-library(rcrossref)
-# get a random sample of DOIs and metadata describing these works
-random_dois <- rcrossref::cr_r(filter = list(
-  issn = "2330-1643", type = "journal-article"
-  ), sample = 50)
-```
-
-#### Calling Unpaywall
-
-Now let's call Unpaywall and store the results in `oa_df`:
-
-```{r}
-oa_df <- roadoi::oadoi_fetch(random_dois, 
-                             email = "najko.jahn@gmail.com")
-```
-
-#### Analysis
-
-roadoi returns the data in a consistent structure improved for further analysis in R. 
-
-```{r}
-oa_df
-```
-
-For example, to determine how many full-text links were found and which sources were used:
-
-```{r}
-oa_df %>%
-  group_by(is_oa) %>%
-  summarise(Articles = n()) %>%
-  mutate(Proportion = Articles / sum(Articles)) %>%
-  arrange(desc(Articles))
-```
-
-How did Unpaywall find those Open Access full-texts, and which were characterized as best matches?
-
-```{r}
-oa_df %>%
-  filter(is_oa == TRUE) %>%
-  tidyr::unnest(oa_locations) %>% 
-  group_by(oa_status, evidence, is_best) %>%
-  summarise(Articles = n()) %>%
-  arrange(desc(Articles))
-```
-
-#### More examples
-
-For more  examples, see Piwowar et al. 2018. Together with the article, the authors shared their analysis of Unpaywall Data as [R Markdown supplement](https://github.com/ourresearch/oadoi-paper1).
-
-This blog post describes how to analyze the Unpaywall data dump with R: <https://subugoe.github.io/scholcomm_analytics/posts/unpaywall_evidence/>
 
 ### References 
 

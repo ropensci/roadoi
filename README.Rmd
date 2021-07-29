@@ -19,9 +19,8 @@ knitr::opts_chunk$set(
 
 
 
-roadoi interacts with the [Unpaywall API](https://unpaywall.org/products/api), 
-a simple web-interface which links DOIs and open access versions of scholarly works. 
-The API powers [Unpaywall](https://unpaywall.org/).
+roadoi interacts with the [Unpaywall REST API](https://unpaywall.org/products/api), 
+an openly available web-interface which returns metadata about open access versions of scholarly works. 
 
 This client supports the most recent API Version 2.
 
@@ -62,10 +61,9 @@ devtools::install_github("ropensci/roadoi")
 library(roadoi)
 ```
 
-## Long-Form Documentation including use-case
+## Documentation
 
-```{r child="vignettes/intro.Rmd"}
-```
+See <https://docs.ropensci.org/roadoi/> to get started.
 
 ## Meta
 
