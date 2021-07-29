@@ -47,7 +47,7 @@ test_that("oadoi_fetch returns", {
 
 
   # some character matches
-  expect_match(h$oa_status, "closed")
+  expect_match(h$oa_status, "bronze")
   expect_match(h$journal_issn_l, "0001-8708")
   expect_match(a$published_date, "2016-08-09")
 
