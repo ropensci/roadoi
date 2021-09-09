@@ -183,13 +183,15 @@ oadoi_fetch <-
 #' }
 #' @export
 oadoi_fetch_ <- function(doi = NULL, email = NULL) {
+  check_wsp_dois(doi)
   u <- httr::modify_url(
     oadoi_baseurl(),
     query = list(email = email),
-    path = c(oadoi_api_version(), trimws(doi))
+    path = c(oadoi_api_version(), 
+      gsub("[[:space:]]", "", doi))
   )
   # Call Unpaywall Data API
-  resp <- httr::RETRY("GET", u, ua)
+  resp <- httr::RETRY("GET", u, ua,  httr::timeout(5))
 
   # test for valid json
   if (httr::http_type(resp) != "application/json") {
