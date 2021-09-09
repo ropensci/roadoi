@@ -45,8 +45,7 @@ email_regex <-
 #' @noRd
 check_wsp_dois <- function(x) {
   wsp_doi <- x[grepl("[[:space:]]", x)]
-  if (!is.null(wsp_doi))
+  if (length(wsp_doi != 0))
     message(
       paste("Removed white space character(s) from:", wsp_doi))
     }
-    
