@@ -86,3 +86,15 @@ test_that("emails are validated", {
   expect_error(oadoi_fetch("10.1038/ng.3260", email = "najko@gnx"))
   expect_error(oadoi_fetch("10.1038/ng.3260", email = "FOOL"))
 })
+
+test_that("oadoi_fetch removes all types of whitespace", {
+  skip_on_cran()
+  dois <- c("10.1177/ 0042098012452322",
+    "10.1038/ng.3260 ",
+    " 10.     7717/peerj.2323 
+      ")
+  a <- expect_message(
+    oadoi_fetch(dois, email = "najko.jahn@gmail.com")
+  )
+  expect_equal(nrow(a), 3)
+})

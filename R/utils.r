@@ -39,3 +39,13 @@ email_regex <-
     # nolint start
     "^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{2,4})$"
     # nolint end
+
+#' White space check
+#'
+#' @noRd
+check_wsp_dois <- function(x) {
+  wsp_doi <- x[grepl("[[:space:]]", x)]
+  if (length(wsp_doi != 0))
+    message(
+      paste("Removed white space character(s) from:", wsp_doi))
+    }

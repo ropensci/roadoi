@@ -1,7 +1,7 @@
 ---
 title: "Introduction"
 author: "Najko Jahn"
-date: "2022-02-28"
+date: "`r Sys.Date()`"
 vignette: >
   %\VignetteIndexEntry{Introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -24,27 +24,11 @@ See [Piwowar et al. (2018)](https://doi.org/10.7717/peerj.4375) for a comprehens
 
 There is one major function to talk with Unpaywall, `oadoi_fetch()`, taking a character vector of DOIs and your email address as required arguments.
 
-
-```r
+```{r}
 library(roadoi)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"),
                     email = "najko.jahn@gmail.com")
-```
-
-```
-## # A tibble: 2 × 21
-##   doi           best_oa_location  oa_locations  oa_locations_emba…
-##   <chr>         <list>            <list>        <list>            
-## 1 10.1186/s128… <tibble [1 × 10]> <tibble [5 ×… <tibble [0 × 0]>  
-## 2 10.1103/phys… <tibble [1 × 10]> <tibble [2 ×… <tibble [0 × 0]>  
-## # … with 17 more variables: data_standard <int>, is_oa <lgl>,
-## #   is_paratext <lgl>, genre <chr>, oa_status <chr>,
-## #   has_repository_copy <lgl>, journal_is_oa <lgl>,
-## #   journal_is_in_doaj <lgl>, journal_issns <chr>,
-## #   journal_issn_l <chr>, journal_name <chr>, publisher <chr>,
-## #   published_date <chr>, year <chr>, title <chr>,
-## #   updated_resource <chr>, authors <list>
 ```
 
 #### What's returned?
@@ -99,8 +83,7 @@ The columns  `best_oa_location`. `oa_locations` and `oa_locations_embargoed` are
 
 If `.flatten = TRUE` the list-column `oa_locations` will be restructured in a long format where each OA fulltext is represented by one row, which allows to take into account all OA locations found by Unpaywall in a data analysis.
 
-
-```r
+```{r, message = FALSE}
 library(dplyr)
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814",
@@ -109,20 +92,6 @@ roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1093/bioinformatics/btw541"),
                     email = "najko.jahn@gmail.com", .flatten = TRUE) %>%
   dplyr::count(is_oa, evidence, is_best)
-```
-
-```
-## # A tibble: 8 × 4
-##   is_oa evidence                                     is_best     n
-##   <lgl> <chr>                                        <lgl>   <int>
-## 1 FALSE <NA>                                         NA          1
-## 2 TRUE  oa journal (via doaj)                        TRUE        2
-## 3 TRUE  oa repository (semantic scholar lookup)      FALSE       1
-## 4 TRUE  oa repository (via OAI-PMH doi match)        FALSE       7
-## 5 TRUE  oa repository (via page says license)        FALSE       1
-## 6 TRUE  oa repository (via pmcid lookup)             FALSE       2
-## 7 TRUE  open (via crossref license, author manuscri… TRUE        1
-## 8 TRUE  open (via page says license)                 TRUE        1
 ```
 
 
@@ -146,31 +115,11 @@ Save the file and restart your R session. To stop sharing the email when using r
 
 To follow your API call, and to estimate the time until completion, use the `.progress` parameter inherited from `plyr` to display a progress bar.
 
-
-```r
+```{r}
 roadoi::oadoi_fetch(dois = c("10.1186/s12864-016-2566-9",
                              "10.1103/physreve.88.012814"),
                     email = "najko.jahn@gmail.com",
                     .progress = "text")
-```
-
-```
-##   |                                                                |                                                        |   0%  |                                                                |============================                            |  50%  |                                                                |========================================================| 100%
-```
-
-```
-## # A tibble: 2 × 21
-##   doi           best_oa_location  oa_locations  oa_locations_emba…
-##   <chr>         <list>            <list>        <list>            
-## 1 10.1186/s128… <tibble [1 × 10]> <tibble [5 ×… <tibble [0 × 0]>  
-## 2 10.1103/phys… <tibble [1 × 10]> <tibble [2 ×… <tibble [0 × 0]>  
-## # … with 17 more variables: data_standard <int>, is_oa <lgl>,
-## #   is_paratext <lgl>, genre <chr>, oa_status <chr>,
-## #   has_repository_copy <lgl>, journal_is_oa <lgl>,
-## #   journal_is_in_doaj <lgl>, journal_issns <chr>,
-## #   journal_issn_l <chr>, journal_name <chr>, publisher <chr>,
-## #   published_date <chr>, year <chr>, title <chr>,
-## #   updated_resource <chr>, authors <list>
 ```
 
 
