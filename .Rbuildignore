@@ -12,3 +12,4 @@ cran-comments.md
 ^revdep$
 ^codemeta\.json$
 ^\.github$
+^vignettes/intro\.Rmd\.orig$
