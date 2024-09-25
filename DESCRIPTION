@@ -41,3 +41,5 @@ Suggests:
     lintr
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
+Encoding: UTF-8
+

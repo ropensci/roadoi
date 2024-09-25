@@ -87,9 +87,9 @@ The result is a tibble with each row representing a publication.
  name and author role \code{sequence}), if available. \cr
 }
 
-The columns  \code{best_oa_location}. \code{oa_locations} and 
-\code{oa_locations_embargoed} are list-columns that contain 
-useful metadata about the OA sources found by Unpaywall. 
+The columns  \code{best_oa_location}. \code{oa_locations} and
+\code{oa_locations_embargoed} are list-columns that contain
+useful metadata about the OA sources found by Unpaywall.
 
 If \code{.flatten = TRUE} the list-column \code{oa_locations} will be
 restructured in a long format where each OA fulltext is represented by

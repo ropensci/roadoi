@@ -20,4 +20,25 @@ GitHub's issue tracker for bug reporting and feature requests.
 More details about the Unpaywall API:
 \url{https://unpaywall.org/products/api}.
 }
-\keyword{package}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://docs.ropensci.org/roadoi/}
+  \item \url{https://github.com/ropensci/roadoi/}
+  \item Report bugs at \url{https://github.com/ropensci/roadoi/issues/}
+}
+
+}
+\author{
+\strong{Maintainer}: Najko Jahn \email{najko.jahn@gmail.com}
+
+Other contributors:
+\itemize{
+  \item Tuija Sonkkila (\href{https://orcid.org/0000-0002-6892-9305}{ORCID}) (Tuija Sonkkila reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/115) [reviewer]
+  \item Ross Mounce (\href{https://orcid.org/0000-0002-3520-2046}{ORCID}) (Ross Mounce reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/115) [reviewer]
+  \item Anne Hobert (\href{https://orcid.org/0000-0003-2429-2995}{ORCID}) [contributor]
+  \item Delwen Franzen [contributor]
+}
+
+}
+\keyword{internal}
