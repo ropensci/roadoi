@@ -9,8 +9,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![R build status](https://github.com/ropensci/roadoi/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/roadoi/actions)
-[![codecov.io](https://codecov.io/github/ropensci/roadoi/coverage.svg?branch=master)](https://codecov.io/github/ropensci/roadoi?branch=master)
+[![R build](https://github.com/ropensci/roadoi/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/roadoi/actions)
 [![cran version](http://www.r-pkg.org/badges/version/roadoi)](https://cran.r-project.org/package=roadoi)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/roadoi)](https://github.com/r-hub/cranlogs.app)
 [![review](https://badges.ropensci.org/115_status.svg)](https://github.com/ropensci/software-review/issues/115)
