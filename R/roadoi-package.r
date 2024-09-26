@@ -30,5 +30,5 @@
 #' @name roadoi-package
 #' @aliases roadoi
 #' @docType package
-#' @keywords package
-NULL
+#' @keywords internal
+"_PACKAGE"

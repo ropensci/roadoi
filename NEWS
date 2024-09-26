@@ -1,3 +1,10 @@
+## roadoi 0.7.3
+
+Minor fixes:
+
+- Fix CRAN check issue
+- Update internal dependencies
+
 ## roadoi 0.7
 
 New features:

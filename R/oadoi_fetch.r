@@ -78,10 +78,10 @@
 #'  name and author role \code{sequence}), if available. \cr
 #' }
 #'
-#' The columns  \code{best_oa_location}. \code{oa_locations} and 
-#' \code{oa_locations_embargoed} are list-columns that contain 
-#' useful metadata about the OA sources found by Unpaywall. 
-#' 
+#' The columns  \code{best_oa_location}. \code{oa_locations} and
+#' \code{oa_locations_embargoed} are list-columns that contain
+#' useful metadata about the OA sources found by Unpaywall.
+#'
 #' If \code{.flatten = TRUE} the list-column \code{oa_locations} will be
 #' restructured in a long format where each OA fulltext is represented by
 #' one row.
@@ -151,11 +151,11 @@ oadoi_fetch <-
     if(.flatten == TRUE){
       out <- req %>%
         dplyr::select(
-          -.data$best_oa_location,
-          -.data$authors, 
-          -.data$oa_locations_embargoed
+          -"best_oa_location",
+          -"authors",
+          -"oa_locations_embargoed"
           ) %>%
-        tidyr::unnest(.data$oa_locations, keep_empty = TRUE)
+        tidyr::unnest("oa_locations", keep_empty = TRUE)
     } else {
       out <- req
     }
@@ -187,7 +187,7 @@ oadoi_fetch_ <- function(doi = NULL, email = NULL) {
   u <- httr::modify_url(
     oadoi_baseurl(),
     query = list(email = email),
-    path = c(oadoi_api_version(), 
+    path = c(oadoi_api_version(),
       gsub("[[:space:]]", "", doi))
   )
   # Call Unpaywall Data API
